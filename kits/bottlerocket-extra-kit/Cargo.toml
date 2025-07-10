@@ -1,0 +1,18 @@
+[package]
+name = "bottlerocket-extra-kit"
+version = "0.1.0"
+edition = "2021"
+publish = false
+build = "../build.rs"
+
+[package.metadata.build-kit]
+vendor = "bottlerocket"
+
+[lib]
+path = "../kit.rs"
+
+[build-dependencies]
+curl = { path = "../../packages/curl" }
+jsoncpp = { path = "../../packages/jsoncpp" }
+oomd = { path = "../../packages/oomd"}
+sysstat = { path = "../../packages/sysstat" }

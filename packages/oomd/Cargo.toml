@@ -1,0 +1,22 @@
+[package]
+name = "oomd"
+version = "0.1.0"
+edition = "2021"
+publish = false
+build = "../build.rs"
+
+[lib]
+path = "../packages.rs"
+
+[package.metadata.build-package]
+releases-url = "https://github.com/facebookincubator/oomd/tags"
+
+[[package.metadata.build-package.external-files]]
+url = "https://github.com/facebookincubator/oomd/archive/refs/tags/v0.5.0.tar.gz"
+sha512 = "1841245c56c9de359b8b9d5e03325430e5b1300b6210f94d810ba3857506658ba9162460baf5ae683a797b534215baa30cefca6daa207d257e30b7c5bd1ac33d"
+
+[dependencies]
+jsoncpp = { path = "../jsoncpp" }
+
+[build-dependencies]
+jsoncpp = { path = "../jsoncpp" }

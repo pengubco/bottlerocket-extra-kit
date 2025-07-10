@@ -1,0 +1,9 @@
+[workspace]
+resolver = "2"
+members = [
+  "kits/bottlerocket-extra-kit",
+  "packages/curl",
+  "packages/jsoncpp",
+  "packages/oomd",
+  "packages/sysstat",
+]

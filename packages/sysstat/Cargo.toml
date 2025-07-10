@@ -1,0 +1,19 @@
+[package]
+name = "sysstat"
+version = "0.1.0"
+edition = "2021"
+publish = false
+build = "../build.rs"
+
+[lib]
+path = "../packages.rs"
+
+[package.metadata.build-package]
+releases-url = "https://github.com/sysstat/sysstat/tags"
+
+[[package.metadata.build-package.external-files]]
+url = "https://github.com/sysstat/sysstat/archive/v12.7.7.tar.gz"
+sha512 = "38e6bdc05244ccd3e875d47b792e6e22930bb2cd8966918e10db09278a610234930115b2856a84333152c59aa4b4c791d8eec681cf14f006257d06bd008568f2"
+
+[dependencies]
+

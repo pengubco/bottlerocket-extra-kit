@@ -1,0 +1,17 @@
+[package]
+name = "curl"
+version = "0.1.0"
+edition = "2021"
+publish = false
+build = "../build.rs"
+
+[lib]
+path = "../packages.rs"
+
+[package.metadata.build-package]
+releases-url = "https://curl.se"
+
+[[package.metadata.build-package.external-files]]
+url = "https://curl.se/download/curl-8.12.1.tar.gz"
+sha512 = "9fcdcceab8bce43e888db79a38c775ff15790a806d3cc5cc96f396a829c6da2383b258481b5642153da14087943f6ef607af0aa3b75df6f41b95c6cd61d835eb"
+force-upstream = true

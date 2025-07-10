@@ -1,0 +1,15 @@
+schema-version = 1
+
+[sdk]
+name = "bottlerocket-sdk"
+version = "0.62.0"
+vendor = "bottlerocket"
+source = "public.ecr.aws/bottlerocket/bottlerocket-sdk:v0.62.0"
+digest = "xlGP2vIM7M1kj36BuRc/lgK8mz8ZpHw6XROwMQ9hUOM="
+
+[[kit]]
+name = "bottlerocket-core-kit"
+version = "9.1.0"
+vendor = "bottlerocket"
+source = "public.ecr.aws/bottlerocket/bottlerocket-core-kit:v9.1.0"
+digest = "UwnhpVRg3YUeMItVr0bGAOb4GPawGizYlONA587NJnE="
