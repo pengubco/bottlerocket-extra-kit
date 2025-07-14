@@ -1,0 +1,18 @@
+[package]
+name = "vim"
+version = "0.1.0"
+edition = "2021"
+publish = false
+build = "../build.rs"
+
+[lib]
+path = "../packages.rs"
+
+[package.metadata.build-package]
+releases-url = "https://github.com/vim/vim/tags"
+
+[[package.metadata.build-package.external-files]]
+url = "https://github.com/vim/vim/archive/v9.1.0.tar.gz"
+sha512 = "d7038c5c413bfd1a125a893c0b1d3e498e9ce6b5df7d45ef536faac966ce2846b08fe2982010c31f30b34fda07ba2c6922d795806509d05d73768626edc70374"
+
+[dependencies]

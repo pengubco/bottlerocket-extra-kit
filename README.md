@@ -15,9 +15,11 @@ version = "0.0.1"
 vendor = "peng" 
 ```
 
-Step 2. Add the package to the included-packages `variants/aws-dev/Cargo.toml`.
+Step 2. Add packages you need to the included-packages `variants/aws-dev/Cargo.toml`. See [available packages](#packages).
 ```plain
 sysstat
+vim
+curl
 ```
 
 Step 3. Build Bottlerocket image and AMI as usual.
@@ -31,6 +33,8 @@ make publish VENDOR=peng
 ```
 
 ## Packages
-- [curl](https://curl.se)
-- [oomd](https://github.com/facebookincubator/oomd)
-- [sysstat](https://github.com/sysstat/sysstat). Commands: sar, sadf, iostat, mpstat, pidstat, tapestat, cifsiostat
+- [curl](https://curl.se) v8.12.1.
+- [jsoncpp](https://github.com/open-source-parsers/jsoncpp) v1.9.6.
+- [oomd](https://github.com/facebookincubator/oomd) v0.5.0.
+- [sysstat](https://github.com/sysstat/sysstat) v12.7.7. Commands: sar, sadf, iostat, mpstat, pidstat, tapestat, cifsiostat
+- [vim](https://github.com/vim/vim) v9.1.0.

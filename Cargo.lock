@@ -10,6 +10,7 @@ dependencies = [
  "jsoncpp",
  "oomd",
  "sysstat",
+ "vim",
 ]
 
 [[package]]
@@ -29,4 +30,8 @@ dependencies = [
 
 [[package]]
 name = "sysstat"
+version = "0.1.0"
+
+[[package]]
+name = "vim"
 version = "0.1.0"

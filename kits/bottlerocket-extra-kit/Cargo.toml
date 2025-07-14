@@ -16,3 +16,4 @@ curl = { path = "../../packages/curl" }
 jsoncpp = { path = "../../packages/jsoncpp" }
 oomd = { path = "../../packages/oomd"}
 sysstat = { path = "../../packages/sysstat" }
+vim = { path = "../../packages/vim" }

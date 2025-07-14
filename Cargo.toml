@@ -3,6 +3,7 @@ resolver = "2"
 members = [
   "kits/bottlerocket-extra-kit",
   "packages/curl",
+  "packages/vim",
   "packages/jsoncpp",
   "packages/oomd",
   "packages/sysstat",
