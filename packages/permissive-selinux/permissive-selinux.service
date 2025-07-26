@@ -1,0 +1,13 @@
+[Unit]
+Description=Set SELinux to permissive mode
+Before=preconfigured.target
+
+[Service]
+Type=oneshot
+ExecStart=/sbin/semodule -i /usr/share/selinux/modules/permissive.cil
+RemainAfterExit=true
+
+StandardError=journal+console
+
+[Install]
+RequiredBy=preconfigured.target

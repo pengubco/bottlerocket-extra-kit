@@ -20,6 +20,7 @@ Step 2. Add packages you need to the included-packages `variants/aws-dev/Cargo.t
 sysstat
 vim
 curl
+permissive-selinux
 ```
 
 Step 3. Build Bottlerocket image and AMI as usual.
@@ -36,5 +37,7 @@ make publish VENDOR=peng
 - [curl](https://curl.se) v8.12.1.
 - [jsoncpp](https://github.com/open-source-parsers/jsoncpp) v1.9.6.
 - [oomd](https://github.com/facebookincubator/oomd) v0.5.0.
+- [permissive-selinux] Set SELinux mode to permissive. Useful to debug/develop bypassing SELinux denials. For example, 
+run a shell script.
 - [sysstat](https://github.com/sysstat/sysstat) v12.7.7. Commands: sar, sadf, iostat, mpstat, pidstat, tapestat, cifsiostat
 - [vim](https://github.com/vim/vim) v9.1.0.

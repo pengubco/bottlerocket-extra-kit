@@ -15,5 +15,6 @@ path = "../kit.rs"
 curl = { path = "../../packages/curl" }
 jsoncpp = { path = "../../packages/jsoncpp" }
 oomd = { path = "../../packages/oomd"}
+permissive-selinux = { path = "../../packages/permissive-selinux" }
 sysstat = { path = "../../packages/sysstat" }
 vim = { path = "../../packages/vim" }

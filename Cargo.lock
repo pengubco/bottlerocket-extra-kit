@@ -9,6 +9,7 @@ dependencies = [
  "curl",
  "jsoncpp",
  "oomd",
+ "permissive-selinux",
  "sysstat",
  "vim",
 ]
@@ -27,6 +28,10 @@ version = "0.1.0"
 dependencies = [
  "jsoncpp",
 ]
+
+[[package]]
+name = "permissive-selinux"
+version = "0.1.0"
 
 [[package]]
 name = "sysstat"
