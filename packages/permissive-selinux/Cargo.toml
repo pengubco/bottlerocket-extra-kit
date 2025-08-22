@@ -11,3 +11,5 @@ path = "../packages.rs"
 [dependencies]
 
 [build-dependencies]
+
+[package.metadata.build-package]

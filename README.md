@@ -25,6 +25,20 @@ permissive-selinux
 
 Step 3. Build Bottlerocket image and AMI as usual.
 
+## bottlerocket-core-kit and bottlerocket-sdk
+In building Bottlerocket image, the bottlerocket-kernel-kit, bottlerocket-core-kit and bottlerocket-sdk must be the same
+across all kits. Otherwise, you may see errors below.  
+```plain
+Error: cannot have multiple versions of the same kit (bottlerocket-core-kit-9.2.1@bottlerocket != bottlerocket-core-kit-9.2.0@bottlerocket
+```
+The extra-kit will release with latest core-kit and sdk at the time of the release. The releases name follows pattern. 
+`v0.0.3-corekit-10.1.2-sdk-0.63.0`, which reads: 
+- bottlerocket-extra-kit version 0.0.3
+- bottlerocket-core-kit version 10.1.2
+- bottlerocket-sdk version 0.63.0
+
+If you need to build with different core-kit adn sdk version, please check out and update the Twoliter.toml.
+
 ## Build and publish this kit 
 ```
 make update
