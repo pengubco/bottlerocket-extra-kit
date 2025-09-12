@@ -1,5 +1,5 @@
 schema-version = 1
-release-version = "0.0.3"
+release-version = "0.0.3-kernalkit-4.3.0-corekit-10.3.0-sdk-0.64.0"
 
 [vendor.bottlerocket]
 registry = "public.ecr.aws/bottlerocket"

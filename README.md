@@ -11,7 +11,7 @@ registry = "public.ecr.aws/m8c0s8v8"
 
 [[kit]]
 name = "bottlerocket-extra-kit"
-version = "0.0.1"
+version = "0.0.3-kernalkit-4.3.0-corekit-10.3.0-sdk-0.64.0"
 vendor = "peng" 
 ```
 
@@ -32,10 +32,11 @@ across all kits. Otherwise, you may see errors below.
 Error: cannot have multiple versions of the same kit (bottlerocket-core-kit-9.2.1@bottlerocket != bottlerocket-core-kit-9.2.0@bottlerocket
 ```
 The extra-kit will release with latest core-kit and sdk at the time of the release. The releases name follows pattern. 
-`v0.0.3-corekit-10.1.2-sdk-0.63.0`, which reads: 
+`v0.0.3-kernalkit-4.3.0-corekit-10.3.0-sdk-0.64.0`, which reads: 
 - bottlerocket-extra-kit version 0.0.3
-- bottlerocket-core-kit version 10.1.2
-- bottlerocket-sdk version 0.63.0
+- bottlerocket-kernal-kit version 4.3.0
+- bottlerocket-core-kit version 10.3.0
+- bottlerocket-sdk version 0.64.0
 
 If you need to build with different core-kit adn sdk version, please check out and update the Twoliter.toml.
 
