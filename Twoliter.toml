@@ -4,12 +4,17 @@ release-version = "0.0.3"
 [vendor.bottlerocket]
 registry = "public.ecr.aws/bottlerocket"
 
-[sdk]
-name = "bottlerocket-sdk"
-version = "0.63.0"
+[[kit]]
+name = "bottlerocket-kernel-kit"
+version = "4.3.0"
 vendor = "bottlerocket"
 
 [[kit]]
 name = "bottlerocket-core-kit"
-version = "10.1.2"
+version = "10.3.0"
+vendor = "bottlerocket"
+
+[sdk]
+name = "bottlerocket-sdk"
+version = "0.64.0"
 vendor = "bottlerocket"
