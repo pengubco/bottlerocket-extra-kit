@@ -1,0 +1,5 @@
+[clarify."github.com/multiformats/go-base36"]
+expression = "Apache-2.0 OR MIT"
+license-files = [
+    { path = "LICENSE.md", hash = 0x1a7b1b90 }
+]

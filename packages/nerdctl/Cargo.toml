@@ -1,0 +1,23 @@
+[package]
+name = "nerdctl"
+version = "0.1.0"
+edition = "2021"
+publish = false
+build = "build.rs"
+
+[lib]
+path = "../packages.rs"
+
+[package.metadata.build-package]
+releases-url = "https://github.com/containerd/nerdctl/releases"
+
+[[package.metadata.build-package.external-files]]
+url = "https://github.com/containerd/nerdctl/archive/refs/tags/v2.1.6.tar.gz"
+sha512 = "4bcd904f83cc47d9ae165740ae758d527450c46fe2fc154a433d0527816d1f66b0d7ac703403219a5113d9d40bb3c891334987426726a6bee4b0546956fea473"
+
+[[package.metadata.build-package.external-files]]
+url = "file://nerdctl-2.1.6-vendor.tar.gz"
+path = "nerdctl-2.1.6-vendor.tar.gz"
+sha512 = "fb4a13aaba8a1588a2d9ba4ee699f8d2098f1b7d6830457f04fd951301c3dff086ae356b82a04626c83d0af3846001e7867ec395e788b595e630506d0b9a5691"
+
+[dependencies]

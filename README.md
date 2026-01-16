@@ -1,58 +1,63 @@
 # Bottlerocket Extra Kit
-This is a kit for building [Bottlerocket](https://github.com/bottlerocket-os). It contains RPM packages used for debugging on Bottlerocket that are not included in the [bottlerocket-kernel-kit](https://github.com/bottlerocket-os/bottlerocket-kernel-kit) and [bottlerocket-core-kit](https://github.com/bottlerocket-os/bottlerocket-core-kit). 
+`bottlerocket-extra-kit` contains RPM packages used for debugging on Bottlerocket that are not included in the [bottlerocket-kernel-kit](https://github.com/bottlerocket-os/bottlerocket-kernel-kit) and [bottlerocket-core-kit](https://github.com/bottlerocket-os/bottlerocket-core-kit). You can consume packages from this kit to build your own [Bottlerocket](https://github.com/bottlerocket-os) variant.
 
-## Use RPM package from the kit
+## Use RPM packages from the released kit
 Take the [aws-dev](https://github.com/bottlerocket-os/bottlerocket/tree/develop/variants/aws-dev) variant as an example. 
 
-Step 1. Add vendor and kit to the {project-root}/Twoliter.toml.
+Step 1. Add vendor and kit to the `{project-root}/Twoliter.toml`.
 ```toml
 [vendor.peng]
 registry = "public.ecr.aws/m8c0s8v8"
 
 [[kit]]
 name = "bottlerocket-extra-kit"
-version = "0.0.3-kernalkit-4.3.0-corekit-10.3.0-sdk-0.64.0"
+# Find the versions in Releases
+version = "1.0.1-kernalkit-4.7.1-corekit-12.2.0-sdk-0.66.0"
 vendor = "peng" 
 ```
 
-Step 2. Add packages you need to the included-packages `variants/aws-dev/Cargo.toml`. See [available packages](#packages).
+You can build and publish the kit on your own. Just create an `Infra.toml` from [the template](Infra-template.toml).
+
+Step 2. Add packages you need to the `included-packages` in `variants/aws-dev/Cargo.toml`. See [available packages](#packages).
 ```plain
 sysstat
 vim
 curl
+nerdctl
 permissive-selinux
 ```
 
-Step 3. Build Bottlerocket image and AMI as usual.
+Step 3. Build the Bottlerocket image and AMI as usual.
 
 ## bottlerocket-core-kit and bottlerocket-sdk
-In building Bottlerocket image, the bottlerocket-kernel-kit, bottlerocket-core-kit and bottlerocket-sdk must be the same
-across all kits. Otherwise, you may see errors below.  
+When building a Bottlerocket image, the bottlerocket-kernel-kit, bottlerocket-core-kit, and bottlerocket-sdk must be the same version across all kits. Otherwise, you may see errors like:
 ```plain
-Error: cannot have multiple versions of the same kit (bottlerocket-core-kit-9.2.1@bottlerocket != bottlerocket-core-kit-9.2.0@bottlerocket
+Error: cannot have multiple versions of the same kit (bottlerocket-core-kit-9.2.1@bottlerocket != bottlerocket-core-kit-9.2.0@bottlerocket)
 ```
-The extra-kit will release with latest core-kit and sdk at the time of the release. The releases name follows pattern. 
-`v0.0.3-kernalkit-4.3.0-corekit-10.3.0-sdk-0.64.0`, which reads: 
+
+The extra-kit will release with the latest core-kit and SDK at the time of release. The release name follows this pattern:
+`v0.0.3-kernelkit-4.3.0-corekit-10.3.0-sdk-0.64.0`, which reads:
 - bottlerocket-extra-kit version 0.0.3
-- bottlerocket-kernal-kit version 4.3.0
+- bottlerocket-kernel-kit version 4.3.0
 - bottlerocket-core-kit version 10.3.0
 - bottlerocket-sdk version 0.64.0
 
-If you need to build with different core-kit adn sdk version, please check out and update the Twoliter.toml.
+If you need to build with a different core-kit and SDK version, please check out the repository and update the `Twoliter.toml`.
 
 ## Build and publish this kit 
 ```
+make generate-twoliter-toml
 make update
 make fetch
 make build
-make publish VENDOR=peng
+make publish VENDOR=<xxx>
 ```
 
 ## Packages
-- [curl](https://curl.se) v8.12.1.
-- [jsoncpp](https://github.com/open-source-parsers/jsoncpp) v1.9.6.
-- [oomd](https://github.com/facebookincubator/oomd) v0.5.0.
-- [permissive-selinux] Set SELinux mode to permissive. Useful to debug/develop bypassing SELinux denials. For example, 
-run a shell script.
-- [sysstat](https://github.com/sysstat/sysstat) v12.7.7. Commands: sar, sadf, iostat, mpstat, pidstat, tapestat, cifsiostat
-- [vim](https://github.com/vim/vim) v9.1.0.
+- [curl](https://curl.se) v8.12.1
+- [vim](https://github.com/vim/vim) v9.1.0
+- [jsoncpp](https://github.com/open-source-parsers/jsoncpp) v1.9.6
+- [nerdctl](https://github.com/containerd/nerdctl) v2.1.6 - Docker-compatible CLI for containerd
+- [oomd](https://github.com/facebookincubator/oomd) v0.5.0
+- [permissive-selinux] - Set SELinux mode to permissive. Useful for debugging/developing while bypassing SELinux denials (e.g., running shell scripts)
+- [sysstat](https://github.com/sysstat/sysstat) v12.7.7 - Commands: sar, sadf, iostat, mpstat, pidstat, tapestat, cifsiostat

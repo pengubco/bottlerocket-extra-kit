@@ -4,9 +4,9 @@ TWOLITER_DIR := $(TOOLS_DIR)/twoliter
 TWOLITER := $(TWOLITER_DIR)/twoliter
 CARGO_HOME := $(TOP).cargo
 
-TWOLITER_VERSION ?= "0.8.1"
-TWOLITER_SHA256_AARCH64 ?= "b3df355b5732884bf5e311709bc9a0d0a34ade97c1d7c4cf101cbce4e766de33"
-TWOLITER_SHA256_X86_64 ?= "cc83689a878f77c1110ca08fb52b23ce5e0cdbe1b38ff074e913e0ebe5be93f9"
+TWOLITER_VERSION ?= "0.16.0"
+TWOLITER_SHA256_AARCH64 ?= "c0586e977c15841eb7f948b9d47a6f798cfa6987d55ba30086b7f04ae3ca5988"
+TWOLITER_SHA256_X86_64 ?= "c5f38cd5b93fff04f3cf8f2a614193b243179a790ac98a3e23eb767696e254d4"
 KIT ?= bottlerocket-extra-kit
 UNAME_ARCH = $(shell uname -m)
 ARCH ?= $(UNAME_ARCH)
@@ -23,6 +23,9 @@ endif
 export GO_MODULES = ecs-gpu-init host-ctr
 
 all: build
+
+generate-twoliter-toml:
+	go run $(TOP)scripts/go/cmd/generate-twoliter/main.go -release 1.0.1 > $(TOP)Twoliter.toml
 
 prep:
 	@mkdir -p $(TWOLITER_DIR)

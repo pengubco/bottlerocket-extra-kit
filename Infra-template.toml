@@ -1,0 +1,9 @@
+[aws]
+regions = ["us-west-2"]
+
+# pick a name for your vendor. You'll reference it in Twoliter.toml of the 
+# Bottlerocket build project.
+[vendor.xxxx]
+# example of OCI registry.
+# registry = "xxxxxxxxxxxx.dkr.ecr.us-west-2.amazonaws.com"
+# registry = "public.ecr.aws/xxxxxxxx"

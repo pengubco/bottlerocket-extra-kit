@@ -7,4 +7,5 @@ members = [
   "packages/jsoncpp",
   "packages/oomd",
   "packages/sysstat",
+  "packages/nerdctl",
 ]

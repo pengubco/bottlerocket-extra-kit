@@ -18,3 +18,4 @@ oomd = { path = "../../packages/oomd"}
 permissive-selinux = { path = "../../packages/permissive-selinux" }
 sysstat = { path = "../../packages/sysstat" }
 vim = { path = "../../packages/vim" }
+nerdctl = { path = "../../packages/nerdctl" }

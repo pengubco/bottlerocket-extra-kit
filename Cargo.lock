@@ -8,6 +8,7 @@ version = "0.1.0"
 dependencies = [
  "curl",
  "jsoncpp",
+ "nerdctl",
  "oomd",
  "permissive-selinux",
  "sysstat",
@@ -20,6 +21,10 @@ version = "0.1.0"
 
 [[package]]
 name = "jsoncpp"
+version = "0.1.0"
+
+[[package]]
+name = "nerdctl"
 version = "0.1.0"
 
 [[package]]
