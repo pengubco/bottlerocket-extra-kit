@@ -50,7 +50,12 @@ make generate-twoliter-toml
 make update
 make fetch
 make build
-make publish VENDOR=<xxx>
+make publish VENDOR=xxx
+```
+
+or 
+```
+make full-build-publish VENDOR=xxx
 ```
 
 ## Packages
