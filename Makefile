@@ -54,6 +54,8 @@ endif
 publish: prep
 	@$(TWOLITER) publish kit $(KIT) $(VENDOR)
 
+full-build-publish: generate-twoliter-toml update fetch build publish
+
 TWOLITER_MAKE = $(TWOLITER) make --cargo-home $(CARGO_HOME) --arch $(ARCH)
 
 # Treat any targets after "make twoliter" as arguments to "twoliter make".
@@ -67,4 +69,4 @@ endif
 twoliter: prep
 	@$(TWOLITER_MAKE) $(TWOLITER_MAKE_ARGS)
 
-.PHONY: prep update fetch build publish twoliter
+.PHONY: prep update fetch build publish full-build-publish twoliter
