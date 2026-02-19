@@ -1,0 +1,22 @@
+[package]
+name = "awscli2"
+version = "0.1.0"
+edition = "2021"
+publish = false
+build = "../build.rs"
+
+[lib]
+path = "../packages.rs"
+
+[package.metadata.build-package]
+releases-url = "https://awscli.amazonaws.com/"
+
+[[package.metadata.build-package.external-files]]
+url = "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.27.0.zip"
+sha512 = "816f904e6a5c53e712bec4de5f0fc55baf7a0dd7f3a82f8a3a0904b1571e853317fa48ad76723bcd8582c941ab785262d1942277224585fb146c37d261a4f5f2"
+
+[[package.metadata.build-package.external-files]]
+url = "https://awscli.amazonaws.com/awscli-exe-linux-aarch64-2.27.0.zip"
+sha512 = "3e1957f284a60e6ca698f770c3f94062300c2faa8a6a29769f5e9e8134a145626a0016ccf53729371f70b174d5ffdef44821ef0800c6063b3f4561d6c43190eb"
+
+[dependencies]

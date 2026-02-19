@@ -8,4 +8,5 @@ members = [
   "packages/oomd",
   "packages/sysstat",
   "packages/nerdctl",
+  "packages/awscli2",
 ]
