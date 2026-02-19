@@ -3,9 +3,14 @@
 version = 4
 
 [[package]]
+name = "awscli2"
+version = "0.1.0"
+
+[[package]]
 name = "bottlerocket-extra-kit"
 version = "0.1.0"
 dependencies = [
+ "awscli2",
  "curl",
  "jsoncpp",
  "nerdctl",

@@ -20,6 +20,7 @@ You can build and publish the kit on your own. Just create an `Infra.toml` from 
 
 Step 2. Add packages you need to the `included-packages` in `variants/aws-dev/Cargo.toml`. See [available packages](#packages).
 ```plain
+awscli2
 sysstat
 vim
 curl
@@ -55,10 +56,11 @@ make publish VENDOR=xxx
 
 or 
 ```
-make full-build-publish VENDOR=xxx
+make build-and-publish VENDOR=xxx
 ```
 
 ## Packages
+- [awscli2](https://aws.amazon.com/cli/) v2.27.0 - AWS CLI version 2
 - [curl](https://curl.se) v8.12.1
 - [vim](https://github.com/vim/vim) v9.1.0
 - [jsoncpp](https://github.com/open-source-parsers/jsoncpp) v1.9.6

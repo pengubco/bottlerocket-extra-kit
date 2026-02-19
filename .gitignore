@@ -1,6 +1,7 @@
 /build
 *.tar.*
 *.tgz
+*.zip
 **/target/
 **/vendor/
 /.cargo
