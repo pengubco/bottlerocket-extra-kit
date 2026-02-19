@@ -24,8 +24,10 @@ export GO_MODULES = ecs-gpu-init host-ctr
 
 all: build
 
+RELEASE_VERSION ?= 1.0.1
+
 generate-twoliter-toml:
-	go run $(TOP)scripts/go/cmd/generate-twoliter/main.go -release 1.0.1 > $(TOP)Twoliter.toml
+	go run $(TOP)scripts/go/cmd/generate-twoliter/main.go -release $(RELEASE_VERSION) > $(TOP)Twoliter.toml
 
 prep:
 	@mkdir -p $(TWOLITER_DIR)
@@ -56,6 +58,10 @@ publish: prep
 
 build-and-publish: generate-twoliter-toml update fetch build publish
 
+release-github:
+	@if [ -z "$(RELEASE_VERSION)" ]; then echo "Error: RELEASE_VERSION is required, e.g. make release-github RELEASE_VERSION=1.0.2"; exit 1; fi
+	@$(TOP)scripts/release.sh $(RELEASE_VERSION) $(VENDOR)
+
 TWOLITER_MAKE = $(TWOLITER) make --cargo-home $(CARGO_HOME) --arch $(ARCH)
 
 # Treat any targets after "make twoliter" as arguments to "twoliter make".
@@ -69,4 +75,4 @@ endif
 twoliter: prep
 	@$(TWOLITER_MAKE) $(TWOLITER_MAKE_ARGS)
 
-.PHONY: prep update fetch build publish build-and-publish twoliter
+.PHONY: prep update fetch build publish build-and-publish release-github twoliter
