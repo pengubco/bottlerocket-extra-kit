@@ -26,8 +26,27 @@ all: build
 
 RELEASE_VERSION ?= 1.0.1
 
+# Generate Twoliter.toml. Three modes (mutually exclusive):
+#   1. Latest from GitHub (default):
+#      make generate-twoliter-toml RELEASE_VERSION=1.0.3
+#   2. Copy versions from an existing Twoliter.toml:
+#      make generate-twoliter-toml RELEASE_VERSION=1.0.3 TWOLITER_SOURCE=/path/to/Twoliter.toml
+#   3. Explicit versions:
+#      make generate-twoliter-toml RELEASE_VERSION=1.0.3 CORE_KIT_VERSION=13.0.0 KERNEL_KIT_VERSION=5.0.0 SDK_VERSION=0.70.0
+CORE_KIT_VERSION ?=
+KERNEL_KIT_VERSION ?=
+SDK_VERSION ?=
+
 generate-twoliter-toml:
-	go run $(TOP)scripts/go/cmd/generate-twoliter/main.go -release $(RELEASE_VERSION) > $(TOP)Twoliter.toml
+ifdef TWOLITER_SOURCE
+	cd $(TOP)scripts/go && go run ./cmd/generate-twoliter -release $(RELEASE_VERSION) -use-version-from $(TWOLITER_SOURCE) > $(TOP)Twoliter.toml
+else
+	cd $(TOP)scripts/go && go run ./cmd/generate-twoliter -release $(RELEASE_VERSION) -use-version-latest \
+		$(if $(CORE_KIT_VERSION),-core-kit $(CORE_KIT_VERSION)) \
+		$(if $(KERNEL_KIT_VERSION),-kernel-kit $(KERNEL_KIT_VERSION)) \
+		$(if $(SDK_VERSION),-sdk $(SDK_VERSION)) \
+		> $(TOP)Twoliter.toml
+endif
 
 prep:
 	@mkdir -p $(TWOLITER_DIR)
@@ -56,7 +75,7 @@ endif
 publish: prep
 	@$(TWOLITER) publish kit $(KIT) $(VENDOR)
 
-build-and-publish: generate-twoliter-toml update fetch build publish
+build-and-publish: update fetch build publish
 
 release-github:
 	@if [ -z "$(RELEASE_VERSION)" ]; then echo "Error: RELEASE_VERSION is required, e.g. make release-github RELEASE_VERSION=1.0.2"; exit 1; fi
@@ -75,4 +94,4 @@ endif
 twoliter: prep
 	@$(TWOLITER_MAKE) $(TWOLITER_MAKE_ARGS)
 
-.PHONY: prep update fetch build publish build-and-publish release-github twoliter
+.PHONY: prep update fetch build publish build-and-publish release-github twoliter generate-twoliter-toml

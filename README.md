@@ -46,8 +46,29 @@ The extra-kit will release with the latest core-kit and SDK at the time of relea
 If you need to build with a different core-kit and SDK version, please check out the repository and update the `Twoliter.toml`.
 
 ## Build and publish this kit 
+
+Generate `Twoliter.toml` using the latest core-kit, kernel-kit, and SDK versions from GitHub (default):
 ```
-make generate-twoliter-toml
+make generate-twoliter-toml RELEASE_VERSION=1.0.3
+```
+
+Pin to the same versions used in an existing `Twoliter.toml`:
+```
+make generate-twoliter-toml RELEASE_VERSION=1.0.3 TWOLITER_SOURCE=/path/to/Twoliter.toml
+```
+
+Or specify versions explicitly:
+```
+make generate-twoliter-toml RELEASE_VERSION=1.0.3 CORE_KIT_VERSION=13.0.0 KERNEL_KIT_VERSION=5.0.0 SDK_VERSION=0.70.0
+```
+
+You can mix and match — any version not specified will be fetched from GitHub. For example, pin only the SDK:
+```
+make generate-twoliter-toml RELEASE_VERSION=1.0.3 SDK_VERSION=0.70.0
+```
+
+Then build and publish:
+```
 make update
 make fetch
 make build
