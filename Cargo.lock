@@ -12,6 +12,7 @@ version = "0.1.0"
 dependencies = [
  "awscli2",
  "curl",
+ "golang",
  "jsoncpp",
  "nerdctl",
  "oomd",
@@ -22,6 +23,10 @@ dependencies = [
 
 [[package]]
 name = "curl"
+version = "0.1.0"
+
+[[package]]
+name = "golang"
 version = "0.1.0"
 
 [[package]]

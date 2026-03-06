@@ -1,5 +1,7 @@
 # Bottlerocket Extra Kit
-`bottlerocket-extra-kit` contains RPM packages used for debugging on Bottlerocket that are not included in the [bottlerocket-kernel-kit](https://github.com/bottlerocket-os/bottlerocket-kernel-kit) and [bottlerocket-core-kit](https://github.com/bottlerocket-os/bottlerocket-core-kit). You can consume packages from this kit to build your own [Bottlerocket](https://github.com/bottlerocket-os) variant.
+`bottlerocket-extra-kit` contains RPM packages used for developing and debugging on Bottlerocket that are not included in the [bottlerocket-kernel-kit](https://github.com/bottlerocket-os/bottlerocket-kernel-kit) and [bottlerocket-core-kit](https://github.com/bottlerocket-os/bottlerocket-core-kit). You can consume packages from this kit to build your own [Bottlerocket](https://github.com/bottlerocket-os) variant.
+
+You should NOT use `bottlerocket-extra-kit` in your production Bottlerocket OS. Packages here are only intended to make developing and debugging on Bottlerocket easier.
 
 ## Use RPM packages from the released kit
 Take the [aws-dev](https://github.com/bottlerocket-os/bottlerocket/tree/develop/variants/aws-dev) variant as an example. 
@@ -83,9 +85,10 @@ make build-and-publish VENDOR=xxx
 ## Packages
 - [awscli2](https://aws.amazon.com/cli/) v2.27.0 - AWS CLI version 2
 - [curl](https://curl.se) v8.12.1
-- [vim](https://github.com/vim/vim) v9.1.0
+- [golang](https://go.dev) v1.26.1 - The Go programming language toolchain. Note: `/tmp` is mounted `noexec` on Bottlerocket; set `GOCACHE`, `GOTMPDIR`, and `GOPATH` to a writable path such as `/local` before running `go build` or `go run`.
 - [jsoncpp](https://github.com/open-source-parsers/jsoncpp) v1.9.6
 - [nerdctl](https://github.com/containerd/nerdctl) v2.1.6 - Docker-compatible CLI for containerd
 - [oomd](https://github.com/facebookincubator/oomd) v0.5.0
 - [permissive-selinux] - Set SELinux mode to permissive. Useful for debugging/developing while bypassing SELinux denials (e.g., running shell scripts)
 - [sysstat](https://github.com/sysstat/sysstat) v12.7.7 - Commands: sar, sadf, iostat, mpstat, pidstat, tapestat, cifsiostat
+- [vim](https://github.com/vim/vim) v9.1.0

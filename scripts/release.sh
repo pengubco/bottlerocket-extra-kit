@@ -43,9 +43,9 @@ echo "==> Pushing tag ${TAG} to origin"
 git push origin "${TAG}" --force
 
 # ── Step 3: build and publish with the given version ──────────────────────────
-# Override the hardcoded 1.0.1 in the generate-twoliter-toml target by passing
-# RELEASE_VERSION; the Makefile reads it via the environment when present.
-# We patch the invocation inline using make's variable override syntax.
+echo "==> Generating Twoliter.toml for version ${VERSION}"
+make generate-twoliter-toml RELEASE_VERSION="${VERSION}"
+
 echo "==> Running make build-and-publish VENDOR=${VENDOR} (version=${VERSION})"
 make build-and-publish \
     VENDOR="${VENDOR}" \

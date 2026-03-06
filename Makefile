@@ -24,7 +24,7 @@ export GO_MODULES = ecs-gpu-init host-ctr
 
 all: build
 
-RELEASE_VERSION ?= 1.0.1
+RELEASE_VERSION ?= 1.0.3
 
 # Generate Twoliter.toml. Three modes (mutually exclusive):
 #   1. Latest from GitHub (default):
@@ -78,7 +78,7 @@ publish: prep
 build-and-publish: update fetch build publish
 
 release-github:
-	@if [ -z "$(RELEASE_VERSION)" ]; then echo "Error: RELEASE_VERSION is required, e.g. make release-github RELEASE_VERSION=1.0.2"; exit 1; fi
+	@if [ -z "$(RELEASE_VERSION)" ]; then echo "Error: RELEASE_VERSION is required, e.g. make release-github RELEASE_VERSION=1.0.3"; exit 1; fi
 	@$(TOP)scripts/release.sh $(RELEASE_VERSION) $(VENDOR)
 
 TWOLITER_MAKE = $(TWOLITER) make --cargo-home $(CARGO_HOME) --arch $(ARCH)

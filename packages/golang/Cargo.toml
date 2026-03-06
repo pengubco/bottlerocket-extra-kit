@@ -1,0 +1,22 @@
+[package]
+name = "golang"
+version = "0.1.0"
+edition = "2021"
+publish = false
+build = "../build.rs"
+
+[lib]
+path = "../packages.rs"
+
+[package.metadata.build-package]
+releases-url = "https://go.dev/dl/"
+
+[[package.metadata.build-package.external-files]]
+url = "https://dl.google.com/go/go1.26.1.linux-amd64.tar.gz"
+sha512 = "6d23a21dff22f7732cba03305efa158ae21432042b8e5c069567640cacdea507c7330c90e03c0bebb2c731f68035b67f0a753238131e3602c64eebeab6715d93"
+
+[[package.metadata.build-package.external-files]]
+url = "https://dl.google.com/go/go1.26.1.linux-arm64.tar.gz"
+sha512 = "0f7f35f794f1d6c84eff1fa9635ecddba356688abe15dbbc5da6dc98b558f8b88502b8dfc7e7c7e1023abf92e0b9841ae01ded99e715aa58b5408b2db69a8185"
+
+[dependencies]
