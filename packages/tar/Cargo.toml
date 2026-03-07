@@ -1,0 +1,18 @@
+[package]
+name = "tar"
+version = "0.1.0"
+edition = "2021"
+publish = false
+build = "../build.rs"
+
+[lib]
+path = "../packages.rs"
+
+[package.metadata.build-package]
+releases-url = "https://ftp.gnu.org/gnu/tar/"
+
+[[package.metadata.build-package.external-files]]
+url = "https://ftp.gnu.org/gnu/tar/tar-1.35.tar.xz"
+sha512 = "8b84ed661e6c878fa33eb5c1808d20351e6f40551ac63f96014fb0d0b9c72d5d94d8865d39e36bcb184fd250f84778a3b271bbd8bd2ceb69eece0c3568577510"
+
+[dependencies]

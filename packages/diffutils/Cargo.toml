@@ -1,0 +1,18 @@
+[package]
+name = "diffutils"
+version = "0.1.0"
+edition = "2021"
+publish = false
+build = "../build.rs"
+
+[lib]
+path = "../packages.rs"
+
+[package.metadata.build-package]
+releases-url = "https://ftp.gnu.org/gnu/diffutils/"
+
+[[package.metadata.build-package.external-files]]
+url = "https://ftp.gnu.org/gnu/diffutils/diffutils-3.12.tar.xz"
+sha512 = "10b17cf1dcdfa9ca0e5db91d62c4a079ebe9fd7eafa3aaebd4eb7e6206e4d753f348496622aa281e1bd7f7fcde65ce4a886dcc4acbb59332ef980f224197b4e4"
+
+[dependencies]

@@ -20,7 +20,7 @@ else
 endif
 
 
-export GO_MODULES = ecs-gpu-init host-ctr
+export GO_MODULES ?=
 
 all: build
 
@@ -81,7 +81,15 @@ release-github:
 	@if [ -z "$(RELEASE_VERSION)" ]; then echo "Error: RELEASE_VERSION is required, e.g. make release-github RELEASE_VERSION=1.0.3"; exit 1; fi
 	@$(TOP)scripts/release.sh $(RELEASE_VERSION) $(VENDOR)
 
+PACKAGE ?=
+export BUILDSYS_UPSTREAM_SOURCE_FALLBACK ?= true
+
 TWOLITER_MAKE = $(TWOLITER) make --cargo-home $(CARGO_HOME) --arch $(ARCH)
+
+# Build a single package: make build-package PACKAGE=awscli2
+build-package: prep
+	@if [ -z "$(PACKAGE)" ]; then echo "Error: PACKAGE is required, e.g. make build-package PACKAGE=awscli2"; exit 1; fi
+	@$(TWOLITER_MAKE) build-package -- PACKAGE=$(PACKAGE)
 
 # Treat any targets after "make twoliter" as arguments to "twoliter make".
 ifeq (twoliter,$(firstword $(MAKECMDGOALS)))
@@ -94,4 +102,4 @@ endif
 twoliter: prep
 	@$(TWOLITER_MAKE) $(TWOLITER_MAKE_ARGS)
 
-.PHONY: prep update fetch build publish build-and-publish release-github twoliter generate-twoliter-toml
+.PHONY: prep update fetch build publish build-and-publish release-github twoliter generate-twoliter-toml build-package

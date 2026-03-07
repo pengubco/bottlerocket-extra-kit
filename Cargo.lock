@@ -12,17 +12,25 @@ version = "0.1.0"
 dependencies = [
  "awscli2",
  "curl",
+ "diffutils",
  "golang",
  "jsoncpp",
  "nerdctl",
  "oomd",
+ "openssh",
  "permissive-selinux",
  "sysstat",
+ "tar",
  "vim",
+ "which",
 ]
 
 [[package]]
 name = "curl"
+version = "0.1.0"
+
+[[package]]
+name = "diffutils"
 version = "0.1.0"
 
 [[package]]
@@ -45,6 +53,10 @@ dependencies = [
 ]
 
 [[package]]
+name = "openssh"
+version = "0.1.0"
+
+[[package]]
 name = "permissive-selinux"
 version = "0.1.0"
 
@@ -53,5 +65,13 @@ name = "sysstat"
 version = "0.1.0"
 
 [[package]]
+name = "tar"
+version = "0.1.0"
+
+[[package]]
 name = "vim"
+version = "0.1.0"
+
+[[package]]
+name = "which"
 version = "0.1.0"

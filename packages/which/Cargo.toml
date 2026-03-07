@@ -1,0 +1,18 @@
+[package]
+name = "which"
+version = "0.1.0"
+edition = "2021"
+publish = false
+build = "../build.rs"
+
+[lib]
+path = "../packages.rs"
+
+[package.metadata.build-package]
+releases-url = "https://ftp.gnu.org/gnu/which/"
+
+[[package.metadata.build-package.external-files]]
+url = "https://ftp.gnu.org/gnu/which/which-2.23.tar.gz"
+sha512 = "738807f79e8cfc5967541a28ae7021247c04c4177279f09be2c19c069af450a7e3b19baf9079fe5569b25b4630bb400be242a123647e52c9fe54f0ad007317bf"
+
+[dependencies]

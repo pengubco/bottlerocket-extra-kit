@@ -23,6 +23,7 @@ You can build and publish the kit on your own. Just create an `Infra.toml` from 
 Step 2. Add packages you need to the `included-packages` in `variants/aws-dev/Cargo.toml`. See [available packages](#packages).
 ```plain
 awscli2
+diffutils
 sysstat
 vim
 curl
@@ -69,11 +70,14 @@ You can mix and match — any version not specified will be fetched from GitHub.
 make generate-twoliter-toml RELEASE_VERSION=1.0.3 SDK_VERSION=0.70.0
 ```
 
+To build a single package without rebuilding the entire kit:
+```
+make build-package PACKAGE=awscli2
+```
+
 Then build and publish:
 ```
-make update
-make fetch
-make build
+make update && make fetch && make build
 make publish VENDOR=xxx
 ```
 
@@ -85,10 +89,14 @@ make build-and-publish VENDOR=xxx
 ## Packages
 - [awscli2](https://aws.amazon.com/cli/) v2.27.0 - AWS CLI version 2
 - [curl](https://curl.se) v8.12.1
+- [diffutils](https://www.gnu.org/software/diffutils/) v3.12 - GNU diff utilities: `diff`, `diff3`, `cmp`, `sdiff`
 - [golang](https://go.dev) v1.26.1 - The Go programming language toolchain. Note: `/tmp` is mounted `noexec` on Bottlerocket; set `GOCACHE`, `GOTMPDIR`, and `GOPATH` to a writable path such as `/local` before running `go build` or `go run`.
 - [jsoncpp](https://github.com/open-source-parsers/jsoncpp) v1.9.6
 - [nerdctl](https://github.com/containerd/nerdctl) v2.1.6 - Docker-compatible CLI for containerd
 - [oomd](https://github.com/facebookincubator/oomd) v0.5.0
+- [openssh](https://www.openssh.com/) v10.0p1 - OpenSSH daemon (`sshd`) and client utilities (`ssh`, `scp`, `sftp`, `ssh-keygen`)
 - [permissive-selinux] - Set SELinux mode to permissive. Useful for debugging/developing while bypassing SELinux denials (e.g., running shell scripts)
 - [sysstat](https://github.com/sysstat/sysstat) v12.7.7 - Commands: sar, sadf, iostat, mpstat, pidstat, tapestat, cifsiostat
+- [tar](https://www.gnu.org/software/tar/) v1.35 - GNU tar archiving utility
 - [vim](https://github.com/vim/vim) v9.1.0
+- [which](https://savannah.gnu.org/projects/which/) v2.23 - Show full path of shell commands

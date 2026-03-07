@@ -1,0 +1,26 @@
+From: Bottlerocket Team <bottlerocket@amazon.com>
+Date: Fri, 07 Mar 2026 00:00:00 +0000
+Subject: [PATCH] openbsd-compat/xcrypt.c: guard crypt() call with HAVE_CRYPT
+
+When building without libxcrypt (e.g. cross-compiling against a sysroot
+that does not provide libcrypt), configure sets HAVE_CRYPT=0 but the
+xcrypt() function still calls crypt() unconditionally in the else branch,
+causing an undefined reference at link time.
+
+Guard the crypt() call with #ifdef HAVE_CRYPT and return NULL otherwise,
+matching the behaviour of the DES_crypt fallback path.
+
+--- a/openbsd-compat/xcrypt.c
++++ b/openbsd-compat/xcrypt.c
+@@ -100,7 +100,11 @@ xcrypt(const char *password, const char *salt)
+ # elif defined(HAVE_SECUREWARE)
+ 	crypted = bigcrypt(password, salt);
+ # else
++# ifdef HAVE_CRYPT
+ 	crypted = crypt(password, salt);
++# else
++	crypted = NULL;
++# endif
+ #endif
+ 
+ 	return crypted;
