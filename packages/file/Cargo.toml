@@ -1,0 +1,18 @@
+[package]
+name = "file"
+version = "0.1.0"
+edition = "2021"
+publish = false
+build = "../build.rs"
+
+[lib]
+path = "../packages.rs"
+
+[package.metadata.build-package]
+releases-url = "https://astron.com/pub/file/"
+
+[[package.metadata.build-package.external-files]]
+url = "https://astron.com/pub/file/file-5.46.tar.gz"
+sha512 = "a6cb7325c49fd4af159b7555bdd38149e48a5097207acbe5e36deb5b7493ad6ea94d703da6e0edece5bb32959581741f4213707e5cb0528cd46d75a97a5242dc"
+
+[dependencies]

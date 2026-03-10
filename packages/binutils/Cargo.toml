@@ -1,0 +1,18 @@
+[package]
+name = "binutils"
+version = "0.1.0"
+edition = "2021"
+publish = false
+build = "../build.rs"
+
+[lib]
+path = "../packages.rs"
+
+[package.metadata.build-package]
+releases-url = "https://ftp.gnu.org/gnu/binutils/"
+
+[[package.metadata.build-package.external-files]]
+url = "https://ftp.gnu.org/gnu/binutils/binutils-2.44.tar.xz"
+sha512 = "b85d3bbc0e334cf67a96219d3c7c65fbf3e832b2c98a7417bf131f3645a0307057ec81cd2b29ff2563cec53e3d42f73e2c60cc5708e80d4a730efdcc6ae14ad7"
+
+[dependencies]

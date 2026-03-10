@@ -1,0 +1,18 @@
+[package]
+name = "procps-ng"
+version = "0.1.0"
+edition = "2021"
+publish = false
+build = "../build.rs"
+
+[lib]
+path = "../packages.rs"
+
+[package.metadata.build-package]
+releases-url = "https://sourceforge.net/projects/procps-ng/files/Production/"
+
+[[package.metadata.build-package.external-files]]
+url = "https://sourceforge.net/projects/procps-ng/files/Production/procps-ng-4.0.5.tar.xz/download"
+sha512 = "c27730743210cf850c4af98e1fb81bc8ee8d550b07b9eedb34a5b9d661263d0f1bc92c4e73802a0ed8d4405854aef4bc542bff283c28e8fbb6dabb967f9e4359"
+
+[dependencies]

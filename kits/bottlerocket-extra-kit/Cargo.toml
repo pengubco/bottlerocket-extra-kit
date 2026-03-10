@@ -25,3 +25,6 @@ diffutils = { path = "../../packages/diffutils" }
 tar = { path = "../../packages/tar" }
 which = { path = "../../packages/which" }
 openssh = { path = "../../packages/openssh" }
+file = { path = "../../packages/file" }
+binutils = { path = "../../packages/binutils" }
+procps-ng = { path = "../../packages/procps-ng" }

@@ -7,18 +7,25 @@ name = "awscli2"
 version = "0.1.0"
 
 [[package]]
+name = "binutils"
+version = "0.1.0"
+
+[[package]]
 name = "bottlerocket-extra-kit"
 version = "0.1.0"
 dependencies = [
  "awscli2",
+ "binutils",
  "curl",
  "diffutils",
+ "file",
  "golang",
  "jsoncpp",
  "nerdctl",
  "oomd",
  "openssh",
  "permissive-selinux",
+ "procps-ng",
  "sysstat",
  "tar",
  "vim",
@@ -31,6 +38,10 @@ version = "0.1.0"
 
 [[package]]
 name = "diffutils"
+version = "0.1.0"
+
+[[package]]
+name = "file"
 version = "0.1.0"
 
 [[package]]
@@ -58,6 +69,10 @@ version = "0.1.0"
 
 [[package]]
 name = "permissive-selinux"
+version = "0.1.0"
+
+[[package]]
+name = "procps-ng"
 version = "0.1.0"
 
 [[package]]
