@@ -20,6 +20,9 @@ sysstat = { path = "../../packages/sysstat" }
 vim = { path = "../../packages/vim" }
 nerdctl = { path = "../../packages/nerdctl" }
 awscli2 = { path = "../../packages/awscli2" }
+perf = { path = "../../packages/perf" }
+bpftrace = { path = "../../packages/bpftrace" }
+perfrun = { path = "../../packages/perfrun" }
 golang = { path = "../../packages/golang" }
 diffutils = { path = "../../packages/diffutils" }
 tar = { path = "../../packages/tar" }

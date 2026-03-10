@@ -9,4 +9,7 @@ members = [
   "packages/sysstat",
   "packages/nerdctl",
   "packages/awscli2",
+  "packages/perf",
+  "packages/bpftrace",
+  "packages/perfrun",
 ]

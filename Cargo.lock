@@ -16,6 +16,7 @@ version = "0.1.0"
 dependencies = [
  "awscli2",
  "binutils",
+ "bpftrace",
  "curl",
  "diffutils",
  "file",
@@ -24,6 +25,8 @@ dependencies = [
  "nerdctl",
  "oomd",
  "openssh",
+ "perf",
+ "perfrun",
  "permissive-selinux",
  "procps-ng",
  "sysstat",
@@ -31,6 +34,10 @@ dependencies = [
  "vim",
  "which",
 ]
+
+[[package]]
+name = "bpftrace"
+version = "0.1.0"
 
 [[package]]
 name = "curl"
@@ -65,6 +72,17 @@ dependencies = [
 
 [[package]]
 name = "openssh"
+version = "0.1.0"
+
+[[package]]
+name = "perf"
+version = "0.1.0"
+dependencies = [
+ "perfrun",
+]
+
+[[package]]
+name = "perfrun"
 version = "0.1.0"
 
 [[package]]

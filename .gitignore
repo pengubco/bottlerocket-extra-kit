@@ -1,5 +1,6 @@
 /build
 .kiro/
+*.rpm
 *.tar.*
 *.tgz
 *.zip

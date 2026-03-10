@@ -1,0 +1,19 @@
+[package]
+name = "bpftrace"
+version = "0.1.0"
+edition = "2021"
+publish = false
+build = "../build.rs"
+
+[lib]
+path = "../packages.rs"
+
+[package.metadata.build-package]
+releases-url = "https://github.com/bpftrace/bpftrace/releases"
+
+# Pre-built static binary for x86_64 (aarch64 binary not available upstream)
+[[package.metadata.build-package.external-files]]
+url = "https://github.com/bpftrace/bpftrace/releases/download/v0.24.2/bpftrace"
+sha512 = "bc562e425629bbd5eb8ad3d6cd450cdad4db30345156219d17a7a523241255700001b672dc8bae2b2db8f00ee45e227fe555b354dcc7af50cd4256ff9d34c90a"
+
+[dependencies]

@@ -1,0 +1,20 @@
+[package]
+name = "perf"
+version = "0.1.0"
+edition = "2021"
+publish = false
+build = "../build.rs"
+
+[lib]
+path = "../packages.rs"
+
+[package.metadata.build-package]
+releases-url = "https://cdn.kernel.org/pub/linux/kernel/"
+
+[[package.metadata.build-package.external-files]]
+url = "https://cdn.amazonlinux.com/al2023/blobstore/dce51e264ae9f9dc1841aaba22ea3ccd34ebc646acd5518b0604134097062c6c/kernel-6.1.159-181.297.amzn2023.src.rpm"
+sha512 = "a6d2f243fae35aae0f4de41e5ad3c4e65ff546a858a85278a19c7b2d8eccf156142f4aa760c02c9b6ad78849e374591e2fa45f2de14e4f04f198393fcdff4e9b"
+force-upstream = true
+
+[dependencies]
+perfrun = { path = "../perfrun" }
