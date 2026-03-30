@@ -77,43 +77,45 @@ make build-package PACKAGE=awscli2
 
 Then build and publish:
 ```
-make update && make fetch && make build
-make publish VENDOR=xxx
-```
-
-or 
-```
 make build-and-publish VENDOR=xxx
 ```
 
-## Performance Analysis Tools
+## Tools That Work Best on the Host
 
-Some performance analysis tools — particularly those that use eBPF, hardware performance counters, or kernel tracing — work best when run directly on the host rather than inside a container. Containers share the host kernel but may have restricted access to `/proc`, `/sys`, perf events, and BPF syscalls depending on their security profile. Running these tools on the Bottlerocket host (e.g., via the admin container or an SSH session) gives them full visibility into all processes, kernel internals, and hardware counters across the entire node.
+Some tools in this kit work correctly only when run natively on the Bottlerocket host, not from inside a container. There are two main reasons for this.
 
-The following packages in this kit are designed for host-level performance analysis:
+**Process-aware tools** — tools like `pldd` attach to running processes via `/proc/<pid>/maps` or ptrace. They need to see the host's process namespace and require `SYS_PTRACE` capability. Running them from a sidecar container against host processes is unreliable and often blocked by the container's security profile.
 
-- **perf** — Linux kernel performance counters. Profiling from inside a container requires `CAP_PERFMON` (or `CAP_SYS_ADMIN` on older kernels) and access to perf events, which are often restricted. Running on the host avoids these limitations and gives system-wide visibility.
+**Dynamic linker tools** — `ldd` works by invoking the ELF interpreter embedded in the target binary (`LD_TRACE_LOADED_OBJECTS=1`). When run from a container against a binary on a mounted host volume, it uses the container's dynamic linker and library paths, not the host's — so the dependency output will be wrong. Running `ldd` natively on the host ensures it resolves libraries against the correct sysroot. If you only need to inspect `NEEDED` entries statically (without executing the binary), `readelf -d` or `objdump -p` from `binutils` work correctly from any context.
+
+**Performance and tracing tools** — eBPF, hardware performance counters, and kernel tracing require elevated capabilities (`CAP_BPF`, `CAP_PERFMON`, `CAP_SYS_ADMIN`) and access to kernel internals that are typically restricted inside containers. Running on the host gives full visibility across all processes and kernel subsystems.
+
+The following packages are designed for or work best at the host level:
+
+- **glibc-utils** (`ldd`, `pldd`) — `ldd` resolves shared library dependencies by executing the target binary's ELF interpreter; must run natively for correct results. `pldd` lists shared libraries loaded into a running process via `/proc`; requires host process namespace access.
+- **perf** — Linux kernel performance counters. Requires `CAP_PERFMON` (or `CAP_SYS_ADMIN` on older kernels) and access to perf events, which are often restricted in containers.
 - **perfrun** — Convenience wrapper around `perf` for common workflows (record, flamegraph, stat, top). Depends on `perf`.
-- **bpftrace** — High-level eBPF tracing language. eBPF programs require `CAP_BPF` + `CAP_PERFMON` and access to kernel BTF/debug info. Host execution is strongly preferred for full tracing capability.
+- **bpftrace** — High-level eBPF tracing language. Requires `CAP_BPF` + `CAP_PERFMON` and access to kernel BTF/debug info.
 - **sysstat** (`sar`, `iostat`, `mpstat`, etc.) — System-wide I/O, CPU, and memory statistics. Most useful at the host level for whole-node visibility.
 
 ## Packages
 - [awscli2](https://aws.amazon.com/cli/) v2.27.0 - AWS CLI version 2
 - [binutils](https://www.gnu.org/software/binutils/) v2.44 - Binary utilities: `as`, `ld`, `objdump`, `nm`, `strip`, `readelf`, and more
-- [bpftrace](https://github.com/bpftrace/bpftrace) v0.24.2 - High-level tracing language for Linux eBPF. Pre-built static binary (x86_64 only). See [Performance Analysis Tools](#performance-analysis-tools).
+- [bpftrace](https://github.com/bpftrace/bpftrace) v0.24.2 - High-level tracing language for Linux eBPF. Pre-built static binary (x86_64 only).
 - [curl](https://curl.se) v8.12.1
 - [diffutils](https://www.gnu.org/software/diffutils/) v3.12 - GNU diff utilities: `diff`, `diff3`, `cmp`, `sdiff`
 - [file](https://www.darwinsys.com/file/) v5.46 - Determine file type (`file` command)
+- [glibc-utils](https://www.gnu.org/software/libc/) v2.42 - GNU C Library utilities: `ldd` (list dynamic dependencies) and `pldd` (list shared libraries of a running process).
 - [golang](https://go.dev) v1.26.1 - The Go programming language toolchain. Note: `/tmp` is mounted `noexec` on Bottlerocket; set `GOCACHE`, `GOTMPDIR`, and `GOPATH` to a writable path such as `/local` before running `go build` or `go run`.
 - [jsoncpp](https://github.com/open-source-parsers/jsoncpp) v1.9.6
 - [nerdctl](https://github.com/containerd/nerdctl) v2.1.6 - Docker-compatible CLI for containerd
 - [oomd](https://github.com/facebookincubator/oomd) v0.5.0
 - [openssh](https://www.openssh.com/) v10.0p1 - OpenSSH daemon (`sshd`) and client utilities (`ssh`, `scp`, `sftp`, `ssh-keygen`)
-- [perf](https://perf.wiki.kernel.org/) v6.1.159 - Linux kernel performance analysis tool. See [Performance Analysis Tools](#performance-analysis-tools).
-- [perfrun](https://www.kernel.org/) v0.1.0 - Convenience wrapper for common `perf` workflows: `record`, `flamegraph`, `stat`, `top`. Installed automatically with `perf`. See [Performance Analysis Tools](#performance-analysis-tools).
+- [perf](https://perf.wiki.kernel.org/) v6.1.159 - Linux kernel performance analysis tool.
+- [perfrun](https://www.kernel.org/) v0.1.0 - Convenience wrapper for common `perf` workflows: `record`, `flamegraph`, `stat`, `top`. Installed automatically with `perf`.
 - [permissive-selinux] - Set SELinux mode to permissive. Useful for debugging/developing while bypassing SELinux denials (e.g., running shell scripts)
 - [procps-ng](https://gitlab.com/procps-ng/procps) - Process monitoring utilities: `ps`, `top`, `free`, `vmstat`, `pgrep`, `pkill`, and more
-- [sysstat](https://github.com/sysstat/sysstat) v12.7.7 - Commands: sar, sadf, iostat, mpstat, pidstat, tapestat, cifsiostat. See [Performance Analysis Tools](#performance-analysis-tools).
+- [sysstat](https://github.com/sysstat/sysstat) v12.7.7 - Commands: sar, sadf, iostat, mpstat, pidstat, tapestat, cifsiostat.
 - [tar](https://www.gnu.org/software/tar/) v1.35 - GNU tar archiving utility
 - [vim](https://github.com/vim/vim) v9.1.0
 - [which](https://savannah.gnu.org/projects/which/) v2.23 - Show full path of shell commands

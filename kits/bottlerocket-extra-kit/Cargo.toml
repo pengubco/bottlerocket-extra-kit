@@ -31,3 +31,4 @@ openssh = { path = "../../packages/openssh" }
 file = { path = "../../packages/file" }
 binutils = { path = "../../packages/binutils" }
 procps-ng = { path = "../../packages/procps-ng" }
+glibc-utils = { path = "../../packages/glibc-utils" }

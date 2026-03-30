@@ -12,4 +12,5 @@ members = [
   "packages/perf",
   "packages/bpftrace",
   "packages/perfrun",
+  "packages/glibc-utils",
 ]

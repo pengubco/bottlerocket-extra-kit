@@ -1,0 +1,22 @@
+[package]
+name = "glibc-utils"
+version = "0.1.0"
+edition = "2021"
+publish = false
+build = "../build.rs"
+
+[lib]
+path = "../packages.rs"
+
+[package.metadata.build-package]
+releases-url = "https://ftp.gnu.org/gnu/glibc"
+
+[[package.metadata.build-package.external-files]]
+url = "https://ftp.gnu.org/gnu/glibc/glibc-2.42.tar.xz"
+sha512 = "73a617db8e0f0958c0575f7a1c5a35b72b7e070b6cbdd02a9bb134995ca7ca0909f1e50d7362c53d2572d72f1879bb201a61d5275bac16136895d9a34ef0c068"
+
+[[package.metadata.build-package.external-files]]
+url = "https://ftp.gnu.org/gnu/glibc/glibc-2.42.tar.xz.sig"
+sha512 = "d868220778e98d24aead10a585e6a903892e4d043cd96a404634c8aa03d001d624a46a5c0fe13c86f83f66396a1f360a10990966fe377e98a722914b5087575d"
+
+[dependencies]

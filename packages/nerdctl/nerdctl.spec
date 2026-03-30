@@ -59,7 +59,7 @@ BUILD_ARGS=(
 )
 
 go build "${BUILD_ARGS[@]}" -o nerdctl ./cmd/nerdctl
-gofips build "${BUILD_ARGS[@]}" -o fips/nerdctl ./cmd/nerdctl
+GOEXPERIMENT=boringcrypto go build "${BUILD_ARGS[@]}" -o fips/nerdctl ./cmd/nerdctl
 
 %install
 install -d %{buildroot}%{_cross_bindir}

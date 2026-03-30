@@ -20,6 +20,7 @@ dependencies = [
  "curl",
  "diffutils",
  "file",
+ "glibc-utils",
  "golang",
  "jsoncpp",
  "nerdctl",
@@ -49,6 +50,10 @@ version = "0.1.0"
 
 [[package]]
 name = "file"
+version = "0.1.0"
+
+[[package]]
+name = "glibc-utils"
 version = "0.1.0"
 
 [[package]]
