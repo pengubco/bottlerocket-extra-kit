@@ -30,6 +30,7 @@ dependencies = [
  "perfrun",
  "permissive-selinux",
  "procps-ng",
+ "strace",
  "sysstat",
  "tar",
  "vim",
@@ -96,6 +97,10 @@ version = "0.1.0"
 
 [[package]]
 name = "procps-ng"
+version = "0.1.0"
+
+[[package]]
+name = "strace"
 version = "0.1.0"
 
 [[package]]

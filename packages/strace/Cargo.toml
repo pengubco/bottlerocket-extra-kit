@@ -1,0 +1,18 @@
+[package]
+name = "strace"
+version = "0.1.0"
+edition = "2021"
+publish = false
+build = "../build.rs"
+
+[lib]
+path = "../packages.rs"
+
+[package.metadata.build-package]
+releases-url = "https://strace.io/files/"
+
+[[package.metadata.build-package.external-files]]
+url = "https://strace.io/files/6.18/strace-6.18.tar.xz"
+sha512 = "421b75971cb04f5e3b09a1a12bd14fff9c8b315ca394f47d299937fe82f828d6c7231981797e12eab4a95b1c96e359224756c65067c8d9aec36ef18d06cfbc85"
+
+[dependencies]

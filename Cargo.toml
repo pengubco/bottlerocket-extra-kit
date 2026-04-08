@@ -13,4 +13,5 @@ members = [
   "packages/bpftrace",
   "packages/perfrun",
   "packages/glibc-utils",
+  "packages/strace",
 ]

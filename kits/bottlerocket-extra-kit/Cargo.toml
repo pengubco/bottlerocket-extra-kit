@@ -30,5 +30,6 @@ which = { path = "../../packages/which" }
 openssh = { path = "../../packages/openssh" }
 file = { path = "../../packages/file" }
 binutils = { path = "../../packages/binutils" }
+strace = { path = "../../packages/strace" }
 procps-ng = { path = "../../packages/procps-ng" }
 glibc-utils = { path = "../../packages/glibc-utils" }
