@@ -23,6 +23,7 @@ dependencies = [
  "glibc-utils",
  "golang",
  "jsoncpp",
+ "libcap-utils",
  "nerdctl",
  "oomd",
  "openssh",
@@ -63,6 +64,10 @@ version = "0.1.0"
 
 [[package]]
 name = "jsoncpp"
+version = "0.1.0"
+
+[[package]]
+name = "libcap-utils"
 version = "0.1.0"
 
 [[package]]

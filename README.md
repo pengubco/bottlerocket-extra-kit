@@ -119,3 +119,4 @@ The following packages are designed for or work best at the host level:
 - [tar](https://www.gnu.org/software/tar/) v1.35 - GNU tar archiving utility
 - [vim](https://github.com/vim/vim) v9.1.0
 - [which](https://savannah.gnu.org/projects/which/) v2.23 - Show full path of shell commands
+- [libcap-utils](https://sites.google.com/site/fullycapable/) v2.77 - POSIX capabilities utilities: `getcap`, `setcap`, `capsh`, `getpcaps`

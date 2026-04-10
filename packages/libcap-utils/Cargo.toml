@@ -1,0 +1,22 @@
+[package]
+name = "libcap-utils"
+version = "0.1.0"
+edition = "2021"
+publish = false
+build = "../build.rs"
+
+[lib]
+path = "../packages.rs"
+
+[package.metadata.build-package]
+releases-url = "https://cdn.kernel.org/pub/linux/libs/security/linux-privs/libcap2/"
+
+[[package.metadata.build-package.external-files]]
+url = "https://cdn.kernel.org/pub/linux/libs/security/linux-privs/libcap2/libcap-2.77.tar.gz"
+sha512 = "e5471afc4f149a8330e6df07effe58cac44d8a773b1fff0686e7039c41888e33402e1942fe5271a142e159a6088abbdbb7a82133389b3a9351749c2bf797b6b8"
+
+[[package.metadata.build-package.external-files]]
+url = "https://cdn.kernel.org/pub/linux/libs/security/linux-privs/libcap2/libcap-2.77.tar.sign"
+sha512 = "c362eefb80bbc110b7d7c676cc2b37e04bd3dab1b8b4577d62a0774b6300258743156c57102e8dc11c35d2ea876053dc57eae44197137273413b959df33ef0c0"
+
+[dependencies]

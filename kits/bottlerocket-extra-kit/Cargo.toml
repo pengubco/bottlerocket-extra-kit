@@ -33,3 +33,4 @@ binutils = { path = "../../packages/binutils" }
 strace = { path = "../../packages/strace" }
 procps-ng = { path = "../../packages/procps-ng" }
 glibc-utils = { path = "../../packages/glibc-utils" }
+libcap-utils = { path = "../../packages/libcap-utils" }

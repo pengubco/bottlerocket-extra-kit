@@ -14,4 +14,5 @@ members = [
   "packages/perfrun",
   "packages/glibc-utils",
   "packages/strace",
+  "packages/libcap-utils",
 ]
