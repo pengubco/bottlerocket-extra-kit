@@ -51,8 +51,8 @@ find %{buildroot}%{_cross_libdir} -name '*.la' -delete
 %{_cross_attribution_file}
 %{_cross_bindir}/*
 %{_cross_libdir}/*.so*
-%dir %{_cross_prefix}/x86_64-bottlerocket-linux-gnu/bin/
-%{_cross_prefix}/x86_64-bottlerocket-linux-gnu/bin/*
+%dir %{_cross_prefix}/%{_cross_target}/bin/
+%{_cross_prefix}/%{_cross_target}/bin/*
 %{_cross_includedir}/
 %{_cross_datadir}/
 

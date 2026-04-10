@@ -68,7 +68,7 @@ autoconf
 %make_build CC="${CC}" 
 
 %install
-%make_install
+%make_install STRIP="%{_cross_target}-strip"
  
 %files 
 %{_cross_bindir}/*
