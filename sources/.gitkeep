@@ -1,0 +1,7 @@
+# This directory is intentionally (almost) empty.
+#
+# The Bottlerocket SDK build container bind-mounts the top-level `sources`
+# directory into the RPM build root. Kit repositories without any first-party
+# source code still need the directory to exist, otherwise every package build
+# fails with `"/sources": not found`. Git does not track empty directories, so
+# this placeholder keeps it around.
