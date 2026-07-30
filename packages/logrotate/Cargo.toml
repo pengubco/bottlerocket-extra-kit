@@ -1,0 +1,18 @@
+[package]
+name = "logrotate"
+version = "0.1.0"
+edition = "2021"
+publish = false
+build = "../build.rs"
+
+[lib]
+path = "../packages.rs"
+
+[package.metadata.build-package]
+releases-url = "https://github.com/logrotate/logrotate/releases"
+
+[[package.metadata.build-package.external-files]]
+url = "https://github.com/logrotate/logrotate/releases/download/3.22.0/logrotate-3.22.0.tar.xz"
+sha512 = "16fd95b4daef779212008c4a968c7a7130be8d550f58531d24fc04599cb9adff6323a745725b3b14d7312ad36cb6646fe33a3defdb5b70cda2cec9646aab066a"
+
+[dependencies]

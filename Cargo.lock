@@ -22,8 +22,10 @@ dependencies = [
  "file",
  "glibc-utils",
  "golang",
+ "gzip",
  "jsoncpp",
  "libcap-utils",
+ "logrotate",
  "nerdctl",
  "oomd",
  "openssh",
@@ -63,11 +65,19 @@ name = "golang"
 version = "0.1.0"
 
 [[package]]
+name = "gzip"
+version = "0.1.0"
+
+[[package]]
 name = "jsoncpp"
 version = "0.1.0"
 
 [[package]]
 name = "libcap-utils"
+version = "0.1.0"
+
+[[package]]
+name = "logrotate"
 version = "0.1.0"
 
 [[package]]

@@ -107,7 +107,9 @@ The following packages are designed for or work best at the host level:
 - [file](https://www.darwinsys.com/file/) v5.46 - Determine file type (`file` command)
 - [glibc-utils](https://www.gnu.org/software/libc/) v2.42 - GNU C Library utilities: `ldd` (list dynamic dependencies) and `pldd` (list shared libraries of a running process).
 - [golang](https://go.dev) v1.26.1 - The Go programming language toolchain. Note: `/tmp` is mounted `noexec` on Bottlerocket; set `GOCACHE`, `GOTMPDIR`, and `GOPATH` to a writable path such as `/local` before running `go build` or `go run`.
+- [gzip](https://www.gnu.org/software/gzip/) v1.14 - GNU compression utility: `gzip`, `gunzip`, `zcat`, `zgrep`. The core kit ships only `unpigz`, which cannot compress, so this fills the gap.
 - [jsoncpp](https://github.com/open-source-parsers/jsoncpp) v1.9.6
+- [logrotate](https://github.com/logrotate/logrotate) v3.22.0 - Rotates and maintains log files. Ships a default `/etc/logrotate.conf` plus a `logrotate.timer` that runs daily; drop additional rules into `/etc/logrotate.d`. Pulls in `gzip` so `compress` works out of the box.
 - [nerdctl](https://github.com/containerd/nerdctl) v2.1.6 - Docker-compatible CLI for containerd
 - [oomd](https://github.com/facebookincubator/oomd) v0.5.0
 - [openssh](https://www.openssh.com/) v10.0p1 - OpenSSH daemon (`sshd`) and client utilities (`ssh`, `scp`, `sftp`, `ssh-keygen`)

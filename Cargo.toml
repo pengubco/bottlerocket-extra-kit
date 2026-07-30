@@ -15,4 +15,6 @@ members = [
   "packages/glibc-utils",
   "packages/strace",
   "packages/libcap-utils",
+  "packages/logrotate",
+  "packages/gzip",
 ]

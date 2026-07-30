@@ -1,0 +1,18 @@
+[package]
+name = "gzip"
+version = "0.1.0"
+edition = "2021"
+publish = false
+build = "../build.rs"
+
+[lib]
+path = "../packages.rs"
+
+[package.metadata.build-package]
+releases-url = "https://ftp.gnu.org/gnu/gzip/"
+
+[[package.metadata.build-package.external-files]]
+url = "https://ftp.gnu.org/gnu/gzip/gzip-1.14.tar.xz"
+sha512 = "82aef53188b3e69b51b7ddab5b8c44a11a5b73c0039b22a315a0c7d244694feab0146748add4265901eb1b4c0cee8a9eb69594995f098830d964091af97079c5"
+
+[dependencies]

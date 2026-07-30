@@ -1,0 +1,31 @@
+[Unit]
+Description=Rotate log files
+Documentation=man:logrotate(8) man:logrotate.conf(5)
+RequiresMountsFor=/var/log
+
+[Service]
+Type=oneshot
+ExecStart=/usr/sbin/logrotate /etc/logrotate.conf
+
+# Performance options
+Nice=19
+IOSchedulingClass=best-effort
+IOSchedulingPriority=7
+
+# Hardening options. See systemd.exec(5) for details.
+# No NoNewPrivileges, since third party rotate scripts may need it.
+# No RestrictSUIDSGID, since setgid directories may need to be created.
+LockPersonality=true
+MemoryDenyWriteExecute=true
+PrivateDevices=true
+PrivateTmp=true
+ProtectClock=true
+ProtectControlGroups=true
+ProtectHome=true
+ProtectHostname=true
+ProtectKernelLogs=true
+ProtectKernelModules=true
+ProtectKernelTunables=true
+ProtectSystem=full
+RestrictNamespaces=true
+RestrictRealtime=true
