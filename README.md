@@ -55,16 +55,6 @@ Pin to the same versions used in an existing `Twoliter.toml`:
 make generate-twoliter-toml RELEASE_VERSION=1.0.4 TWOLITER_SOURCE=/path/to/Twoliter.toml
 ```
 
-Or specify versions explicitly:
-```
-make generate-twoliter-toml RELEASE_VERSION=1.0.4 CORE_KIT_VERSION=13.0.0 KERNEL_KIT_VERSION=5.0.0 SDK_VERSION=0.70.0
-```
-
-You can mix and match — any version not specified will be fetched from GitHub. For example, pin only the SDK:
-```
-make generate-twoliter-toml RELEASE_VERSION=1.0.4 SDK_VERSION=0.70.0
-```
-
 To build a single package without rebuilding the entire kit:
 ```
 make build-package PACKAGE=awscli2
@@ -83,11 +73,18 @@ make build-and-publish VENDOR=xxx
 0 6 * * * /path/to/bottlerocket-extra-kit/scripts/daily-build.sh
 ```
 
+Flags:
+- `--force` — rebuild and publish even when Twoliter.toml already has the latest versions.
+- `--dry-run` — show what would change without acting.
+
 Environment variables:
 - `VENDOR` — ECR vendor alias for publishing (default: `peng`). Set empty to skip publish.
+- `REGISTRY` — OCI registry URL (e.g. `public.ecr.aws/m8c0s8v8`). Required for publishing unless `Infra.toml` already exists.
+- `PUBLISH_REGIONS` — Comma-separated AWS regions (default: `us-west-2`).
 - `RELEASE_VERSION` — Override the extra-kit release version (default: read from Makefile).
 - `LOG_FILE` — Log output path (default: `/tmp/extra-kit-daily-build.log`).
-- `DRY_RUN` — Set to `true` to show what would change without acting.
+
+If `Infra.toml` does not exist and `VENDOR` is set, the script generates one from `REGISTRY` and `PUBLISH_REGIONS`. You can also create it manually from [Infra-template.toml](Infra-template.toml).
 
 ## Tools That Work Best on the Host
 
