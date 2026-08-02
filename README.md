@@ -1,7 +1,7 @@
 # Bottlerocket Extra Kit
-`bottlerocket-extra-kit` contains RPM packages used for developing and debugging on Bottlerocket that are not included in the [bottlerocket-kernel-kit](https://github.com/bottlerocket-os/bottlerocket-kernel-kit) and [bottlerocket-core-kit](https://github.com/bottlerocket-os/bottlerocket-core-kit). You can consume packages from this kit to build your own [Bottlerocket](https://github.com/bottlerocket-os) variant.
+`bottlerocket-extra-kit` provides RPM packages not included in the [bottlerocket-kernel-kit](https://github.com/bottlerocket-os/bottlerocket-kernel-kit) or [bottlerocket-core-kit](https://github.com/bottlerocket-os/bottlerocket-core-kit) that you may find useful when building your own [Bottlerocket](https://github.com/bottlerocket-os) variant.
 
-You should NOT use `bottlerocket-extra-kit` in your production Bottlerocket OS. Packages here are only intended to make developing and debugging on Bottlerocket easier.
+Some tools (noted in the [Tools That Work Best on the Host](#tools-that-work-best-on-the-host) section below) rely on host-level access to processes, kernel internals, or the native dynamic linker and will not work correctly from inside a container.
 
 ## Use RPM packages from the released kit
 Take the [aws-dev](https://github.com/bottlerocket-os/bottlerocket/tree/develop/variants/aws-dev) variant as an example. 
