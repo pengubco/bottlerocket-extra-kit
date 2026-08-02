@@ -75,6 +75,20 @@ Then build and publish:
 make build-and-publish VENDOR=xxx
 ```
 
+## Automated daily builds
+
+`scripts/daily-build.sh` checks for upstream kernel-kit, core-kit, or SDK updates and rebuilds the kit when any version changes. If nothing changed, it logs and exits. Use it from cron:
+
+```cron
+0 6 * * * /path/to/bottlerocket-extra-kit/scripts/daily-build.sh
+```
+
+Environment variables:
+- `VENDOR` — ECR vendor alias for publishing (default: `peng`). Set empty to skip publish.
+- `RELEASE_VERSION` — Override the extra-kit release version (default: read from Makefile).
+- `LOG_FILE` — Log output path (default: `/tmp/extra-kit-daily-build.log`).
+- `DRY_RUN` — Set to `true` to show what would change without acting.
+
 ## Tools That Work Best on the Host
 
 Some tools in this kit work correctly only when run natively on the Bottlerocket host, not from inside a container. There are two main reasons for this.
