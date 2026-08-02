@@ -14,7 +14,7 @@ registry = "public.ecr.aws/m8c0s8v8"
 [[kit]]
 name = "bottlerocket-extra-kit"
 # Find the versions in Releases
-version = "1.0.4"
+version = "1.0.5"
 vendor = "peng" 
 ```
 
@@ -39,7 +39,7 @@ When building a Bottlerocket image, the bottlerocket-kernel-kit, bottlerocket-co
 Error: cannot have multiple versions of the same kit (bottlerocket-core-kit-9.2.1@bottlerocket != bottlerocket-core-kit-9.2.0@bottlerocket)
 ```
 
-The extra-kit always builds against the latest core-kit, kernel-kit, and SDK at the time of release. The release version is just the extra-kit's own semver (e.g. `1.0.4`). To find which core-kit, kernel-kit, and SDK a given release was built with, check the `Twoliter.toml` at that release tag.
+The extra-kit always builds against the latest core-kit, kernel-kit, and SDK at the time of release. The release version is just the extra-kit's own semver (e.g. `1.0.5`). To find which core-kit, kernel-kit, and SDK a given release was built with, check the `Twoliter.toml` at that release tag.
 
 If you need to build with a different core-kit and SDK version, please check out the repository and update the `Twoliter.toml`.
 
@@ -47,12 +47,12 @@ If you need to build with a different core-kit and SDK version, please check out
 
 Generate `Twoliter.toml` using the latest core-kit, kernel-kit, and SDK versions from GitHub (default):
 ```
-make generate-twoliter-toml RELEASE_VERSION=1.0.4
+make generate-twoliter-toml RELEASE_VERSION=1.0.5
 ```
 
 Pin to the same versions used in an existing `Twoliter.toml`:
 ```
-make generate-twoliter-toml RELEASE_VERSION=1.0.4 TWOLITER_SOURCE=/path/to/Twoliter.toml
+make generate-twoliter-toml RELEASE_VERSION=1.0.5 TWOLITER_SOURCE=/path/to/Twoliter.toml
 ```
 
 To build a single package without rebuilding the entire kit:
@@ -85,6 +85,11 @@ Environment variables:
 - `LOG_FILE` — Log output path (default: `/tmp/extra-kit-daily-build.log`).
 
 If `Infra.toml` does not exist and `VENDOR` is set, the script generates one from `REGISTRY` and `PUBLISH_REGIONS`. You can also create it manually from [Infra-template.toml](Infra-template.toml).
+
+Example:
+```
+VENDOR=peng REGISTRY=public.ecr.aws/m8c0s8v8 ./scripts/daily-build.sh --force
+```
 
 ## Tools That Work Best on the Host
 
