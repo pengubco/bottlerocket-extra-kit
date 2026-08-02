@@ -206,8 +206,10 @@ func main() {
 		}
 	}
 
-	// Generate release-version string
-	fullReleaseVersion := fmt.Sprintf("%s-kernalkit-%s-corekit-%s-sdk-%s", releaseVersion, kernelKit, coreKit, sdk)
+	// The release-version is the extra-kit's own semver. Dependency kit and SDK
+	// versions are recorded as explicit pins in the kit/sdk sections below, so
+	// they don't need to be encoded into the release-version string.
+	fullReleaseVersion := releaseVersion
 
 	// Generate and output Twoliter.toml
 	output := fmt.Sprintf(`schema-version = 1

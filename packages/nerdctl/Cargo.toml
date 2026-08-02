@@ -18,6 +18,6 @@ sha512 = "4bcd904f83cc47d9ae165740ae758d527450c46fe2fc154a433d0527816d1f66b0d7ac
 [[package.metadata.build-package.external-files]]
 url = "file://nerdctl-2.1.6-vendor.tar.gz"
 path = "nerdctl-2.1.6-vendor.tar.gz"
-sha512 = "fb4a13aaba8a1588a2d9ba4ee699f8d2098f1b7d6830457f04fd951301c3dff086ae356b82a04626c83d0af3846001e7867ec395e788b595e630506d0b9a5691"
+sha512 = "c72bbfe04ee9642208bc650dbb01236a82fc3774431ec62cd2b11599da65a244d07223533601e071b956b0543572deeb72f0c91398ef6123810041853ccea3ca"
 
 [dependencies]

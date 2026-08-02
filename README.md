@@ -14,7 +14,7 @@ registry = "public.ecr.aws/m8c0s8v8"
 [[kit]]
 name = "bottlerocket-extra-kit"
 # Find the versions in Releases
-version = "1.0.1-kernalkit-4.7.1-corekit-12.2.0-sdk-0.66.0"
+version = "1.0.4"
 vendor = "peng" 
 ```
 
@@ -39,12 +39,7 @@ When building a Bottlerocket image, the bottlerocket-kernel-kit, bottlerocket-co
 Error: cannot have multiple versions of the same kit (bottlerocket-core-kit-9.2.1@bottlerocket != bottlerocket-core-kit-9.2.0@bottlerocket)
 ```
 
-The extra-kit will release with the latest core-kit and SDK at the time of release. The release name follows this pattern:
-`v0.0.3-kernelkit-4.3.0-corekit-10.3.0-sdk-0.64.0`, which reads:
-- bottlerocket-extra-kit version 0.0.3
-- bottlerocket-kernel-kit version 4.3.0
-- bottlerocket-core-kit version 10.3.0
-- bottlerocket-sdk version 0.64.0
+The extra-kit always builds against the latest core-kit, kernel-kit, and SDK at the time of release. The release version is just the extra-kit's own semver (e.g. `1.0.4`). To find which core-kit, kernel-kit, and SDK a given release was built with, check the `Twoliter.toml` at that release tag.
 
 If you need to build with a different core-kit and SDK version, please check out the repository and update the `Twoliter.toml`.
 
@@ -52,22 +47,22 @@ If you need to build with a different core-kit and SDK version, please check out
 
 Generate `Twoliter.toml` using the latest core-kit, kernel-kit, and SDK versions from GitHub (default):
 ```
-make generate-twoliter-toml RELEASE_VERSION=1.0.3
+make generate-twoliter-toml RELEASE_VERSION=1.0.4
 ```
 
 Pin to the same versions used in an existing `Twoliter.toml`:
 ```
-make generate-twoliter-toml RELEASE_VERSION=1.0.3 TWOLITER_SOURCE=/path/to/Twoliter.toml
+make generate-twoliter-toml RELEASE_VERSION=1.0.4 TWOLITER_SOURCE=/path/to/Twoliter.toml
 ```
 
 Or specify versions explicitly:
 ```
-make generate-twoliter-toml RELEASE_VERSION=1.0.3 CORE_KIT_VERSION=13.0.0 KERNEL_KIT_VERSION=5.0.0 SDK_VERSION=0.70.0
+make generate-twoliter-toml RELEASE_VERSION=1.0.4 CORE_KIT_VERSION=13.0.0 KERNEL_KIT_VERSION=5.0.0 SDK_VERSION=0.70.0
 ```
 
 You can mix and match — any version not specified will be fetched from GitHub. For example, pin only the SDK:
 ```
-make generate-twoliter-toml RELEASE_VERSION=1.0.3 SDK_VERSION=0.70.0
+make generate-twoliter-toml RELEASE_VERSION=1.0.4 SDK_VERSION=0.70.0
 ```
 
 To build a single package without rebuilding the entire kit:
