@@ -41,6 +41,43 @@ type TwoliterVersions struct {
 	SDK       string
 }
 
+// getSDKForKit returns the SDK version that a kit was built with, by reading
+// the [sdk] section of that kit's Twoliter.toml at the given tag.
+//
+// Twoliter requires a single SDK across the project and all of its dependency
+// kits, so the SDK must be derived from the kits we depend on rather than from
+// the newest SDK release. A newer SDK often exists before any kit adopts it,
+// and pinning it here fails the lock step with "cannot use multiple sdks".
+func getSDKForKit(repo, version string) (string, error) {
+	url := fmt.Sprintf("https://raw.githubusercontent.com/%s/v%s/Twoliter.toml", repo, version)
+
+	resp, err := http.Get(url)
+	if err != nil {
+		return "", fmt.Errorf("failed to fetch Twoliter.toml from %s v%s: %w", repo, version, err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return "", fmt.Errorf("fetching Twoliter.toml from %s v%s returned status %d", repo, version, resp.StatusCode)
+	}
+
+	data, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return "", fmt.Errorf("failed to read Twoliter.toml from %s v%s: %w", repo, version, err)
+	}
+
+	var tf twoliterFile
+	if err := toml.Unmarshal(data, &tf); err != nil {
+		return "", fmt.Errorf("failed to parse Twoliter.toml from %s v%s: %w", repo, version, err)
+	}
+
+	if tf.SDK.Version == "" {
+		return "", fmt.Errorf("no [sdk] version found in Twoliter.toml from %s v%s", repo, version)
+	}
+
+	return tf.SDK.Version, nil
+}
+
 // parseTwoliterToml reads a Twoliter.toml file and extracts kit/sdk versions.
 func parseTwoliterToml(path string) (*TwoliterVersions, error) {
 	data, err := os.ReadFile(path)
@@ -155,8 +192,8 @@ func main() {
 	flag.StringVar(&releaseVersion, "release", "", "Release version number (required)")
 	flag.StringVar(&coreKitVersion, "core-kit", "", "Version of bottlerocket-core-kit (if not provided, fetches latest release)")
 	flag.StringVar(&kernelKitVersion, "kernel-kit", "", "Version of bottlerocket-kernel-kit (if not provided, fetches latest release)")
-	flag.StringVar(&sdkVersion, "sdk", "", "Version of bottlerocket-sdk (if not provided, fetches latest release)")
-	flag.BoolVar(&useVersionLatest, "use-version-latest", false, "Fetch latest core-kit, kernel-kit and sdk versions from GitHub (default behavior)")
+	flag.StringVar(&sdkVersion, "sdk", "", "Version of bottlerocket-sdk (if not provided, uses the sdk that the pinned core-kit was built with)")
+	flag.BoolVar(&useVersionLatest, "use-version-latest", false, "Fetch latest core-kit and kernel-kit versions from GitHub, and the sdk they were built with (default behavior)")
 	flag.StringVar(&useVersionFrom, "use-version-from", "", "Path to a Twoliter.toml file; use its core-kit, kernel-kit and sdk versions")
 
 	flag.Parse()
@@ -199,9 +236,28 @@ func main() {
 			os.Exit(1)
 		}
 
-		sdk, err = getVersion(sdkVersion, "bottlerocket-os/bottlerocket-sdk")
+		// Derive the SDK from the core-kit we pin, not from the newest SDK
+		// release: all dependency kits and the project must agree on one SDK.
+		if sdkVersion != "" {
+			sdk = sdkVersion
+		} else {
+			sdk, err = getSDKForKit("bottlerocket-os/bottlerocket-core-kit", coreKit)
+			if err != nil {
+				fmt.Fprintf(os.Stderr, "Error getting sdk version: %v\n", err)
+				os.Exit(1)
+			}
+		}
+
+		kernelKitSDK, err := getSDKForKit("bottlerocket-os/bottlerocket-kernel-kit", kernelKit)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "Error getting sdk version: %v\n", err)
+			fmt.Fprintf(os.Stderr, "Error getting kernel-kit sdk version: %v\n", err)
+			os.Exit(1)
+		}
+		if kernelKitSDK != sdk {
+			fmt.Fprintf(os.Stderr,
+				"Error: core-kit %s uses sdk %s but kernel-kit %s uses sdk %s; "+
+					"twoliter requires a single sdk across all kits\n",
+				coreKit, sdk, kernelKit, kernelKitSDK)
 			os.Exit(1)
 		}
 	}

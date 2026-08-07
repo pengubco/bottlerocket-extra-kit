@@ -91,6 +91,21 @@ get_latest_version() {
     echo "${version#v}"
 }
 
+# Read the SDK version a kit was built with, from that kit's Twoliter.toml at
+# the given tag.
+get_kit_sdk_version() {
+    local repo="$1"
+    local version="$2"
+    local sdk
+
+    sdk=$(curl -sfL "https://raw.githubusercontent.com/${repo}/v${version}/Twoliter.toml" \
+        | sed -n '/^\[sdk\]/,/^\[/p' | grep '^version' | head -1 | cut -d'"' -f2) || true
+
+    [[ -z "$sdk" ]] && die "Could not determine sdk version for ${repo} v${version}"
+
+    echo "$sdk"
+}
+
 # Parse a version from Twoliter.toml for a given kit or sdk name.
 parse_version() {
     local name="$1"
@@ -143,7 +158,11 @@ log "Starting daily build check (force=${FORCE})"
 log "Fetching latest upstream versions..."
 LATEST_KERNEL_KIT=$(get_latest_version "bottlerocket-os/bottlerocket-kernel-kit")
 LATEST_CORE_KIT=$(get_latest_version "bottlerocket-os/bottlerocket-core-kit")
-LATEST_SDK=$(get_latest_version "bottlerocket-os/bottlerocket-sdk")
+# The SDK is not chosen independently: twoliter requires the project and every
+# dependency kit to agree on a single SDK, so take whatever SDK the core-kit we
+# are about to pin was built with. The newest SDK release is frequently ahead of
+# any kit that has adopted it.
+LATEST_SDK=$(get_kit_sdk_version "bottlerocket-os/bottlerocket-core-kit" "${LATEST_CORE_KIT}")
 
 log "  kernel-kit: ${LATEST_KERNEL_KIT}"
 log "  core-kit:   ${LATEST_CORE_KIT}"
