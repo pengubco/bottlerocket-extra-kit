@@ -6,7 +6,7 @@ registry = "public.ecr.aws/bottlerocket"
 
 [[kit]]
 name = "bottlerocket-kernel-kit"
-version = "7.2.1"
+version = "7.3.0"
 vendor = "bottlerocket"
 
 [[kit]]
