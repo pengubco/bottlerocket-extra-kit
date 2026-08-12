@@ -96,6 +96,7 @@ Environment variables:
 - `PUBLISH_REGIONS` — Comma-separated AWS regions (default: `us-west-2`).
 - `RELEASE_VERSION` — Override the extra-kit release version (default: read from Makefile).
 - `LOG_FILE` — Log output path (default: `/tmp/extra-kit-daily-build.log`).
+- `ALLOW_DIRTY` — Set to `true` to build and publish from a dirty working tree. Off by default; see [Why the working tree must be clean](#why-the-working-tree-must-be-clean).
 - `GITHUB_TOKEN` — Token for the GitHub API calls that resolve upstream versions. Unauthenticated requests are capped at 60/hour **per IP**, which a shared NAT address (such as a Cloud Desktop) exhausts easily. If unset, the script falls back to `gh auth token` when the gh CLI is logged in.
 
 Progress and error messages go to stderr; they are also appended to `LOG_FILE`.
@@ -109,6 +110,19 @@ If `Infra.toml` does not exist and `VENDOR` is set, the script generates one fro
 ```
 
 Set `GITHUB_TOKEN` explicitly for cron rather than relying on the `gh` fallback. cron runs with a minimal environment, so `gh` may not be on `PATH` even when it works in an interactive shell.
+
+### Why the working tree must be clean
+
+The kit version is derived from git, in twoliter's `Makefile.toml`:
+
+```toml
+BUILDSYS_VERSION_BUILD = { script = ["git describe --always --dirty --exclude '*' --abbrev=8 || echo 00000000"] }
+```
+
+That value lands in the archive filename and is also passed to `publish-kit` as `--build-id`. Two consequences:
+
+- **Building from a dirty tree** produces an artifact tagged `-dirty`, which corresponds to no commit and cannot be reproduced. The script refuses to do this unless `ALLOW_DIRTY=true`.
+- **HEAD must not change between build and publish.** If it does, publish computes a different expected filename and fails with `No kit archive(s) exist at path ...`. This is why the script commits the pin bump *before* building, not after.
 
 ## Tools That Work Best on the Host
 

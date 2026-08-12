@@ -8,8 +8,10 @@
 #   1. Queries GitHub for the latest kernel-kit, core-kit, and SDK versions.
 #   2. Compares them against the versions pinned in Twoliter.toml.
 #   3. If nothing changed (and --force is not set), logs the result and exits.
-#   4. If any version is newer (or --force), regenerates Twoliter.toml, builds
-#      the kit, commits the update, and optionally publishes.
+#   4. If any version is newer (or --force), regenerates Twoliter.toml, commits
+#      the new pins, builds the kit, and optionally publishes.
+#
+# The commit happens before the build on purpose; see Step 5 for why.
 #
 # Flags:
 #   --force         Build and publish even if Twoliter.toml already has the
@@ -25,6 +27,10 @@
 #   RELEASE_VERSION — Extra-kit release version (default: read from Makefile).
 #   LOG_FILE        — Path to log file (default: /tmp/extra-kit-daily-build.log).
 #   DRY_RUN         — If set to "true", same as --dry-run flag.
+#   ALLOW_DIRTY     — If "true", build/publish even when the working tree is
+#                     dirty. Off by default: the kit version embeds
+#                     `git describe`, so a dirty tree produces a "-dirty"
+#                     artifact that matches no commit.
 #   GITHUB_TOKEN    — GitHub token for API calls. Unauthenticated requests are
 #                     capped at 60/hour per IP, which is easily exhausted on a
 #                     shared NAT (e.g. a Cloud Desktop). If unset, the script
@@ -172,6 +178,32 @@ parse_version() {
     fi
 }
 
+# Refuse to build or publish from a dirty working tree.
+#
+# The kit version embeds `git describe --always --dirty`, so a dirty tree yields
+# an artifact tagged "-dirty" that corresponds to no commit. Publishing that to a
+# registry makes it impossible to reproduce. Checking here, before the build,
+# also avoids discovering the problem several minutes later.
+#
+# Set ALLOW_DIRTY=true to downgrade this to a warning.
+require_clean_tree() {
+    local dirty
+    dirty="$(git status --porcelain)"
+
+    [[ -z "$dirty" ]] && return 0
+
+    if [[ "${ALLOW_DIRTY:-false}" == "true" ]]; then
+        log "WARNING: working tree is dirty; artifacts will be tagged '-dirty'."
+        return 0
+    fi
+
+    log "Working tree is not clean:"
+    printf '%s\n' "$dirty" | tee -a "${LOG_FILE}" >&2
+    die "Refusing to build from a dirty tree, because the kit version embeds" \
+        "'git describe'. Commit or stash the changes above, or set" \
+        "ALLOW_DIRTY=true to override."
+}
+
 # Ensure Infra.toml exists when publishing is requested.
 ensure_infra_toml() {
     local infra_path="${REPO_ROOT}/Infra.toml"
@@ -253,7 +285,7 @@ fi
 
 if [[ "$CHANGED" == "true" ]]; then
     log "Upstream changes detected:"
-    printf "%b" "$CHANGES" | tee -a "${LOG_FILE}"
+    printf "%b" "$CHANGES" | tee -a "${LOG_FILE}" >&2
 else
     log "No upstream changes, but --force is set. Rebuilding anyway."
 fi
@@ -270,23 +302,31 @@ if [[ -z "${RELEASE_VERSION:-}" ]]; then
 fi
 log "Using RELEASE_VERSION=${RELEASE_VERSION}"
 
-# ── Step 4: Regenerate Twoliter.toml and rebuild ─────────────────────────────
+# ── Step 4: Regenerate Twoliter.toml and refresh the lock ────────────────────
 if [[ "$CHANGED" == "true" ]]; then
     log "Regenerating Twoliter.toml..."
-    make generate-twoliter-toml RELEASE_VERSION="${RELEASE_VERSION}" 2>&1 | tee -a "${LOG_FILE}"
+    make generate-twoliter-toml RELEASE_VERSION="${RELEASE_VERSION}" 2>&1 | tee -a "${LOG_FILE}" >&2
 
     log "Running make update..."
-    make update 2>&1 | tee -a "${LOG_FILE}"
+    make update 2>&1 | tee -a "${LOG_FILE}" >&2
 fi
 
-log "Building kit..."
-make build 2>&1 | tee -a "${LOG_FILE}"
-
-# ── Step 5: Commit the update (only if Twoliter.toml changed) ────────────────
+# ── Step 5: Commit the pin bump, BEFORE building ─────────────────────────────
+# This must happen before `make build`. The kit version embeds
+# `git describe --always --dirty --abbrev=8` (BUILDSYS_VERSION_BUILD in
+# twoliter's Makefile.toml), and that value is baked into the archive filename
+# as well as passed to `publish-kit` as --build-id. Committing between build and
+# publish changes HEAD, so publish looks for an archive name that the build
+# never produced and fails with "No kit archive(s) exist at path ...".
+# Committing first also means the published artifact is labelled with the exact
+# commit that contains the pins it was built from.
 if [[ "$CHANGED" == "true" ]]; then
     log "Committing updated Twoliter.toml and Twoliter.lock..."
     git add Twoliter.toml Twoliter.lock
-    git commit -q -m "chore: Bump upstream dependencies (daily build)
+    # --only limits the commit to these paths, so unrelated staged work in the
+    # index can never be swept into an automated commit.
+    git commit -q --only -- Twoliter.toml Twoliter.lock \
+        -m "chore: Bump upstream dependencies (daily build)
 
 Automated update to latest upstream versions:
 $(printf '%b' "$CHANGES")"
@@ -294,11 +334,22 @@ $(printf '%b' "$CHANGES")"
     log "Committed: $(git log --oneline -1)"
 fi
 
-# ── Step 6: Publish (optional) ───────────────────────────────────────────────
+# ── Step 6: Validate before spending time on a build ─────────────────────────
+# Both checks are cheap and catch failures that would otherwise surface only
+# after a multi-minute build.
 if [[ -n "$VENDOR" ]]; then
     ensure_infra_toml
+fi
+require_clean_tree
+
+# ── Step 7: Build ────────────────────────────────────────────────────────────
+log "Building kit..."
+make build 2>&1 | tee -a "${LOG_FILE}" >&2
+
+# ── Step 8: Publish (optional) ───────────────────────────────────────────────
+if [[ -n "$VENDOR" ]]; then
     log "Publishing kit to vendor=${VENDOR}..."
-    make publish VENDOR="${VENDOR}" 2>&1 | tee -a "${LOG_FILE}"
+    make publish VENDOR="${VENDOR}" 2>&1 | tee -a "${LOG_FILE}" >&2
     log "Published successfully."
 else
     log "VENDOR is empty — skipping publish."
