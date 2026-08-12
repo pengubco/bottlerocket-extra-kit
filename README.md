@@ -55,6 +55,12 @@ Pin to the same versions used in an existing `Twoliter.toml`:
 make generate-twoliter-toml RELEASE_VERSION=1.0.5 TWOLITER_SOURCE=/path/to/Twoliter.toml
 ```
 
+Pin explicit versions:
+```
+make generate-twoliter-toml RELEASE_VERSION=1.0.5 \
+  CORE_KIT_VERSION=15.0.0 KERNEL_KIT_VERSION=7.3.0 SDK_VERSION=0.77.0
+```
+
 To build a single package without rebuilding the entire kit:
 ```
 make build-package PACKAGE=awscli2
@@ -67,10 +73,17 @@ make build-and-publish VENDOR=xxx
 
 ## Automated daily builds
 
-`scripts/daily-build.sh` checks for upstream kernel-kit, core-kit, or SDK updates and rebuilds the kit when any version changes. If nothing changed, it logs and exits. Use it from cron:
+`scripts/daily-build.sh` checks for upstream kernel-kit, core-kit, or SDK updates and rebuilds the kit when any version changes. If nothing changed, it logs and exits.
 
-```cron
-0 6 * * * /path/to/bottlerocket-extra-kit/scripts/daily-build.sh
+Run it through make:
+```
+make daily-build
+make daily-build DAILY_BUILD_ARGS=--dry-run
+```
+
+Or call the script directly:
+```
+VENDOR=peng REGISTRY=public.ecr.aws/m8c0s8v8 ./scripts/daily-build.sh --force
 ```
 
 Flags:
@@ -83,13 +96,19 @@ Environment variables:
 - `PUBLISH_REGIONS` — Comma-separated AWS regions (default: `us-west-2`).
 - `RELEASE_VERSION` — Override the extra-kit release version (default: read from Makefile).
 - `LOG_FILE` — Log output path (default: `/tmp/extra-kit-daily-build.log`).
+- `GITHUB_TOKEN` — Token for the GitHub API calls that resolve upstream versions. Unauthenticated requests are capped at 60/hour **per IP**, which a shared NAT address (such as a Cloud Desktop) exhausts easily. If unset, the script falls back to `gh auth token` when the gh CLI is logged in.
+
+Progress and error messages go to stderr; they are also appended to `LOG_FILE`.
 
 If `Infra.toml` does not exist and `VENDOR` is set, the script generates one from `REGISTRY` and `PUBLISH_REGIONS`. You can also create it manually from [Infra-template.toml](Infra-template.toml).
 
-Example:
+### Running from cron
+
+```cron
+0 6 * * * GITHUB_TOKEN=ghp_xxx REGISTRY=public.ecr.aws/m8c0s8v8 /path/to/bottlerocket-extra-kit/scripts/daily-build.sh
 ```
-VENDOR=peng REGISTRY=public.ecr.aws/m8c0s8v8 ./scripts/daily-build.sh --force
-```
+
+Set `GITHUB_TOKEN` explicitly for cron rather than relying on the `gh` fallback. cron runs with a minimal environment, so `gh` may not be on `PATH` even when it works in an interactive shell.
 
 ## Tools That Work Best on the Host
 

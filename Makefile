@@ -77,6 +77,18 @@ publish: prep
 
 build-and-publish: update fetch build publish
 
+# Check for upstream kernel-kit/core-kit/SDK updates and rebuild when any
+# version changed. Pass script flags via DAILY_BUILD_ARGS, e.g.:
+#   make daily-build DAILY_BUILD_ARGS=--dry-run
+#   make daily-build DAILY_BUILD_ARGS=--force
+# REGISTRY, PUBLISH_REGIONS, GITHUB_TOKEN, and LOG_FILE are read from the
+# environment; see scripts/daily-build.sh --help.
+DAILY_BUILD_ARGS ?=
+
+daily-build:
+	@VENDOR="$(VENDOR)" RELEASE_VERSION="$(RELEASE_VERSION)" \
+		$(TOP)scripts/daily-build.sh $(DAILY_BUILD_ARGS)
+
 release-github:
 	@if [ -z "$(RELEASE_VERSION)" ]; then echo "Error: RELEASE_VERSION is required, e.g. make release-github RELEASE_VERSION=1.0.3"; exit 1; fi
 	@$(TOP)scripts/release.sh $(RELEASE_VERSION) $(VENDOR)
@@ -102,4 +114,4 @@ endif
 twoliter: prep
 	@$(TWOLITER_MAKE) $(TWOLITER_MAKE_ARGS)
 
-.PHONY: prep update fetch build publish build-and-publish release-github twoliter generate-twoliter-toml build-package
+.PHONY: prep update fetch build publish build-and-publish daily-build release-github twoliter generate-twoliter-toml build-package
