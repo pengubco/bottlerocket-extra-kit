@@ -27,10 +27,6 @@
 #   RELEASE_VERSION — Extra-kit release version (default: read from Makefile).
 #   LOG_FILE        — Path to log file (default: /tmp/extra-kit-daily-build.log).
 #   DRY_RUN         — If set to "true", same as --dry-run flag.
-#   ALLOW_DIRTY     — If "true", build/publish even when the working tree is
-#                     dirty. Off by default: the kit version embeds
-#                     `git describe`, so a dirty tree produces a "-dirty"
-#                     artifact that matches no commit.
 #   GITHUB_TOKEN    — GitHub token for API calls. Unauthenticated requests are
 #                     capped at 60/hour per IP, which is easily exhausted on a
 #                     shared NAT (e.g. a Cloud Desktop). If unset, the script
@@ -178,30 +174,32 @@ parse_version() {
     fi
 }
 
-# Refuse to build or publish from a dirty working tree.
+# List uncommitted changes, empty when the working tree is clean.
+dirty_tree() {
+    git status --porcelain
+}
+
+# Refuse to *publish* from a dirty working tree. There is deliberately no
+# override.
 #
-# The kit version embeds `git describe --always --dirty`, so a dirty tree yields
-# an artifact tagged "-dirty" that corresponds to no commit. Publishing that to a
-# registry makes it impossible to reproduce. Checking here, before the build,
-# also avoids discovering the problem several minutes later.
+# Building dirty is fine and often useful locally. Publishing is not: the kit
+# version embeds `git describe --always --dirty`, so a dirty tree yields an
+# artifact tagged "-dirty" that corresponds to no commit and cannot be
+# reproduced from the repository. A published kit that nobody can rebuild from
+# source is not worth the convenience of skipping a commit.
 #
-# Set ALLOW_DIRTY=true to downgrade this to a warning.
-require_clean_tree() {
+# To build without publishing, set VENDOR to the empty string.
+require_clean_tree_for_publish() {
     local dirty
-    dirty="$(git status --porcelain)"
+    dirty="$(dirty_tree)"
 
     [[ -z "$dirty" ]] && return 0
 
-    if [[ "${ALLOW_DIRTY:-false}" == "true" ]]; then
-        log "WARNING: working tree is dirty; artifacts will be tagged '-dirty'."
-        return 0
-    fi
-
     log "Working tree is not clean:"
     printf '%s\n' "$dirty" | tee -a "${LOG_FILE}" >&2
-    die "Refusing to build from a dirty tree, because the kit version embeds" \
-        "'git describe'. Commit or stash the changes above, or set" \
-        "ALLOW_DIRTY=true to override."
+    die "Refusing to publish from a dirty tree, because the kit version embeds" \
+        "'git describe' and a '-dirty' artifact matches no commit. Commit or" \
+        "stash the changes above, or set VENDOR= to build without publishing."
 }
 
 # Ensure Infra.toml exists when publishing is requested.
@@ -334,13 +332,13 @@ $(printf '%b' "$CHANGES")"
     log "Committed: $(git log --oneline -1)"
 fi
 
-# ── Step 6: Validate before spending time on a build ─────────────────────────
-# Both checks are cheap and catch failures that would otherwise surface only
-# after a multi-minute build.
+# ── Step 6: Validate publish prerequisites before spending time on a build ───
+# When publishing is requested, both of these would otherwise fail only after a
+# multi-minute build has completed. Check them up front instead.
 if [[ -n "$VENDOR" ]]; then
     ensure_infra_toml
+    require_clean_tree_for_publish
 fi
-require_clean_tree
 
 # ── Step 7: Build ────────────────────────────────────────────────────────────
 log "Building kit..."
@@ -348,6 +346,8 @@ make build 2>&1 | tee -a "${LOG_FILE}" >&2
 
 # ── Step 8: Publish (optional) ───────────────────────────────────────────────
 if [[ -n "$VENDOR" ]]; then
+    # Re-check: the build itself could have modified a tracked file.
+    require_clean_tree_for_publish
     log "Publishing kit to vendor=${VENDOR}..."
     make publish VENDOR="${VENDOR}" 2>&1 | tee -a "${LOG_FILE}" >&2
     log "Published successfully."
