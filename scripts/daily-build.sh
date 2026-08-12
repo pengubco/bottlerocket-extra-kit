@@ -25,6 +25,10 @@
 #   RELEASE_VERSION — Extra-kit release version (default: read from Makefile).
 #   LOG_FILE        — Path to log file (default: /tmp/extra-kit-daily-build.log).
 #   DRY_RUN         — If set to "true", same as --dry-run flag.
+#   GITHUB_TOKEN    — GitHub token for API calls. Unauthenticated requests are
+#                     capped at 60/hour per IP, which is easily exhausted on a
+#                     shared NAT (e.g. a Cloud Desktop). If unset, the script
+#                     falls back to `gh auth token` when the gh CLI is logged in.
 
 set -euo pipefail
 
@@ -54,15 +58,50 @@ for arg in "$@"; do
     esac
 done
 
+# Log to stderr, not stdout. Several helpers below are called inside command
+# substitutions, which capture stdout — logging to stdout there would swallow
+# the message into the caller's variable instead of showing it.
 log() {
     local ts
     ts="$(date -u '+%Y-%m-%dT%H:%M:%SZ')"
-    echo "[${ts}] $*" | tee -a "${LOG_FILE}"
+    echo "[${ts}] $*" | tee -a "${LOG_FILE}" >&2
 }
 
 die() {
     log "ERROR: $*"
     exit 1
+}
+
+# ── GitHub authentication ────────────────────────────────────────────────────
+# Prefer an explicit GITHUB_TOKEN; otherwise borrow the gh CLI's token if the
+# user is logged in. Without a token the API allows only 60 requests/hour per
+# IP, which a shared Cloud Desktop NAT address exhausts quickly.
+GITHUB_TOKEN="${GITHUB_TOKEN:-}"
+if [[ -z "$GITHUB_TOKEN" ]] && command -v gh >/dev/null 2>&1; then
+    GITHUB_TOKEN="$(gh auth token 2>/dev/null || true)"
+fi
+
+GH_AUTH_ARGS=()
+if [[ -n "$GITHUB_TOKEN" ]]; then
+    GH_AUTH_ARGS=(-H "Authorization: Bearer ${GITHUB_TOKEN}")
+fi
+
+# Fail with an actionable message when GitHub rate limits us, instead of
+# reporting the downstream symptom ("could not determine latest version").
+check_rate_limit() {
+    local code="$1" payload="$2"
+
+    [[ "$code" == "403" || "$code" == "429" ]] || return 0
+    echo "$payload" | grep -qi 'rate limit' || return 0
+
+    local hint
+    if [[ -n "$GITHUB_TOKEN" ]]; then
+        hint="A token was sent but the request was still limited; it may be invalid or expired."
+    else
+        hint="No token was found. Set GITHUB_TOKEN, or run 'gh auth login' so the script can use 'gh auth token'."
+    fi
+
+    die "GitHub API rate limit exceeded (HTTP ${code}). ${hint}"
 }
 
 # Fetch the latest version for a GitHub repo. Uses releases/latest first,
@@ -72,17 +111,29 @@ get_latest_version() {
     local version
 
     local http_code body
-    body=$(curl -sL -w '\n%{http_code}' \
+    body=$(curl -sL "${GH_AUTH_ARGS[@]}" -w '\n%{http_code}' \
         "https://api.github.com/repos/${repo}/releases/latest" 2>/dev/null) || true
     http_code=$(echo "$body" | tail -1)
     body=$(echo "$body" | sed '$d')
 
     if [[ "$http_code" == "200" ]]; then
-        version=$(echo "$body" | grep '"tag_name"' | head -1 | cut -d'"' -f4)
+        version=$(echo "$body" | grep '"tag_name"' | head -1 | cut -d'"' -f4) || true
     else
-        # Fallback: first tag (most recently pushed)
-        version=$(curl -sL "https://api.github.com/repos/${repo}/tags" \
-            | grep '"name"' | head -1 | cut -d'"' -f4)
+        check_rate_limit "$http_code" "$body"
+
+        # Fallback: first tag (most recently pushed). Repos without releases
+        # land here legitimately, so a non-200 above is not itself an error.
+        local tags_code tags_body
+        tags_body=$(curl -sL "${GH_AUTH_ARGS[@]}" -w '\n%{http_code}' \
+            "https://api.github.com/repos/${repo}/tags" 2>/dev/null) || true
+        tags_code=$(echo "$tags_body" | tail -1)
+        tags_body=$(echo "$tags_body" | sed '$d')
+
+        check_rate_limit "$tags_code" "$tags_body"
+        [[ "$tags_code" == "200" ]] \
+            || die "GitHub API returned HTTP ${tags_code} listing tags for ${repo}"
+
+        version=$(echo "$tags_body" | grep '"name"' | head -1 | cut -d'"' -f4) || true
     fi
 
     [[ -z "$version" ]] && die "Could not determine latest version for ${repo}"
@@ -98,7 +149,8 @@ get_kit_sdk_version() {
     local version="$2"
     local sdk
 
-    sdk=$(curl -sfL "https://raw.githubusercontent.com/${repo}/v${version}/Twoliter.toml" \
+    sdk=$(curl -sfL "${GH_AUTH_ARGS[@]}" \
+        "https://raw.githubusercontent.com/${repo}/v${version}/Twoliter.toml" \
         | sed -n '/^\[sdk\]/,/^\[/p' | grep '^version' | head -1 | cut -d'"' -f2) || true
 
     [[ -z "$sdk" ]] && die "Could not determine sdk version for ${repo} v${version}"
