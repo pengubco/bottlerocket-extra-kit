@@ -323,11 +323,12 @@ if [[ "$CHANGED" == "true" ]]; then
     git add Twoliter.toml Twoliter.lock
     # --only limits the commit to these paths, so unrelated staged work in the
     # index can never be swept into an automated commit.
-    git commit -q --only -- Twoliter.toml Twoliter.lock \
+    git commit -q --only \
         -m "chore: Bump upstream dependencies (daily build)
 
 Automated update to latest upstream versions:
-$(printf '%b' "$CHANGES")"
+$(printf '%b' "$CHANGES")" \
+        -- Twoliter.toml Twoliter.lock
 
     log "Committed: $(git log --oneline -1)"
 fi
