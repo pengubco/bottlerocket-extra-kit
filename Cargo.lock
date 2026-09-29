@@ -36,6 +36,7 @@ dependencies = [
  "strace",
  "sysstat",
  "tar",
+ "tree",
  "vim",
  "which",
 ]
@@ -124,6 +125,10 @@ version = "0.1.0"
 
 [[package]]
 name = "tar"
+version = "0.1.0"
+
+[[package]]
+name = "tree"
 version = "0.1.0"
 
 [[package]]

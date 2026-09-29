@@ -162,6 +162,7 @@ The following packages are designed for or work best at the host level:
 - [procps-ng](https://gitlab.com/procps-ng/procps) - Process monitoring utilities: `ps`, `top`, `free`, `vmstat`, `pgrep`, `pkill`, and more
 - [sysstat](https://github.com/sysstat/sysstat) v12.7.7 - Commands: sar, sadf, iostat, mpstat, pidstat, tapestat, cifsiostat.
 - [tar](https://www.gnu.org/software/tar/) v1.35 - GNU tar archiving utility
+- [tree](https://oldmanprogrammer.net/source.php?dir=projects/tree) v2.3.2 - List directory contents as an indented tree (`tree`)
 - [vim](https://github.com/vim/vim) v9.1.0
 - [which](https://savannah.gnu.org/projects/which/) v2.23 - Show full path of shell commands
 - [libcap-utils](https://sites.google.com/site/fullycapable/) v2.77 - POSIX capabilities utilities: `getcap`, `setcap`, `capsh`, `getpcaps`

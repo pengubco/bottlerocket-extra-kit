@@ -1,0 +1,18 @@
+[package]
+name = "tree"
+version = "0.1.0"
+edition = "2021"
+publish = false
+build = "../build.rs"
+
+[lib]
+path = "../packages.rs"
+
+[package.metadata.build-package]
+releases-url = "https://oldmanprogrammer.net/source.php?dir=projects/tree"
+
+[[package.metadata.build-package.external-files]]
+url = "https://oldmanprogrammer.net/tar/tree/tree-2.3.2.tgz"
+sha512 = "aefe6e8935752b71bfe327fff9bfb0797b702995ba8f62b34dcdc26b9f6b35a5753324b98ce6d339fac23679b1752d7db612b5dd1342083f5a478db10e31b7bb"
+
+[dependencies]
