@@ -37,6 +37,7 @@ dependencies = [
  "libtraceevent",
  "libtracefs",
  "logrotate",
+ "lsof",
  "nerdctl",
  "numactl",
  "oomd",
@@ -120,6 +121,10 @@ dependencies = [
 
 [[package]]
 name = "logrotate"
+version = "0.1.0"
+
+[[package]]
+name = "lsof"
 version = "0.1.0"
 
 [[package]]
