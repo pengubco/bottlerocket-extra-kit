@@ -115,6 +115,14 @@ release-github:
 	@VENDOR="$(VENDOR)" ARCHES="$(ARCHES)" \
 		$(TOP)scripts/release.sh $(RELEASE_ARGS) $(RELEASE_VERSION)
 
+# Report packages whose upstream has a newer release than their spec.
+check-upstream:
+	@go -C $(TOP)scripts/go run ./cmd/check-upstream -root $(TOP)
+
+# Check that every package is in the kit, Cargo.lock and the README.
+check-packages:
+	@go -C $(TOP)scripts/go run ./cmd/check-packages -root $(TOP)
+
 PACKAGE ?=
 export BUILDSYS_UPSTREAM_SOURCE_FALLBACK ?= true
 
@@ -136,4 +144,4 @@ endif
 twoliter: prep
 	@$(TWOLITER_MAKE) $(TWOLITER_MAKE_ARGS)
 
-.PHONY: prep update fetch build build-all-arches publish build-and-publish daily-build release-github twoliter generate-twoliter-toml build-package
+.PHONY: check-upstream check-packages prep update fetch build build-all-arches publish build-and-publish daily-build release-github twoliter generate-twoliter-toml build-package
