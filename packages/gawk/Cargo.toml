@@ -1,0 +1,18 @@
+[package]
+name = "gawk"
+version = "0.1.0"
+edition = "2021"
+publish = false
+build = "../build.rs"
+
+[lib]
+path = "../packages.rs"
+
+[package.metadata.build-package]
+releases-url = "https://ftp.gnu.org/gnu/gawk/"
+
+[[package.metadata.build-package.external-files]]
+url = "https://ftp.gnu.org/gnu/gawk/gawk-5.4.2.tar.xz"
+sha512 = "2d51e9788d1e39b3b6528a5c15d14282582c6c54bcf2678d0c57936556e65da6eed903bad03c8ddbde33322af5754710ea7dcaaa451a225b6f4271f10fb810ae"
+
+[dependencies]

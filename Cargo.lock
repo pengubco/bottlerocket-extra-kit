@@ -27,6 +27,7 @@ dependencies = [
  "curl",
  "diffutils",
  "file",
+ "gawk",
  "glibc-utils",
  "golang",
  "gzip",
@@ -78,6 +79,10 @@ version = "0.1.0"
 
 [[package]]
 name = "file"
+version = "0.1.0"
+
+[[package]]
+name = "gawk"
 version = "0.1.0"
 
 [[package]]
