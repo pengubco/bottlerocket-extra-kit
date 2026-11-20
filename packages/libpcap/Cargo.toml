@@ -1,0 +1,18 @@
+[package]
+name = "libpcap"
+version = "0.1.0"
+edition = "2021"
+publish = false
+build = "../build.rs"
+
+[lib]
+path = "../packages.rs"
+
+[package.metadata.build-package]
+releases-url = "https://www.tcpdump.org/release/"
+
+[[package.metadata.build-package.external-files]]
+url = "https://www.tcpdump.org/release/libpcap-1.11.0.tar.xz"
+sha512 = "a786a1a498aaff30c972d92e5250be269aef06fcd0879b7b9b656fae7f15fa37dd4bb314fc6aa475993065f9b02599b76e0a5cafd5edec8fd9833887d71c26c3"
+
+[dependencies]

@@ -163,6 +163,7 @@ The following packages are designed for or work best at the host level:
 - [libbpf-tools](https://github.com/iovisor/bcc/tree/master/libbpf-tools) v0.37.0 - BPF CO-RE tracing tools from bcc (`bpf-biolatency`, `bpf-runqlat`, `bpf-offcputime`, `bpf-profile`, `bpf-execsnoop`, `bpf-opensnoop`, `bpf-tcpconnect`, and more), installed with a `bpf-` prefix. No python or compiler needed; requires kernel BTF.
 - [libtraceevent](https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git/) v1.9.1 - Library for parsing raw kernel trace event formats, plus its event-format plugins. Used by `trace-cmd`.
 - [libtracefs](https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/) v1.8.4 - Library for accessing the kernel tracefs file system. Used by `trace-cmd`.
+- [libpcap](https://www.tcpdump.org/) v1.11.0 - Packet capture library used by `tcpdump`. Built with only the Linux socket and netfilter backends (no D-Bus, Bluetooth, RDMA, USB, netmap, or remote capture). Includes a `-devel` subpackage.
 - [logrotate](https://github.com/logrotate/logrotate) v3.22.0 - Rotates and maintains log files. Ships a default `/etc/logrotate.conf` plus a `logrotate.timer` that runs daily; drop additional rules into `/etc/logrotate.d`. Pulls in `gzip` so `compress` works out of the box.
 - [lsof](https://github.com/lsof-org/lsof) v4.99.7 - List open files, sockets and pipes per process (`lsof`), with SELinux context (`-Z`) support
 - [nerdctl](https://github.com/containerd/nerdctl) v2.1.6 - Docker-compatible CLI for containerd

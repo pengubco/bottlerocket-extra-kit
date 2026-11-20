@@ -36,6 +36,7 @@ dependencies = [
  "jsoncpp",
  "libbpf-tools",
  "libcap-utils",
+ "libpcap",
  "libtraceevent",
  "libtracefs",
  "logrotate",
@@ -117,6 +118,10 @@ version = "0.1.0"
 
 [[package]]
 name = "libcap-utils"
+version = "0.1.0"
+
+[[package]]
+name = "libpcap"
 version = "0.1.0"
 
 [[package]]
