@@ -1,0 +1,91 @@
+From: Bottlerocket Team <bottlerocket@amazon.com>
+Subject: [PATCH] stress-pty: drop deprecated TCGETA/TCSETA* ioctls
+
+glibc 2.42 removed the legacy System V "struct termio" from <termio.h>,
+while the header itself still exists, so the HAVE_TERMIO_H probe passes
+but stress-pty.c fails with "storage size of 'io' isn't known".
+
+Backport of the intent of upstream commit 92d752c8a0d7 ("stress-pty:
+remove deprecated TCGETA ioctls"), rebased onto 0.22.02 since the
+upstream change applies on top of an unrelated refactor.
+
+---
+ stress-pty.c | 66 ------------------------------------------------------
+ 1 file changed, 66 deletions(-)
+
+diff --git a/stress-pty.c b/stress-pty.c
+--- a/stress-pty.c
++++ b/stress-pty.c
+@@ -351,72 +351,6 @@
+ 			}
+ #endif
+ 
+-#if defined(HAVE_TERMIO_H) &&	\
+-    defined(TCGETA) &&		\
+-    defined(TCSETA)
+-			{
+-				struct termio io;
+-
+-				if (UNLIKELY((ioctl(ptys[i].follower, TCGETA, &io) < 0) &&
+-					     (errno != EINTR))) {
+-					pr_fail("%s: ioctl TCGETA on follower pty failed, errno=%d (%s)\n",
+-						args->name, errno, strerror(errno));
+-					rc = EXIT_FAILURE;
+-				} else {
+-					if (UNLIKELY((ioctl(ptys[i].follower, TCSETA, &io) < 0) &&
+-						     (errno != EINTR))) {
+-						pr_fail("%s: ioctl TCSETA on follower pty failed, errno=%d (%s)\n",
+-							args->name, errno, strerror(errno));
+-						rc = EXIT_FAILURE;
+-					}
+-				}
+-			}
+-#endif
+-
+-#if defined(HAVE_TERMIO_H) &&	\
+-    defined(TCGETA) &&		\
+-    defined(TCSETAW)
+-			{
+-				struct termio io;
+-
+-				if (UNLIKELY((ioctl(ptys[i].follower, TCGETA, &io) < 0) &&
+-					     (errno != EINTR))) {
+-					pr_fail("%s: ioctl TCGETA on follower pty failed, errno=%d (%s)\n",
+-						args->name, errno, strerror(errno));
+-					rc = EXIT_FAILURE;
+-				} else {
+-					if (UNLIKELY((ioctl(ptys[i].follower, TCSETAW, &io) < 0) &&
+-						     (errno != EINTR))) {
+-						pr_fail("%s: ioctl TCSETAW on follower pty failed, errno=%d (%s)\n",
+-							args->name, errno, strerror(errno));
+-						rc = EXIT_FAILURE;
+-					}
+-				}
+-			}
+-#endif
+-
+-#if defined(HAVE_TERMIO_H) &&	\
+-    defined(TCGETA) &&		\
+-    defined(TCSETAF)
+-			{
+-				struct termio io;
+-
+-				if (UNLIKELY((ioctl(ptys[i].follower, TCGETA, &io) < 0) &&
+-					     (errno != EINTR))) {
+-					pr_fail("%s: ioctl TCGETA on follower pty failed, errno=%d (%s)\n",
+-						args->name, errno, strerror(errno));
+-					rc = EXIT_FAILURE;
+-				} else {
+-					if (UNLIKELY((ioctl(ptys[i].follower, TCSETAF, &io) < 0) &&
+-						     (errno != EINTR))) {
+-						pr_fail("%s: ioctl TCSETAF on follower pty failed, errno=%d (%s)\n",
+-							args->name, errno, strerror(errno));
+-						rc = EXIT_FAILURE;
+-					}
+-				}
+-			}
+-#endif
+-
+ #if defined(HAVE_ASM_TERMBITS_H) &&			\
+     defined(HAVE_ASM_TERMBITS_STRUCT_TERMIOS) &&	\
+     defined(TIOCGLCKTRMIOS)

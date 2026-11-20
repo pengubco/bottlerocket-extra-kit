@@ -177,6 +177,7 @@ The following packages are designed for or work best at the host level:
 - [perfrun](https://www.kernel.org/) v0.1.0 - Convenience wrapper for common `perf` workflows: `record`, `flamegraph`, `stat`, `top`. Installed automatically with `perf`.
 - [permissive-selinux] - Set SELinux mode to permissive. Useful for debugging/developing while bypassing SELinux denials (e.g., running shell scripts)
 - [procps-ng](https://gitlab.com/procps-ng/procps) - Process monitoring utilities: `ps`, `top`, `free`, `vmstat`, `pgrep`, `pkill`, and more
+- [stress-ng](https://github.com/ColinIanKing/stress-ng) v0.22.02 - Stress test CPU, cache, memory, I/O, filesystem and kernel interfaces (`stress-ng`). Built against glibc only; stressors that need optional libraries (zlib, libaio, libacl, libsctp, libkmod, ...) report as not implemented.
 - [sysstat](https://github.com/sysstat/sysstat) v12.7.7 - Commands: sar, sadf, iostat, mpstat, pidstat, tapestat, cifsiostat.
 - [tar](https://www.gnu.org/software/tar/) v1.35 - GNU tar archiving utility
 - [trace-cmd](https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/) v3.4 - Command-line front end for the kernel ftrace tracer: `trace-cmd record`, `report`, `list`, `stat`, and more. Pulls in `libtraceevent` and `libtracefs`. Run as root with `/sys/kernel/tracing` (tracefs) accessible, e.g. from the admin container via `sheltie`.
