@@ -49,3 +49,4 @@ iotop-c = { path = "../../packages/iotop-c" }
 numactl = { path = "../../packages/numactl" }
 lsof = { path = "../../packages/lsof" }
 gawk = { path = "../../packages/gawk" }
+perf-tools = { path = "../../packages/perf-tools" }

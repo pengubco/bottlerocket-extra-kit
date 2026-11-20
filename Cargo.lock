@@ -44,6 +44,7 @@ dependencies = [
  "oomd",
  "openssh",
  "perf",
+ "perf-tools",
  "perfrun",
  "permissive-selinux",
  "procps-ng",
@@ -156,6 +157,13 @@ name = "perf"
 version = "0.1.0"
 dependencies = [
  "perfrun",
+]
+
+[[package]]
+name = "perf-tools"
+version = "0.1.0"
+dependencies = [
+ "gawk",
 ]
 
 [[package]]

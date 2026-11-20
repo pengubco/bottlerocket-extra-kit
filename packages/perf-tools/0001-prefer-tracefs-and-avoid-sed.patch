@@ -1,0 +1,210 @@
+From: Bottlerocket Team <bottlerocket@amazon.com>
+Subject: [PATCH] Prefer tracefs at /sys/kernel/tracing and avoid sed
+
+Upstream hard-codes the ftrace directory as /sys/kernel/debug/tracing, which
+only exists when debugfs is mounted. Modern kernels mount tracefs directly at
+/sys/kernel/tracing, and debugfs access is restricted under kernel lockdown,
+so try /sys/kernel/tracing first and fall back to the debugfs path.
+
+kprobe and uprobe also pipe dmesg through sed to indent error output; use awk
+instead, since Bottlerocket does not ship sed.
+---
+--- a/execsnoop
++++ b/execsnoop
+@@ -54,7 +54,8 @@
+ # 07-Jul-2014	Brendan Gregg	Created this.
+ 
+ ### default variables
+-tracing=/sys/kernel/debug/tracing
++tracing=/sys/kernel/tracing
++[[ -e $tracing/trace ]] || tracing=/sys/kernel/debug/tracing
+ flock=/var/tmp/.ftrace-lock; wroteflock=0
+ opt_duration=0; duration=; opt_name=0; name=; opt_time=0; opt_reexec=0
+ opt_argc=0; argc=8; max_argc=16; ftext=
+--- a/fs/cachestat
++++ b/fs/cachestat
+@@ -54,7 +54,8 @@
+ # 28-Dec-2014	Brendan Gregg	Created this.
+ 
+ ### default variables
+-tracing=/sys/kernel/debug/tracing
++tracing=/sys/kernel/tracing
++[[ -e $tracing/trace ]] || tracing=/sys/kernel/debug/tracing
+ interval=1; opt_timestamp=0; opt_debug=0
+ trap 'quit=1' INT QUIT TERM PIPE HUP	# sends execution to end tracing section
+ 
+--- a/iolatency
++++ b/iolatency
+@@ -40,7 +40,8 @@
+ # 20-Jul-2014	Brendan Gregg	Created this.
+ 
+ ### default variables
+-tracing=/sys/kernel/debug/tracing
++tracing=/sys/kernel/tracing
++[[ -e $tracing/trace ]] || tracing=/sys/kernel/debug/tracing
+ flock=/var/tmp/.ftrace-lock
+ bufsize_kb=4096
+ opt_device=0; device=; opt_iotype=0; iotype=; opt_timestamp=0
+--- a/iosnoop
++++ b/iosnoop
+@@ -53,7 +53,8 @@
+ # 12-Jul-2014	Brendan Gregg	Created this.
+ 
+ ### default variables
+-tracing=/sys/kernel/debug/tracing
++tracing=/sys/kernel/tracing
++[[ -e $tracing/trace ]] || tracing=/sys/kernel/debug/tracing
+ flock=/var/tmp/.ftrace-lock
+ bufsize_kb=4096
+ opt_duration=0; duration=; opt_name=0; name=; opt_pid=0; pid=; ftext=
+--- a/kernel/funccount
++++ b/kernel/funccount
+@@ -40,7 +40,8 @@
+ # 12-Jul-2014	Brendan Gregg	Created this.
+ 
+ ### default variables
+-tracing=/sys/kernel/debug/tracing
++tracing=/sys/kernel/tracing
++[[ -e $tracing/trace ]] || tracing=/sys/kernel/debug/tracing
+ opt_duration=0; duration=; opt_interval=0; interval=999999; opt_timestamp=0
+ opt_tail=0; tcmd=cat; ttext=
+ trap 'quit=1' INT QUIT TERM PIPE HUP	# sends execution to end tracing section
+--- a/kernel/funcgraph
++++ b/kernel/funcgraph
+@@ -66,7 +66,8 @@
+ # 12-Jul-2014	Brendan Gregg	Created this.
+ 
+ ### default variables
+-tracing=/sys/kernel/debug/tracing
++tracing=/sys/kernel/tracing
++[[ -e $tracing/trace ]] || tracing=/sys/kernel/debug/tracing
+ flock=/var/tmp/.ftrace-lock
+ opt_duration=0; duration=; opt_pid=0; pid=; opt_tid=0; tid=; pidtext=
+ opt_headers=0; opt_proc=0; opt_time=0; opt_tail=0; opt_nodur=0; opt_cpu=0
+--- a/kernel/funcslower
++++ b/kernel/funcslower
+@@ -51,7 +51,8 @@
+ # 12-Jul-2014	Brendan Gregg	Created this.
+ 
+ ### default variables
+-tracing=/sys/kernel/debug/tracing
++tracing=/sys/kernel/tracing
++[[ -e $tracing/trace ]] || tracing=/sys/kernel/debug/tracing
+ flock=/var/tmp/.ftrace-lock
+ opt_duration=0; duration=; opt_pid=0; pid=; opt_tid=0; tid=
+ pidtext=; opt_headers=0; opt_proc=0; opt_time=0; opt_cpu=0
+--- a/kernel/functrace
++++ b/kernel/functrace
+@@ -57,7 +57,8 @@
+ # 12-Jul-2014	Brendan Gregg	Created this.
+ 
+ ### default variables
+-tracing=/sys/kernel/debug/tracing
++tracing=/sys/kernel/tracing
++[[ -e $tracing/trace ]] || tracing=/sys/kernel/debug/tracing
+ flock=/var/tmp/.ftrace-lock
+ opt_duration=0; duration=; opt_pid=0; pid=; opt_tid=0; tid=; pidtext=
+ opt_headers=0
+--- a/kernel/kprobe
++++ b/kernel/kprobe
+@@ -48,7 +48,8 @@
+ # 22-Jul-2014	Brendan Gregg	Created this.
+ 
+ ### default variables
+-tracing=/sys/kernel/debug/tracing
++tracing=/sys/kernel/tracing
++[[ -e $tracing/trace ]] || tracing=/sys/kernel/debug/tracing
+ flock=/var/tmp/.ftrace-lock; wroteflock=0
+ opt_duration=0; duration=; opt_pid=0; pid=; opt_tid=0; tid=
+ opt_filter=0; filter=; opt_view=0; opt_headers=0; opt_stack=0; dmesg=2
+@@ -229,7 +230,7 @@
+ 	echo >&2 "ERROR: adding kprobe \"$kprobe\"."
+ 	if (( dmesg )); then
+ 		echo >&2 "Last $dmesg dmesg entries (might contain reason):"
+-		dmesg | tail -$dmesg | sed 's/^/    /'
++		dmesg | tail -$dmesg | awk '{ print "    " $0 }'
+ 	fi
+ 	edie "Exiting."
+ fi
+--- a/killsnoop
++++ b/killsnoop
+@@ -48,7 +48,8 @@
+ # 13-Sep-2014   Martin Probst   Created this.
+ 
+ ### default variables
+-tracing=/sys/kernel/debug/tracing
++tracing=/sys/kernel/tracing
++[[ -e $tracing/trace ]] || tracing=/sys/kernel/debug/tracing
+ flock=/var/tmp/.ftrace-lock; wroteflock=0
+ opt_duration=0; duration=; opt_name=0; name=; opt_pid=0; pid=; ftext=
+ opt_time=0; opt_fail=0; opt_file=0; file=
+--- a/misc/perf-stat-hist
++++ b/misc/perf-stat-hist
+@@ -101,7 +101,9 @@
+ (( opt_power && power < 2 )) && die "ERROR: -P power must be 2 or higher"
+ 
+ ### check that tracepoint exists
+-if ! grep "^$tpoint\$" /sys/kernel/debug/tracing/available_events > /dev/null
++tracing=/sys/kernel/tracing
++[[ -e $tracing/trace ]] || tracing=/sys/kernel/debug/tracing
++if ! grep "^$tpoint\$" $tracing/available_events > /dev/null
+ then
+ 	echo >&2 "ERROR: tracepoint \"$tpoint\" not found. Exiting..."
+ 	[[ "$USER" != "root" ]] && echo >&2 "Not root user?"
+--- a/opensnoop
++++ b/opensnoop
+@@ -46,7 +46,8 @@
+ # 20-Jul-2014	Brendan Gregg	Created this.
+ 
+ ### default variables
+-tracing=/sys/kernel/debug/tracing
++tracing=/sys/kernel/tracing
++[[ -e $tracing/trace ]] || tracing=/sys/kernel/debug/tracing
+ flock=/var/tmp/.ftrace-lock; wroteflock=0
+ opt_duration=0; duration=; opt_name=0; name=; opt_pid=0; pid=; opt_tid=0; tid=
+ ftext=; opt_time=0; opt_fail=0; opt_file=0; file=
+--- a/system/tpoint
++++ b/system/tpoint
+@@ -51,7 +51,8 @@
+ # 22-Jul-2014	Brendan Gregg	Created this.
+ 
+ ### default variables
+-tracing=/sys/kernel/debug/tracing
++tracing=/sys/kernel/tracing
++[[ -e $tracing/trace ]] || tracing=/sys/kernel/debug/tracing
+ flock=/var/tmp/.ftrace-lock; wroteflock=0
+ opt_duration=0; duration=; opt_pid=0; pid=; opt_tid=0; tid=
+ opt_filter=0; filter=; opt_view=0; opt_headers=0; opt_stack=0; dmesg=2
+--- a/tools/reset-ftrace
++++ b/tools/reset-ftrace
+@@ -36,7 +36,8 @@
+ #
+ # 20-Jul-2014	Brendan Gregg	Created this.
+ 
+-tracing=/sys/kernel/debug/tracing
++tracing=/sys/kernel/tracing
++[[ -e $tracing/trace ]] || tracing=/sys/kernel/debug/tracing
+ flock=/var/tmp/.ftrace-lock
+ opt_force=0; opt_quiet=0
+ 
+--- a/user/uprobe
++++ b/user/uprobe
+@@ -61,7 +61,8 @@
+ # 27-Jul-2015	Brendan Gregg	Created this.
+ 
+ ### default variables
+-tracing=/sys/kernel/debug/tracing
++tracing=/sys/kernel/tracing
++[[ -e $tracing/trace ]] || tracing=/sys/kernel/debug/tracing
+ flock=/var/tmp/.ftrace-lock; wroteflock=0
+ opt_duration=0; duration=; opt_pid=0; pid=; opt_tid=0; tid=
+ opt_filter=0; filter=; opt_view=0; opt_headers=0; opt_stack=0; dmesg=2
+@@ -349,7 +350,7 @@
+ 	echo >&2 "ERROR: adding uprobe \"$uprobe\"."
+ 	if (( dmesg )); then
+ 		echo >&2 "Last $dmesg dmesg entries (might contain reason):"
+-		dmesg | tail -$dmesg | sed 's/^/    /'
++		dmesg | tail -$dmesg | awk '{ print "    " $0 }'
+ 	fi
+ 	edie "Exiting."
+ fi
