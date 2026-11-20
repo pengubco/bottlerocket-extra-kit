@@ -154,6 +154,7 @@ The following packages are designed for or work best at the host level:
 - [diffutils](https://www.gnu.org/software/diffutils/) v3.12 - GNU diff utilities: `diff`, `diff3`, `cmp`, `sdiff`
 - [file](https://www.darwinsys.com/file/) v5.46 - Determine file type (`file` command)
 - [gawk](https://www.gnu.org/software/gawk/) v5.4.2 - GNU awk: `gawk` and `awk`. The core kit ships no awk, so scripts that pipe through awk (such as `perf-tools`) need this.
+- [fio](https://github.com/axboe/fio) v3.43 - Flexible I/O tester for storage benchmarking (`fio`). Built with the `libaio`, `io_uring` and synchronous engines; network/cluster engines (rbd, gfapi, rdma, http, nfs) and the python/gnuplot helper scripts are not included. `fio --server` opens a listening socket (port 8765) and should only be started deliberately.
 - [glibc-utils](https://www.gnu.org/software/libc/) v2.42 - GNU C Library utilities: `ldd` (list dynamic dependencies) and `pldd` (list shared libraries of a running process).
 - [golang](https://go.dev) v1.26.1 - The Go programming language toolchain. Note: `/tmp` is mounted `noexec` on Bottlerocket; set `GOCACHE`, `GOTMPDIR`, and `GOPATH` to a writable path such as `/local` before running `go build` or `go run`.
 - [gzip](https://www.gnu.org/software/gzip/) v1.14 - GNU compression utility: `gzip`, `gunzip`, `zcat`, `zgrep`. The core kit ships only `unpigz`, which cannot compress, so this fills the gap.
