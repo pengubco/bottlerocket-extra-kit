@@ -1,0 +1,10 @@
+#!/bin/bash
+# bpftrace upstream ships a self-contained AppImage. Running an AppImage
+# normally needs FUSE (fusermount), which Bottlerocket doesn't have, and the
+# fallback extracts into $TMPDIR, which on Bottlerocket (/tmp) is noexec.
+# Extract once into a cache under /var instead and reuse it on later runs.
+set -euo pipefail
+cache="${BPFTRACE_CACHE_DIR:-/var/cache/bpftrace}"
+mkdir -p "${cache}"
+export TMPDIR="${cache}" APPIMAGE_EXTRACT_AND_RUN=1 NO_CLEANUP=1
+exec /usr/libexec/bpftrace/bpftrace.AppImage "$@"
