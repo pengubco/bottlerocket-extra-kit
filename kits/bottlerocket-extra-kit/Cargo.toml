@@ -53,3 +53,4 @@ perf-tools = { path = "../../packages/perf-tools" }
 htop = { path = "../../packages/htop" }
 libpcap = { path = "../../packages/libpcap" }
 tcpdump = { path = "../../packages/tcpdump" }
+fio = { path = "../../packages/fio" }

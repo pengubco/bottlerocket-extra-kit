@@ -1,0 +1,18 @@
+[package]
+name = "fio"
+version = "0.1.0"
+edition = "2021"
+publish = false
+build = "../build.rs"
+
+[lib]
+path = "../packages.rs"
+
+[package.metadata.build-package]
+releases-url = "https://brick.kernel.dk/snaps/"
+
+[[package.metadata.build-package.external-files]]
+url = "https://brick.kernel.dk/snaps/fio-3.43.tar.gz"
+sha512 = "0916967c340841ee75cca00aa943a4c16e10c6c0ae1b6c285795d4518f81966f3067b9016289a1fe07674375285e8c4dc16009b25a171046d39379835963a484"
+
+[dependencies]
