@@ -53,6 +53,7 @@ dependencies = [
  "permissive-selinux",
  "procps-ng",
  "strace",
+ "stress-ng",
  "sysstat",
  "tar",
  "tcpdump",
@@ -201,6 +202,10 @@ version = "0.1.0"
 
 [[package]]
 name = "strace"
+version = "0.1.0"
+
+[[package]]
+name = "stress-ng"
 version = "0.1.0"
 
 [[package]]

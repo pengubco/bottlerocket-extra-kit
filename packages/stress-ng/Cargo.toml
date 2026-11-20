@@ -1,0 +1,19 @@
+[package]
+name = "stress-ng"
+version = "0.1.0"
+edition = "2021"
+publish = false
+build = "../build.rs"
+
+[lib]
+path = "../packages.rs"
+
+[package.metadata.build-package]
+releases-url = "https://github.com/ColinIanKing/stress-ng/releases"
+
+[[package.metadata.build-package.external-files]]
+url = "https://github.com/ColinIanKing/stress-ng/archive/refs/tags/V0.22.02.tar.gz"
+path = "stress-ng-0.22.02.tar.gz"
+sha512 = "376873b5b5f3628f9debe8a99bac14d24aa388008b72b0f6b028f3322c4f52f0e329e988100da2746d78f9b51c3becdff18506213cff5de54750435d49c2ba3f"
+
+[dependencies]
