@@ -42,3 +42,4 @@ turbostat = { path = "../../packages/turbostat" }
 cpupower = { path = "../../packages/cpupower" }
 libbpf-tools = { path = "../../packages/libbpf-tools" }
 libtraceevent = { path = "../../packages/libtraceevent" }
+libtracefs = { path = "../../packages/libtracefs" }

@@ -1,0 +1,22 @@
+[package]
+name = "libtracefs"
+version = "0.1.0"
+edition = "2021"
+publish = false
+build = "../build.rs"
+
+[lib]
+path = "../packages.rs"
+
+[package.metadata.build-package]
+releases-url = "https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/refs/"
+
+[[package.metadata.build-package.external-files]]
+url = "https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/snapshot/libtracefs-1.8.4.tar.gz"
+sha512 = "4187da4a73f2580d0e4c083ebc013f3921fbd07ea35a46cac47eb89861f389e07d3a8d5ad39599ed5d5015d1b9a5477849cec63635eceff1a6dbc0b959c9240d"
+
+[dependencies]
+libtraceevent = { path = "../libtraceevent" }
+
+[build-dependencies]
+libtraceevent = { path = "../libtraceevent" }
