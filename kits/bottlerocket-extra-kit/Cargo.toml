@@ -38,3 +38,4 @@ logrotate = { path = "../../packages/logrotate" }
 gzip = { path = "../../packages/gzip" }
 tree = { path = "../../packages/tree" }
 bpftool = { path = "../../packages/bpftool" }
+turbostat = { path = "../../packages/turbostat" }
