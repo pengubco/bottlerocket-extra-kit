@@ -71,6 +71,31 @@ Then build and publish:
 make build-and-publish VENDOR=xxx
 ```
 
+This builds the kit for both `x86_64` and `aarch64` (the SDK cross-compiles, so one x86 host is enough) and publishes them as a single multi-arch image. Limit the architectures with `ARCHES`, e.g. `make build-and-publish VENDOR=xxx ARCHES=x86_64`. To build every architecture without publishing, run `make build-all-arches`.
+
+## Cutting a release
+
+`make release-github` cuts a release end to end:
+```
+make release-github RELEASE_VERSION=1.0.6
+make release-github RELEASE_VERSION=1.0.6 RELEASE_ARGS="--latest --draft"
+```
+
+It runs `scripts/release.sh`, which:
+1. Checks that the tree is clean, `gh` is logged in, `Infra.toml` exists, and the tag `vX.Y.Z` does not exist yet.
+2. Bumps `release-version` in `Twoliter.toml` and `RELEASE_VERSION` in the Makefile, refreshes `Twoliter.lock`, and commits.
+3. Builds the kit for each architecture in `ARCHES`.
+4. Publishes the kit and, if `crane` is installed, checks that the image index has every architecture.
+5. Pushes the commit and the annotated tag, then creates the GitHub release. The release notes list the usage snippet, the pinned core-kit, kernel-kit and SDK versions, the packages, and the commits since the previous tag.
+
+The tag is created only after publishing succeeds, so a failed build never leaves behind a tag without an artifact.
+
+Flags (pass them via `RELEASE_ARGS`):
+- `--latest` — bump core-kit, kernel-kit and SDK to the latest upstream first. By default the current pins are kept.
+- `--draft` — create the GitHub release as a draft.
+- `--attach-archives` — upload the per-architecture kit tarballs (~160 MB each) as release assets.
+- `--skip-build` — reuse archives already built for the current commit.
+
 ## Automated daily builds
 
 `scripts/daily-build.sh` checks for upstream kernel-kit, core-kit, or SDK updates and rebuilds the kit when any version changes. If nothing changed, it logs and exits.
@@ -95,6 +120,7 @@ Environment variables:
 - `REGISTRY` — OCI registry URL (e.g. `public.ecr.aws/m8c0s8v8`). Required for publishing unless `Infra.toml` already exists.
 - `PUBLISH_REGIONS` — Comma-separated AWS regions (default: `us-west-2`).
 - `RELEASE_VERSION` — Override the extra-kit release version (default: read from Makefile).
+- `ARCHES` — Space-separated architectures to build (default: `x86_64 aarch64`). They are published as one multi-arch image.
 - `LOG_FILE` — Log output path (default: `/tmp/extra-kit-daily-build.log`).
 - `GITHUB_TOKEN` — Token for the GitHub API calls that resolve upstream versions. Unauthenticated requests are capped at 60/hour **per IP**, which a shared NAT address (such as a Cloud Desktop) exhausts easily. If unset, the script falls back to `gh auth token` when the gh CLI is logged in.
 

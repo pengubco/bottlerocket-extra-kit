@@ -12,6 +12,9 @@ UNAME_ARCH = $(shell uname -m)
 ARCH ?= $(UNAME_ARCH)
 VENDOR ?= peng
 UPSTREAM_SOURCE_FALLBACK ?= false
+# Architectures built by build-all-arches, build-and-publish, daily-build and
+# release-github. Both are built on the same host; the SDK cross-compiles.
+ARCHES ?= x86_64 aarch64
 
 ifeq ($(UNAME_ARCH), aarch64)
 	TWOLITER_SHA256=$(TWOLITER_SHA256_AARCH64)
@@ -66,16 +69,26 @@ fetch: prep
 	@$(TWOLITER) fetch --arch $(ARCH)
 
 build: fetch
-ifeq ($(UPSTREAM_SOURCE_FALLBACK), "false")
+ifeq ($(UPSTREAM_SOURCE_FALLBACK),false)
 	@$(TWOLITER) build kit $(KIT) --arch $(ARCH)
 else
 	@$(TWOLITER) build kit $(KIT) --arch $(ARCH) --upstream-source-fallback
 endif
 
+# Build the kit once per architecture in ARCHES. publish then pushes every
+# archive matching the current commit as a single multi-arch OCI index.
+build-all-arches:
+	@set -e; for a in $(ARCHES); do \
+		echo "==> Building $(KIT) for $$a"; \
+		$(MAKE) --no-print-directory build ARCH=$$a; \
+	done
+
 publish: prep
 	@$(TWOLITER) publish kit $(KIT) $(VENDOR)
 
-build-and-publish: update fetch build publish
+build-and-publish: update
+	@$(MAKE) --no-print-directory build-all-arches
+	@$(MAKE) --no-print-directory publish
 
 # Check for upstream kernel-kit/core-kit/SDK updates and rebuild when any
 # version changed. Pass script flags via DAILY_BUILD_ARGS, e.g.:
@@ -86,12 +99,20 @@ build-and-publish: update fetch build publish
 DAILY_BUILD_ARGS ?=
 
 daily-build:
-	@VENDOR="$(VENDOR)" RELEASE_VERSION="$(RELEASE_VERSION)" \
+	@VENDOR="$(VENDOR)" RELEASE_VERSION="$(RELEASE_VERSION)" ARCHES="$(ARCHES)" \
 		$(TOP)scripts/daily-build.sh $(DAILY_BUILD_ARGS)
 
+# Cut a release: bump release-version, commit, build all ARCHES, publish,
+# tag, and create the GitHub release. Pass script flags via RELEASE_ARGS, e.g.:
+#   make release-github RELEASE_VERSION=1.0.6
+#   make release-github RELEASE_VERSION=1.0.6 RELEASE_ARGS="--latest --draft"
+# See scripts/release.sh --help.
+RELEASE_ARGS ?=
+
 release-github:
-	@if [ -z "$(RELEASE_VERSION)" ]; then echo "Error: RELEASE_VERSION is required, e.g. make release-github RELEASE_VERSION=1.0.3"; exit 1; fi
-	@$(TOP)scripts/release.sh $(RELEASE_VERSION) $(VENDOR)
+	@if [ "$(origin RELEASE_VERSION)" != "command line" ]; then echo "Error: pass the new version explicitly, e.g. make release-github RELEASE_VERSION=1.0.6"; exit 1; fi
+	@VENDOR="$(VENDOR)" ARCHES="$(ARCHES)" \
+		$(TOP)scripts/release.sh $(RELEASE_ARGS) $(RELEASE_VERSION)
 
 PACKAGE ?=
 export BUILDSYS_UPSTREAM_SOURCE_FALLBACK ?= true
@@ -114,4 +135,4 @@ endif
 twoliter: prep
 	@$(TWOLITER_MAKE) $(TWOLITER_MAKE_ARGS)
 
-.PHONY: prep update fetch build publish build-and-publish daily-build release-github twoliter generate-twoliter-toml build-package
+.PHONY: prep update fetch build build-all-arches publish build-and-publish daily-build release-github twoliter generate-twoliter-toml build-package
