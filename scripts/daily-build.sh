@@ -40,6 +40,8 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+# shellcheck source=scripts/lib.sh
+source "${SCRIPT_DIR}/lib.sh"
 
 VENDOR="${VENDOR:-peng}"
 REGISTRY="${REGISTRY:-}"
@@ -156,9 +158,12 @@ get_kit_sdk_version() {
     local version="$2"
     local sdk
 
-    sdk=$(curl -sfL "${GH_AUTH_ARGS[@]}" \
-        "https://raw.githubusercontent.com/${repo}/v${version}/Twoliter.toml" \
-        | sed -n '/^\[sdk\]/,/^\[/p' | grep '^version' | head -1 | cut -d'"' -f2) || true
+    local toml
+    toml="$(mktemp)"
+    curl -sfL "${GH_AUTH_ARGS[@]}" -o "$toml" \
+        "https://raw.githubusercontent.com/${repo}/v${version}/Twoliter.toml" || true
+    sdk=$(tomlq "$toml" sdk.version 2>/dev/null) || true
+    rm -f "$toml"
 
     [[ -z "$sdk" ]] && die "Could not determine sdk version for ${repo} v${version}"
 
@@ -171,11 +176,9 @@ parse_version() {
     local section="${2:-kit}"
 
     if [[ "$section" == "sdk" ]]; then
-        sed -n '/^\[sdk\]/,/^\[/p' "${REPO_ROOT}/Twoliter.toml" \
-            | grep '^version' | head -1 | cut -d'"' -f2
+        tomlq "${REPO_ROOT}/Twoliter.toml" sdk.version
     else
-        grep -A3 "name = \"${name}\"" "${REPO_ROOT}/Twoliter.toml" \
-            | grep '^version' | head -1 | cut -d'"' -f2
+        tomlq "${REPO_ROOT}/Twoliter.toml" "kit[name=${name}].version"
     fi
 }
 
@@ -303,7 +306,7 @@ fi
 # working tree, build, and leave the changes for the caller to review.
 if [[ -z "$VENDOR" ]]; then
     if [[ "$CHANGED" == "true" ]]; then
-        CUR_RELEASE=$(grep '^release-version' Twoliter.toml | head -1 | cut -d'"' -f2)
+        CUR_RELEASE=$(tomlq Twoliter.toml release-version)
         log "Regenerating Twoliter.toml (release-version ${CUR_RELEASE})..."
         make generate-twoliter-toml RELEASE_VERSION="${CUR_RELEASE}" 2>&1 | tee -a "${LOG_FILE}" >&2
         make update 2>&1 | tee -a "${LOG_FILE}" >&2
@@ -330,7 +333,7 @@ next_patch() {
 if [[ -n "${RELEASE_VERSION:-}" ]]; then
     NEXT_VERSION="${RELEASE_VERSION}"
 else
-    NEXT_VERSION=$(grep '^release-version' Twoliter.toml | head -1 | cut -d'"' -f2)
+    NEXT_VERSION=$(tomlq Twoliter.toml release-version)
     git fetch -q --tags origin || true
     while git rev-parse -q --verify "refs/tags/v${NEXT_VERSION}" >/dev/null; do
         NEXT_VERSION=$(next_patch "${NEXT_VERSION}")
