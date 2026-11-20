@@ -1,0 +1,18 @@
+[package]
+name = "libtraceevent"
+version = "0.1.0"
+edition = "2021"
+publish = false
+build = "../build.rs"
+
+[lib]
+path = "../packages.rs"
+
+[package.metadata.build-package]
+releases-url = "https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git/refs/"
+
+[[package.metadata.build-package.external-files]]
+url = "https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git/snapshot/libtraceevent-1.9.1.tar.gz"
+sha512 = "188afb541ef4d049fce7cf052a42f60ad631c1b9b85fcad7776a9a2a321f7f804590709bc118e2870d495b2b7d3e441e933d355cba36e6293689f01ac857eac2"
+
+[dependencies]

@@ -28,6 +28,7 @@ dependencies = [
  "jsoncpp",
  "libbpf-tools",
  "libcap-utils",
+ "libtraceevent",
  "logrotate",
  "nerdctl",
  "oomd",
@@ -91,6 +92,10 @@ version = "0.1.0"
 
 [[package]]
 name = "libcap-utils"
+version = "0.1.0"
+
+[[package]]
+name = "libtraceevent"
 version = "0.1.0"
 
 [[package]]
