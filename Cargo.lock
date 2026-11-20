@@ -29,6 +29,7 @@ dependencies = [
  "libbpf-tools",
  "libcap-utils",
  "libtraceevent",
+ "libtracefs",
  "logrotate",
  "nerdctl",
  "oomd",
@@ -97,6 +98,13 @@ version = "0.1.0"
 [[package]]
 name = "libtraceevent"
 version = "0.1.0"
+
+[[package]]
+name = "libtracefs"
+version = "0.1.0"
+dependencies = [
+ "libtraceevent",
+]
 
 [[package]]
 name = "logrotate"
