@@ -151,6 +151,10 @@ That value lands in the archive filename and is also passed to `publish-kit` as 
 - **Publishing from a dirty tree** would push an artifact tagged `-dirty`, which corresponds to no commit and cannot be reproduced from the repository. The script refuses to do this, with no override. Building dirty is fine and stays allowed — only the publish step is gated. To build without publishing, set `VENDOR=` (empty). When publishing is requested, the check runs *before* the build, so a dirty tree fails in under a second rather than after several minutes.
 - **HEAD must not change between build and publish.** If it does, publish computes a different expected filename and fails with `No kit archive(s) exist at path ...`. This is why `release.sh` commits the version and pin bump *before* building, and tags only after publishing.
 
+## Smoke-testing a host
+
+After booting an image that includes the kit, copy `scripts/smoke-test.sh` to the host and run it as root from the admin container (`sudo sheltie`, then `bash smoke-test.sh`). It runs a harmless version or help command for each tool and reports PASS, FAIL, or SKIP for tools the variant doesn't include.
+
 ## Tools That Work Best on the Host
 
 Some tools in this kit work correctly only when run natively on the Bottlerocket host, not from inside a container. There are two main reasons for this.
