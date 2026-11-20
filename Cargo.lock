@@ -53,6 +53,7 @@ dependencies = [
  "strace",
  "sysstat",
  "tar",
+ "tcpdump",
  "trace-cmd",
  "tree",
  "turbostat",
@@ -199,6 +200,13 @@ version = "0.1.0"
 [[package]]
 name = "tar"
 version = "0.1.0"
+
+[[package]]
+name = "tcpdump"
+version = "0.1.0"
+dependencies = [
+ "libpcap",
+]
 
 [[package]]
 name = "trace-cmd"

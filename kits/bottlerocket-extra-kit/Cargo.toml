@@ -52,3 +52,4 @@ gawk = { path = "../../packages/gawk" }
 perf-tools = { path = "../../packages/perf-tools" }
 htop = { path = "../../packages/htop" }
 libpcap = { path = "../../packages/libpcap" }
+tcpdump = { path = "../../packages/tcpdump" }

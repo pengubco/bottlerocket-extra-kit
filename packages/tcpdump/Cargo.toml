@@ -1,0 +1,22 @@
+[package]
+name = "tcpdump"
+version = "0.1.0"
+edition = "2021"
+publish = false
+build = "../build.rs"
+
+[lib]
+path = "../packages.rs"
+
+[package.metadata.build-package]
+releases-url = "https://www.tcpdump.org/release/"
+
+[[package.metadata.build-package.external-files]]
+url = "https://www.tcpdump.org/release/tcpdump-4.99.7.tar.xz"
+sha512 = "bb59924d7e20f39009a0d8916921e0c2b0524bbcd3432c1f399b3178008786b5f2d26d60d5d6cc290627c8701152718bd6d6231a5873a6c204adf4b0f99f7f4c"
+
+[dependencies]
+libpcap = { path = "../libpcap" }
+
+[build-dependencies]
+libpcap = { path = "../libpcap" }
