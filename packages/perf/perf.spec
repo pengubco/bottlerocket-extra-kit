@@ -1,5 +1,5 @@
 %global debug_package %{nil}
-%global kversion 6.1.159
+%global kversion 6.1.190
 
 Name:    %{_cross_os}perf
 Version: %{kversion}
@@ -9,7 +9,7 @@ License: GPL-2.0-only
 URL:     https://www.kernel.org/
 
 # Same AL2023 kernel SRPM used by bottlerocket-kernel-kit kernel-6.1
-Source0: https://cdn.amazonlinux.com/al2023/blobstore/dce51e264ae9f9dc1841aaba22ea3ccd34ebc646acd5518b0604134097062c6c/kernel-6.1.159-181.297.amzn2023.src.rpm
+Source0: https://cdn.amazonlinux.com/al2023/blobstore/a5bd89eb90dc5c4a71535d05acd83210b0637aee68a9bb3a055e83d92de9cf25/kernel-6.1.190-237.442.amzn2023.src.rpm
 
 Requires: %{_cross_os}perfrun
 
@@ -71,5 +71,8 @@ install -p -m 0755 tools/perf/perf %{buildroot}%{_cross_bindir}/perf
 %{_cross_bindir}/perf
 
 %changelog
+* Fri Nov 20 2026 Bottlerocket Team <bottlerocket@amazon.com> - 6.1.190-1
+- Build from kernel 6.1.190, matching bottlerocket-kernel-kit 9.8.0
+
 * Tue Mar 10 2026 Bottlerocket Team <bottlerocket@amazon.com> - 6.1.159-1
 - Initial package for perf from kernel 6.1.159

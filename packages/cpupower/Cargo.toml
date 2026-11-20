@@ -12,8 +12,8 @@ path = "../packages.rs"
 releases-url = "https://cdn.kernel.org/pub/linux/kernel/"
 
 [[package.metadata.build-package.external-files]]
-url = "https://cdn.amazonlinux.com/al2023/blobstore/dce51e264ae9f9dc1841aaba22ea3ccd34ebc646acd5518b0604134097062c6c/kernel-6.1.159-181.297.amzn2023.src.rpm"
-sha512 = "a6d2f243fae35aae0f4de41e5ad3c4e65ff546a858a85278a19c7b2d8eccf156142f4aa760c02c9b6ad78849e374591e2fa45f2de14e4f04f198393fcdff4e9b"
+url = "https://cdn.amazonlinux.com/al2023/blobstore/a5bd89eb90dc5c4a71535d05acd83210b0637aee68a9bb3a055e83d92de9cf25/kernel-6.1.190-237.442.amzn2023.src.rpm"
+sha512 = "edea0f943faee23ecc9dc506456a6912e8969de3efccae4a5816962ff0ae992fb97184c00a355fe5bac338bbf484be78935fcb9e146d859616b2c3b1d19f4e3d"
 force-upstream = true
 
 # libpci is statically linked into cpupower; core-kit ships lspci but no libpci
