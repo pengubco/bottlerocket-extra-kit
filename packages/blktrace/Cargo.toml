@@ -1,0 +1,18 @@
+[package]
+name = "blktrace"
+version = "0.1.0"
+edition = "2021"
+publish = false
+build = "../build.rs"
+
+[lib]
+path = "../packages.rs"
+
+[package.metadata.build-package]
+releases-url = "https://brick.kernel.dk/snaps/"
+
+[[package.metadata.build-package.external-files]]
+url = "https://brick.kernel.dk/snaps/blktrace-1.3.0.tar.gz"
+sha512 = "955555280549a126756273157365776f12b1ad50bb089db9975035fd6a349157ba9bfd03593f742f50413509b66673fbcc573ec32b6ed5a4d30c3a41b9b9702f"
+
+[dependencies]
