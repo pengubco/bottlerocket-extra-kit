@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: Lint and consistency checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: shellcheck
+        run: shellcheck -x -e SC2016 scripts/*.sh
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: scripts/go/go.mod
+          cache-dependency-path: scripts/go/go.sum
+
+      - name: gofmt
+        run: |
+          unformatted="$(gofmt -l scripts/go)"
+          if [ -n "$unformatted" ]; then
+            echo "Run gofmt -w on:"; echo "$unformatted"; exit 1
+          fi
+
+      - name: go vet and test
+        working-directory: scripts/go
+        run: |
+          go vet ./...
+          go test ./...
+
+      - name: Package consistency
+        run: go -C scripts/go run ./cmd/check-packages -root ../..

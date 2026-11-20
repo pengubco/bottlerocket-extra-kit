@@ -1,0 +1,35 @@
+name: Package request
+description: Ask for a tool or library to be added to the kit
+title: "Package request: <name>"
+labels: [package-request]
+body:
+  - type: input
+    id: name
+    attributes:
+      label: Package
+      description: Name and upstream URL
+      placeholder: "htop — https://github.com/htop-dev/htop"
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Use case
+      description: What do you need it for? Why does it need to run on the host rather than in a container?
+    validations:
+      required: true
+  - type: dropdown
+    id: arch
+    attributes:
+      label: Architectures
+      options:
+        - x86_64 and aarch64
+        - x86_64 only
+        - aarch64 only
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Build notes
+      description: Optional. Dependencies, build system, known runtime needs (capabilities, tracefs, BTF, ...).

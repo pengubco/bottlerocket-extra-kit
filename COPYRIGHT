@@ -1,0 +1,16 @@
+Copyright Peng Zhang and other contributors.
+
+Except as otherwise noted (below and/or in individual files), bottlerocket-extra-kit is
+dual-licensed under the Apache License, version 2.0 <LICENSE-APACHE> or the MIT license
+<LICENSE-MIT>, at your option. This matches the license of Bottlerocket and its kits.
+
+Copyrights are retained by their contributors. No copyright assignment is required to
+contribute. Contributions are explicitly made under both the Apache License, version 2.0,
+and the MIT license. For full authorship information, see the version control history.
+
+The packages built by this kit are third-party software that carry their own copyright
+notices and license terms. Each package spec records its upstream License, and the license
+files are installed under /usr/share/licenses on Bottlerocket images.
+
+tools/install-twoliter.sh is copied from https://github.com/bottlerocket-os/twoliter and is
+licensed under its terms (Apache-2.0 OR MIT).
