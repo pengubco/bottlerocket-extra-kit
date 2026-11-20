@@ -139,6 +139,7 @@ The following packages are designed for or work best at the host level:
 - **perf** — Linux kernel performance counters. Requires `CAP_PERFMON` (or `CAP_SYS_ADMIN` on older kernels) and access to perf events, which are often restricted in containers.
 - **perfrun** — Convenience wrapper around `perf` for common workflows (record, flamegraph, stat, top). Depends on `perf`.
 - **bpftrace** — High-level eBPF tracing language. Requires `CAP_BPF` + `CAP_PERFMON` and access to kernel BTF/debug info.
+- **libbpf-tools** (`bpf-biolatency`, `bpf-runqlat`, `bpf-execsnoop`, etc.) — Prebuilt eBPF CO-RE tools. Require `CAP_BPF` + `CAP_PERFMON` (or `CAP_SYS_ADMIN`) and kernel BTF at `/sys/kernel/btf/vmlinux`.
 - **sysstat** (`sar`, `iostat`, `mpstat`, etc.) — System-wide I/O, CPU, and memory statistics. Most useful at the host level for whole-node visibility.
 
 ## Packages
@@ -154,6 +155,7 @@ The following packages are designed for or work best at the host level:
 - [golang](https://go.dev) v1.26.1 - The Go programming language toolchain. Note: `/tmp` is mounted `noexec` on Bottlerocket; set `GOCACHE`, `GOTMPDIR`, and `GOPATH` to a writable path such as `/local` before running `go build` or `go run`.
 - [gzip](https://www.gnu.org/software/gzip/) v1.14 - GNU compression utility: `gzip`, `gunzip`, `zcat`, `zgrep`. The core kit ships only `unpigz`, which cannot compress, so this fills the gap.
 - [jsoncpp](https://github.com/open-source-parsers/jsoncpp) v1.9.6
+- [libbpf-tools](https://github.com/iovisor/bcc/tree/master/libbpf-tools) v0.37.0 - BPF CO-RE tracing tools from bcc (`bpf-biolatency`, `bpf-runqlat`, `bpf-offcputime`, `bpf-profile`, `bpf-execsnoop`, `bpf-opensnoop`, `bpf-tcpconnect`, and more), installed with a `bpf-` prefix. No python or compiler needed; requires kernel BTF.
 - [logrotate](https://github.com/logrotate/logrotate) v3.22.0 - Rotates and maintains log files. Ships a default `/etc/logrotate.conf` plus a `logrotate.timer` that runs daily; drop additional rules into `/etc/logrotate.d`. Pulls in `gzip` so `compress` works out of the box.
 - [nerdctl](https://github.com/containerd/nerdctl) v2.1.6 - Docker-compatible CLI for containerd
 - [oomd](https://github.com/facebookincubator/oomd) v0.5.0

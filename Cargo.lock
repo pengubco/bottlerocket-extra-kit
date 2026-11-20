@@ -26,6 +26,7 @@ dependencies = [
  "golang",
  "gzip",
  "jsoncpp",
+ "libbpf-tools",
  "libcap-utils",
  "logrotate",
  "nerdctl",
@@ -82,6 +83,10 @@ version = "0.1.0"
 
 [[package]]
 name = "jsoncpp"
+version = "0.1.0"
+
+[[package]]
+name = "libbpf-tools"
 version = "0.1.0"
 
 [[package]]

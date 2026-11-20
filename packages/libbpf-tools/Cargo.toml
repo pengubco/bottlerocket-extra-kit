@@ -1,0 +1,20 @@
+[package]
+name = "libbpf-tools"
+version = "0.1.0"
+edition = "2021"
+publish = false
+build = "../build.rs"
+
+[lib]
+path = "../packages.rs"
+
+[package.metadata.build-package]
+releases-url = "https://github.com/iovisor/bcc/releases"
+
+# The release asset bundles the libbpf, bpftool and blazesym submodules;
+# GitHub's auto-generated archive tarballs do not.
+[[package.metadata.build-package.external-files]]
+url = "https://github.com/iovisor/bcc/releases/download/v0.37.0/bcc-src-with-submodule-0.37.0.tar.gz"
+sha512 = "49d7755d1a368571c1a595b8294de3e6844e19c609e414a6e22d4c0842c8332ea8afc5332752a6491c38b46b5158b727f27b9efc8b332206c4e36e4b2d744899"
+
+[dependencies]
