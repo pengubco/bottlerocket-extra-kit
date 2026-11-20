@@ -1,0 +1,18 @@
+[package]
+name = "lsof"
+version = "0.1.0"
+edition = "2021"
+publish = false
+build = "../build.rs"
+
+[lib]
+path = "../packages.rs"
+
+[package.metadata.build-package]
+releases-url = "https://github.com/lsof-org/lsof/releases/"
+
+[[package.metadata.build-package.external-files]]
+url = "https://github.com/lsof-org/lsof/releases/download/4.99.7/lsof-4.99.7.tar.gz"
+sha512 = "1a305e2d80a590fcb02ebd4a2008c263980879bfd4f9118af4da148d45766950b2bb1503cb78a0027ac63ef4f534abd8fc1bd5d367f9f13ee64694a9c08015fa"
+
+[dependencies]

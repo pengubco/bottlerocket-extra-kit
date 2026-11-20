@@ -161,6 +161,7 @@ The following packages are designed for or work best at the host level:
 - [libtraceevent](https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git/) v1.9.1 - Library for parsing raw kernel trace event formats, plus its event-format plugins. Used by `trace-cmd`.
 - [libtracefs](https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/) v1.8.4 - Library for accessing the kernel tracefs file system. Used by `trace-cmd`.
 - [logrotate](https://github.com/logrotate/logrotate) v3.22.0 - Rotates and maintains log files. Ships a default `/etc/logrotate.conf` plus a `logrotate.timer` that runs daily; drop additional rules into `/etc/logrotate.d`. Pulls in `gzip` so `compress` works out of the box.
+- [lsof](https://github.com/lsof-org/lsof) v4.99.7 - List open files, sockets and pipes per process (`lsof`), with SELinux context (`-Z`) support
 - [nerdctl](https://github.com/containerd/nerdctl) v2.1.6 - Docker-compatible CLI for containerd
 - [numactl](https://github.com/numactl/numactl) v2.0.19 - NUMA policy control: `numactl`, `numastat`, `migratepages`, `memhog`, plus the `libnuma` shared library
 - [oomd](https://github.com/facebookincubator/oomd) v0.5.0
