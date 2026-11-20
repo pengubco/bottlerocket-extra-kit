@@ -231,6 +231,8 @@ CI runs `shellcheck`, `go vet`/`go test` for `scripts/go`, and `scripts/go/cmd/c
 go -C scripts/go run ./cmd/check-packages -root ../..
 ```
 
+`make check-upstream` reports packages whose upstream (GitHub releases/tags, or go.dev for Go) has a newer release than the spec. It is a report for maintainers, not a CI gate.
+
 To request a package, open an issue with the "Package request" template.
 
 ## License
