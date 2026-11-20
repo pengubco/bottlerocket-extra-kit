@@ -162,6 +162,7 @@ The following packages are designed for or work best at the host level:
 - [libtracefs](https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/) v1.8.4 - Library for accessing the kernel tracefs file system. Used by `trace-cmd`.
 - [logrotate](https://github.com/logrotate/logrotate) v3.22.0 - Rotates and maintains log files. Ships a default `/etc/logrotate.conf` plus a `logrotate.timer` that runs daily; drop additional rules into `/etc/logrotate.d`. Pulls in `gzip` so `compress` works out of the box.
 - [nerdctl](https://github.com/containerd/nerdctl) v2.1.6 - Docker-compatible CLI for containerd
+- [numactl](https://github.com/numactl/numactl) v2.0.19 - NUMA policy control: `numactl`, `numastat`, `migratepages`, `memhog`, plus the `libnuma` shared library
 - [oomd](https://github.com/facebookincubator/oomd) v0.5.0
 - [openssh](https://www.openssh.com/) v10.0p1 - OpenSSH daemon (`sshd`) and client utilities (`ssh`, `scp`, `sftp`, `ssh-keygen`)
 - [perf](https://perf.wiki.kernel.org/) v6.1.159 - Linux kernel performance analysis tool.
