@@ -30,6 +30,7 @@ dependencies = [
  "glibc-utils",
  "golang",
  "gzip",
+ "iotop-c",
  "jsoncpp",
  "libbpf-tools",
  "libcap-utils",
@@ -87,6 +88,10 @@ version = "0.1.0"
 
 [[package]]
 name = "gzip"
+version = "0.1.0"
+
+[[package]]
+name = "iotop-c"
 version = "0.1.0"
 
 [[package]]
