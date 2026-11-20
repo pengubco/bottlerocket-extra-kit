@@ -46,3 +46,4 @@ libtracefs = { path = "../../packages/libtracefs" }
 trace-cmd = { path = "../../packages/trace-cmd" }
 blktrace = { path = "../../packages/blktrace" }
 iotop-c = { path = "../../packages/iotop-c" }
+numactl = { path = "../../packages/numactl" }

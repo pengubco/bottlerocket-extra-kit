@@ -38,6 +38,7 @@ dependencies = [
  "libtracefs",
  "logrotate",
  "nerdctl",
+ "numactl",
  "oomd",
  "openssh",
  "perf",
@@ -123,6 +124,10 @@ version = "0.1.0"
 
 [[package]]
 name = "nerdctl"
+version = "0.1.0"
+
+[[package]]
+name = "numactl"
 version = "0.1.0"
 
 [[package]]
