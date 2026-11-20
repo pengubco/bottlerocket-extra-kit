@@ -1,0 +1,18 @@
+[package]
+name = "iotop-c"
+version = "0.1.0"
+edition = "2021"
+publish = false
+build = "../build.rs"
+
+[lib]
+path = "../packages.rs"
+
+[package.metadata.build-package]
+releases-url = "https://github.com/Tomas-M/iotop/releases"
+
+[[package.metadata.build-package.external-files]]
+url = "https://github.com/Tomas-M/iotop/releases/download/v1.33/iotop-1.33.tar.xz"
+sha512 = "c617504168c16ea5f9191de017ce5cee0146800852a06fe1b59f5bf74015f9de5ac5e2c4f8703c1d7d5d43e6e11f04d4ecda1d8dbf94110534c6b8cf5c3665ef"
+
+[dependencies]

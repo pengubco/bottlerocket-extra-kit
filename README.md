@@ -155,6 +155,7 @@ The following packages are designed for or work best at the host level:
 - [glibc-utils](https://www.gnu.org/software/libc/) v2.42 - GNU C Library utilities: `ldd` (list dynamic dependencies) and `pldd` (list shared libraries of a running process).
 - [golang](https://go.dev) v1.26.1 - The Go programming language toolchain. Note: `/tmp` is mounted `noexec` on Bottlerocket; set `GOCACHE`, `GOTMPDIR`, and `GOPATH` to a writable path such as `/local` before running `go build` or `go run`.
 - [gzip](https://www.gnu.org/software/gzip/) v1.14 - GNU compression utility: `gzip`, `gunzip`, `zcat`, `zgrep`. The core kit ships only `unpigz`, which cannot compress, so this fills the gap.
+- [iotop-c](https://github.com/Tomas-M/iotop) v1.33 - Top-like per-process I/O monitor (`iotop`), the C rewrite of iotop. Needs root or `CAP_NET_ADMIN` (taskstats netlink); enable `sysctl kernel.task_delayacct=1` for the SWAPIN/IO% columns.
 - [jsoncpp](https://github.com/open-source-parsers/jsoncpp) v1.9.6
 - [libbpf-tools](https://github.com/iovisor/bcc/tree/master/libbpf-tools) v0.37.0 - BPF CO-RE tracing tools from bcc (`bpf-biolatency`, `bpf-runqlat`, `bpf-offcputime`, `bpf-profile`, `bpf-execsnoop`, `bpf-opensnoop`, `bpf-tcpconnect`, and more), installed with a `bpf-` prefix. No python or compiler needed; requires kernel BTF.
 - [libtraceevent](https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git/) v1.9.1 - Library for parsing raw kernel trace event formats, plus its event-format plugins. Used by `trace-cmd`.
