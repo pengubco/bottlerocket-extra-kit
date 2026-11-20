@@ -11,11 +11,16 @@ name = "binutils"
 version = "0.1.0"
 
 [[package]]
+name = "blktrace"
+version = "0.1.0"
+
+[[package]]
 name = "bottlerocket-extra-kit"
 version = "0.1.0"
 dependencies = [
  "awscli2",
  "binutils",
+ "blktrace",
  "bpftool",
  "bpftrace",
  "cpupower",
