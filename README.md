@@ -168,6 +168,7 @@ The following packages are designed for or work best at the host level:
 - [procps-ng](https://gitlab.com/procps-ng/procps) - Process monitoring utilities: `ps`, `top`, `free`, `vmstat`, `pgrep`, `pkill`, and more
 - [sysstat](https://github.com/sysstat/sysstat) v12.7.7 - Commands: sar, sadf, iostat, mpstat, pidstat, tapestat, cifsiostat.
 - [tar](https://www.gnu.org/software/tar/) v1.35 - GNU tar archiving utility
+- [trace-cmd](https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/) v3.4 - Command-line front end for the kernel ftrace tracer: `trace-cmd record`, `report`, `list`, `stat`, and more. Pulls in `libtraceevent` and `libtracefs`. Run as root with `/sys/kernel/tracing` (tracefs) accessible, e.g. from the admin container via `sheltie`.
 - [tree](https://oldmanprogrammer.net/source.php?dir=projects/tree) v2.3.2 - List directory contents as an indented tree (`tree`)
 - [turbostat](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/power/x86/turbostat) v6.1.159 - Report per-CPU frequency, C-state residency, temperature and RAPL power on x86 (`turbostat` 2022.10.04, built from the kernel 6.1.159 tree). x86_64 only. Run as root (needs `CAP_SYS_RAWIO` for `/dev/cpu/*/msr`); most counters are unavailable inside VMs that do not expose MSRs.
 - [vim](https://github.com/vim/vim) v9.1.0

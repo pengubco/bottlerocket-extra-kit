@@ -41,6 +41,7 @@ dependencies = [
  "strace",
  "sysstat",
  "tar",
+ "trace-cmd",
  "tree",
  "turbostat",
  "vim",
@@ -155,6 +156,14 @@ version = "0.1.0"
 [[package]]
 name = "tar"
 version = "0.1.0"
+
+[[package]]
+name = "trace-cmd"
+version = "0.1.0"
+dependencies = [
+ "libtraceevent",
+ "libtracefs",
+]
 
 [[package]]
 name = "tree"
