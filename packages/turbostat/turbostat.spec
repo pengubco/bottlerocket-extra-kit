@@ -1,5 +1,5 @@
 %global debug_package %{nil}
-%global kversion 6.1.159
+%global kversion 6.1.190
 
 Name:    %{_cross_os}turbostat
 Version: %{kversion}
@@ -10,7 +10,7 @@ URL:     https://www.kernel.org/
 ExclusiveArch: x86_64
 
 # Same AL2023 kernel SRPM used by the perf package
-Source0: https://cdn.amazonlinux.com/al2023/blobstore/dce51e264ae9f9dc1841aaba22ea3ccd34ebc646acd5518b0604134097062c6c/kernel-6.1.159-181.297.amzn2023.src.rpm
+Source0: https://cdn.amazonlinux.com/al2023/blobstore/a5bd89eb90dc5c4a71535d05acd83210b0637aee68a9bb3a055e83d92de9cf25/kernel-6.1.190-237.442.amzn2023.src.rpm
 
 Requires: %{_cross_os}libcap
 
@@ -49,5 +49,8 @@ install -p -m 0755 tools/power/x86/turbostat/turbostat %{buildroot}%{_cross_bind
 %{_cross_bindir}/turbostat
 
 %changelog
+* Fri Nov 20 2026 Bottlerocket Team <bottlerocket@amazon.com> - 6.1.190-1
+- Build from kernel 6.1.190, matching bottlerocket-kernel-kit 9.8.0
+
 * Fri Nov 20 2026 Bottlerocket Team <bottlerocket@amazon.com> - 6.1.159-1
 - Initial package for turbostat from kernel 6.1.159

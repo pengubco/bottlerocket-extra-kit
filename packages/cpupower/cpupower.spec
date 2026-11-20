@@ -1,5 +1,5 @@
 %global debug_package %{nil}
-%global kversion 6.1.159
+%global kversion 6.1.190
 %global pciver 3.15.0
 
 Name:    %{_cross_os}cpupower
@@ -10,7 +10,7 @@ License: GPL-2.0-only AND GPL-2.0-or-later
 URL:     https://www.kernel.org/
 
 # Same AL2023 kernel SRPM used by the perf package
-Source0: https://cdn.amazonlinux.com/al2023/blobstore/dce51e264ae9f9dc1841aaba22ea3ccd34ebc646acd5518b0604134097062c6c/kernel-6.1.159-181.297.amzn2023.src.rpm
+Source0: https://cdn.amazonlinux.com/al2023/blobstore/a5bd89eb90dc5c4a71535d05acd83210b0637aee68a9bb3a055e83d92de9cf25/kernel-6.1.190-237.442.amzn2023.src.rpm
 # Built as a private static library: cpupower always links -lpci, and the
 # core kit's pciutils package ships only lspci, not libpci.
 Source1: https://mirrors.edge.kernel.org/pub/software/utils/pciutils/pciutils-%{pciver}.tar.xz
@@ -70,5 +70,8 @@ install -p -m 0755 linux-%{kversion}/tools/power/cpupower/cpupower %{buildroot}%
 %{_cross_bindir}/cpupower
 
 %changelog
+* Fri Nov 20 2026 Bottlerocket Team <bottlerocket@amazon.com> - 6.1.190-1
+- Build from kernel 6.1.190, matching bottlerocket-kernel-kit 9.8.0
+
 * Fri Nov 20 2026 Bottlerocket Team <bottlerocket@amazon.com> - 6.1.159-1
 - Initial package for cpupower from kernel 6.1.159
