@@ -99,7 +99,8 @@ build-and-publish: update
 DAILY_BUILD_ARGS ?=
 
 daily-build:
-	@VENDOR="$(VENDOR)" RELEASE_VERSION="$(RELEASE_VERSION)" ARCHES="$(ARCHES)" \
+	@VENDOR="$(VENDOR)" ARCHES="$(ARCHES)" \
+		$(if $(filter command line,$(origin RELEASE_VERSION)),RELEASE_VERSION="$(RELEASE_VERSION)") \
 		$(TOP)scripts/daily-build.sh $(DAILY_BUILD_ARGS)
 
 # Cut a release: bump release-version, commit, build all ARCHES, publish,
