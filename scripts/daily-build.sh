@@ -8,10 +8,10 @@
 #   1. Queries GitHub for the latest kernel-kit, core-kit, and SDK versions.
 #   2. Compares them against the versions pinned in Twoliter.toml.
 #   3. If nothing changed (and --force is not set), logs the result and exits.
-#   4. If any version is newer (or --force), regenerates Twoliter.toml, commits
-#      the new pins, builds the kit, and optionally publishes.
-#
-# The commit happens before the build on purpose; see Step 5 for why.
+#   4. If any version is newer (or --force), cuts the next patch release with
+#      scripts/release.sh: new pins, commit, build every arch, publish, tag,
+#      and GitHub release. A published version is never republished.
+#      With VENDOR empty it only refreshes the pins and builds.
 #
 # Flags:
 #   --force         Build and publish even if Twoliter.toml already has the
@@ -24,7 +24,8 @@
 #   REGISTRY        — OCI registry URL (e.g. public.ecr.aws/m8c0s8v8).
 #                     Required for publishing unless Infra.toml already exists.
 #   PUBLISH_REGIONS — Comma-separated AWS regions (default: us-west-2).
-#   RELEASE_VERSION — Extra-kit release version (default: read from Makefile).
+#   RELEASE_VERSION — Version to release (default: the current release-version
+#                     if it has no git tag yet, otherwise the next patch).
 #   ARCHES          — Space-separated architectures to build (default:
 #                     "x86_64 aarch64"). All are published as one multi-arch
 #                     index.
@@ -297,69 +298,57 @@ if [[ "$DRY_RUN" == "true" ]]; then
     exit 0
 fi
 
-# ── Step 3: Determine release version ────────────────────────────────────────
-if [[ -z "${RELEASE_VERSION:-}" ]]; then
-    RELEASE_VERSION=$(grep '^RELEASE_VERSION' "${REPO_ROOT}/Makefile" \
-        | head -1 | sed 's/.*?= *//')
-fi
-log "Using RELEASE_VERSION=${RELEASE_VERSION}"
-
-# ── Step 4: Regenerate Twoliter.toml and refresh the lock ────────────────────
-if [[ "$CHANGED" == "true" ]]; then
-    log "Regenerating Twoliter.toml..."
-    make generate-twoliter-toml RELEASE_VERSION="${RELEASE_VERSION}" 2>&1 | tee -a "${LOG_FILE}" >&2
-
-    log "Running make update..."
-    make update 2>&1 | tee -a "${LOG_FILE}" >&2
-fi
-
-# ── Step 5: Commit the pin bump, BEFORE building ─────────────────────────────
-# This must happen before `make build`. The kit version embeds
-# `git describe --always --dirty --abbrev=8` (BUILDSYS_VERSION_BUILD in
-# twoliter's Makefile.toml), and that value is baked into the archive filename
-# as well as passed to `publish-kit` as --build-id. Committing between build and
-# publish changes HEAD, so publish looks for an archive name that the build
-# never produced and fails with "No kit archive(s) exist at path ...".
-# Committing first also means the published artifact is labelled with the exact
-# commit that contains the pins it was built from.
-if [[ "$CHANGED" == "true" ]]; then
-    log "Committing updated Twoliter.toml and Twoliter.lock..."
-    git add Twoliter.toml Twoliter.lock
-    # --only limits the commit to these paths, so unrelated staged work in the
-    # index can never be swept into an automated commit.
-    git commit -q --only \
-        -m "chore: Bump upstream dependencies (daily build)
-
-Automated update to latest upstream versions:
-$(printf '%b' "$CHANGES")" \
-        -- Twoliter.toml Twoliter.lock
-
-    log "Committed: $(git log --oneline -1)"
+# ── Step 3: Build only (VENDOR empty) ────────────────────────────────────────
+# Without publishing there is nothing to version: refresh the pins in the
+# working tree, build, and leave the changes for the caller to review.
+if [[ -z "$VENDOR" ]]; then
+    if [[ "$CHANGED" == "true" ]]; then
+        CUR_RELEASE=$(grep '^release-version' Twoliter.toml | head -1 | cut -d'"' -f2)
+        log "Regenerating Twoliter.toml (release-version ${CUR_RELEASE})..."
+        make generate-twoliter-toml RELEASE_VERSION="${CUR_RELEASE}" 2>&1 | tee -a "${LOG_FILE}" >&2
+        make update 2>&1 | tee -a "${LOG_FILE}" >&2
+    fi
+    for arch in ${ARCHES}; do
+        log "Building kit for ${arch}..."
+        make build ARCH="${arch}" 2>&1 | tee -a "${LOG_FILE}" >&2
+    done
+    log "VENDOR is empty — built without publishing. Pin changes, if any, are uncommitted."
+    exit 0
 fi
 
-# ── Step 6: Validate publish prerequisites before spending time on a build ───
-# When publishing is requested, both of these would otherwise fail only after a
-# multi-minute build has completed. Check them up front instead.
-if [[ -n "$VENDOR" ]]; then
-    ensure_infra_toml
-    require_clean_tree_for_publish
-fi
+# ── Step 4: Pick a new release version ───────────────────────────────────────
+# A published version is never republished. Twoliter projects that consume the
+# kit pin it by version and lock its digest, so overwriting vX.Y.Z would
+# silently swap their dependency (and its core-kit/SDK pins) underneath them.
+# Every rebuild that publishes therefore becomes the next patch release.
+next_patch() {
+    local v="$1" major minor patch
+    IFS=. read -r major minor patch <<<"${v%%-*}"
+    echo "${major}.${minor}.$((patch + 1))"
+}
 
-# ── Step 7: Build ────────────────────────────────────────────────────────────
-for arch in ${ARCHES}; do
-    log "Building kit for ${arch}..."
-    make build ARCH="${arch}" 2>&1 | tee -a "${LOG_FILE}" >&2
-done
-
-# ── Step 8: Publish (optional) ───────────────────────────────────────────────
-if [[ -n "$VENDOR" ]]; then
-    # Re-check: the build itself could have modified a tracked file.
-    require_clean_tree_for_publish
-    log "Publishing kit to vendor=${VENDOR}..."
-    make publish VENDOR="${VENDOR}" 2>&1 | tee -a "${LOG_FILE}" >&2
-    log "Published successfully."
+if [[ -n "${RELEASE_VERSION:-}" ]]; then
+    NEXT_VERSION="${RELEASE_VERSION}"
 else
-    log "VENDOR is empty — skipping publish."
+    NEXT_VERSION=$(grep '^release-version' Twoliter.toml | head -1 | cut -d'"' -f2)
+    git fetch -q --tags origin || true
+    while git rev-parse -q --verify "refs/tags/v${NEXT_VERSION}" >/dev/null; do
+        NEXT_VERSION=$(next_patch "${NEXT_VERSION}")
+    done
 fi
+log "Releasing v${NEXT_VERSION}"
 
-log "Daily build complete."
+ensure_infra_toml
+require_clean_tree_for_publish
+
+# ── Step 5: Release ──────────────────────────────────────────────────────────
+# release.sh bumps the pins (with --latest) and release-version, commits,
+# builds every arch, publishes, verifies the image index, tags, pushes, and
+# creates the GitHub release. It refuses to reuse an existing tag or image.
+RELEASE_FLAGS=()
+[[ "$CHANGED" == "true" ]] && RELEASE_FLAGS+=(--latest)
+
+VENDOR="${VENDOR}" ARCHES="${ARCHES}" \
+    "${SCRIPT_DIR}/release.sh" "${RELEASE_FLAGS[@]}" "${NEXT_VERSION}" 2>&1 | tee -a "${LOG_FILE}" >&2
+
+log "Daily build complete: released v${NEXT_VERSION}."

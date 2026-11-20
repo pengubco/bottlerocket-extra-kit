@@ -98,7 +98,9 @@ Flags (pass them via `RELEASE_ARGS`):
 
 ## Automated daily builds
 
-`scripts/daily-build.sh` checks for upstream kernel-kit, core-kit, or SDK updates and rebuilds the kit when any version changes. If nothing changed, it logs and exits.
+`scripts/daily-build.sh` checks for upstream kernel-kit, core-kit, or SDK updates. If nothing changed, it logs and exits. If anything changed, it cuts the next patch release (e.g. 1.0.6 → 1.0.7) with `scripts/release.sh --latest`, which bumps the pins, builds every architecture, publishes, tags, and creates the GitHub release.
+
+A published version is never republished. Projects that use the kit pin it by version and lock its digest in `Twoliter.lock`, so overwriting `vX.Y.Z` would silently change their core-kit and SDK requirements. Both scripts refuse to reuse a git tag or an existing image tag.
 
 Run it through make:
 ```
@@ -112,14 +114,14 @@ VENDOR=peng REGISTRY=public.ecr.aws/m8c0s8v8 ./scripts/daily-build.sh --force
 ```
 
 Flags:
-- `--force` — rebuild and publish even when Twoliter.toml already has the latest versions.
+- `--force` — cut a new patch release even when Twoliter.toml already has the latest versions.
 - `--dry-run` — show what would change without acting.
 
 Environment variables:
 - `VENDOR` — ECR vendor alias for publishing (default: `peng`). Set empty to skip publish.
 - `REGISTRY` — OCI registry URL (e.g. `public.ecr.aws/m8c0s8v8`). Required for publishing unless `Infra.toml` already exists.
 - `PUBLISH_REGIONS` — Comma-separated AWS regions (default: `us-west-2`).
-- `RELEASE_VERSION` — Override the extra-kit release version (default: read from Makefile).
+- `RELEASE_VERSION` — Version to release (default: the current `release-version` if it has no git tag yet, otherwise the next patch). Pass it explicitly to `make daily-build` to override.
 - `ARCHES` — Space-separated architectures to build (default: `x86_64 aarch64`). They are published as one multi-arch image.
 - `LOG_FILE` — Log output path (default: `/tmp/extra-kit-daily-build.log`).
 - `GITHUB_TOKEN` — Token for the GitHub API calls that resolve upstream versions. Unauthenticated requests are capped at 60/hour **per IP**, which a shared NAT address (such as a Cloud Desktop) exhausts easily. If unset, the script falls back to `gh auth token` when the gh CLI is logged in.
@@ -147,7 +149,7 @@ BUILDSYS_VERSION_BUILD = { script = ["git describe --always --dirty --exclude '*
 That value lands in the archive filename and is also passed to `publish-kit` as `--build-id`. Two consequences:
 
 - **Publishing from a dirty tree** would push an artifact tagged `-dirty`, which corresponds to no commit and cannot be reproduced from the repository. The script refuses to do this, with no override. Building dirty is fine and stays allowed — only the publish step is gated. To build without publishing, set `VENDOR=` (empty). When publishing is requested, the check runs *before* the build, so a dirty tree fails in under a second rather than after several minutes.
-- **HEAD must not change between build and publish.** If it does, publish computes a different expected filename and fails with `No kit archive(s) exist at path ...`. This is why the script commits the pin bump *before* building, not after.
+- **HEAD must not change between build and publish.** If it does, publish computes a different expected filename and fails with `No kit archive(s) exist at path ...`. This is why `release.sh` commits the version and pin bump *before* building, and tags only after publishing.
 
 ## Tools That Work Best on the Host
 

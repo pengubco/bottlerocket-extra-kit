@@ -98,6 +98,13 @@ git rev-parse -q --verify "refs/tags/${TAG}" >/dev/null && die "tag ${TAG} alrea
 git fetch -q --tags "${REMOTE}"
 git ls-remote --exit-code --tags "${REMOTE}" "refs/tags/${TAG}" >/dev/null 2>&1 \
     && die "tag ${TAG} already exists on ${REMOTE}"
+REGISTRY="$(sed -n "/^\[vendor\.${VENDOR}\]/,/^\[/p" Infra.toml | grep '^registry' | head -1 | cut -d'"' -f2)"
+[[ -n "$REGISTRY" ]] || die "no registry for vendor '${VENDOR}' in Infra.toml"
+IMAGE="${REGISTRY}/${KIT}:${TAG}"
+# Never republish a version: consumers lock the kit by version and digest.
+if command -v crane >/dev/null && crane digest "${IMAGE}" >/dev/null 2>&1; then
+    die "${IMAGE} already exists; pick a new version"
+fi
 BRANCH="$(git symbolic-ref --short HEAD)" || die "HEAD is detached; check out a branch"
 PREV_TAG="$(git describe --tags --abbrev=0 --match 'v[0-9]*' 2>/dev/null || true)"
 echo "Branch ${BRANCH}, previous tag ${PREV_TAG:-<none>}, arches: ${ARCHES}"
@@ -152,8 +159,6 @@ step "Publishing to vendor ${VENDOR}"
 make --no-print-directory publish VENDOR="${VENDOR}"
 
 # ── Step 5: verify the published index ────────────────────────────────────────
-REGISTRY="$(sed -n "/^\[vendor\.${VENDOR}\]/,/^\[/p" Infra.toml | grep '^registry' | head -1 | cut -d'"' -f2)"
-IMAGE="${REGISTRY}/${KIT}:${TAG}"
 if command -v crane >/dev/null; then
     step "Verifying ${IMAGE}"
     manifest="$(crane manifest "${IMAGE}")"
