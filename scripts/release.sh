@@ -74,17 +74,20 @@ TAG="v${VERSION}"
 
 cd "${REPO_ROOT}"
 
+# shellcheck source=scripts/lib.sh
+source "${SCRIPT_DIR}/lib.sh"
+
 # Read a pinned version from Twoliter.toml. Arg: kit name, or "sdk".
 pin() {
     if [[ "$1" == "sdk" ]]; then
-        sed -n '/^\[sdk\]/,/^\[/p' Twoliter.toml | grep '^version' | head -1 | cut -d'"' -f2
+        tomlq Twoliter.toml sdk.version
     else
-        grep -A3 "name = \"$1\"" Twoliter.toml | grep '^version' | head -1 | cut -d'"' -f2
+        tomlq Twoliter.toml "kit[name=$1].version"
     fi
 }
 
 current_release_version() {
-    grep '^release-version' Twoliter.toml | head -1 | cut -d'"' -f2
+    tomlq Twoliter.toml release-version
 }
 
 # ── Step 1: preflight ─────────────────────────────────────────────────────────
@@ -92,14 +95,13 @@ step "Preflight checks"
 command -v gh >/dev/null || die "gh CLI not found"
 gh auth status >/dev/null 2>&1 || die "gh is not logged in; run 'gh auth login'"
 [[ -f Infra.toml ]] || die "Infra.toml not found; create it from Infra-template.toml"
-grep -q "^\[vendor\.${VENDOR}\]" Infra.toml || die "vendor '${VENDOR}' not defined in Infra.toml"
+REGISTRY="$(tomlq Infra.toml "vendor.${VENDOR}.registry")" \
+    || die "vendor '${VENDOR}' has no registry in Infra.toml"
 [[ -z "$(git status --porcelain)" ]] || { git status --short >&2; die "working tree is not clean"; }
 git rev-parse -q --verify "refs/tags/${TAG}" >/dev/null && die "tag ${TAG} already exists locally"
 git fetch -q --tags "${REMOTE}"
 git ls-remote --exit-code --tags "${REMOTE}" "refs/tags/${TAG}" >/dev/null 2>&1 \
     && die "tag ${TAG} already exists on ${REMOTE}"
-REGISTRY="$(sed -n "/^\[vendor\.${VENDOR}\]/,/^\[/p" Infra.toml | grep '^registry' | head -1 | cut -d'"' -f2)"
-[[ -n "$REGISTRY" ]] || die "no registry for vendor '${VENDOR}' in Infra.toml"
 IMAGE="${REGISTRY}/${KIT}:${TAG}"
 # Never republish a version: consumers lock the kit by version and digest.
 if command -v crane >/dev/null && crane digest "${IMAGE}" >/dev/null 2>&1; then
