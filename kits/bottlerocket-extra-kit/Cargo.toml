@@ -40,3 +40,4 @@ tree = { path = "../../packages/tree" }
 bpftool = { path = "../../packages/bpftool" }
 turbostat = { path = "../../packages/turbostat" }
 cpupower = { path = "../../packages/cpupower" }
+libbpf-tools = { path = "../../packages/libbpf-tools" }
