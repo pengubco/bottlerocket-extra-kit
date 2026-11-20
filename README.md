@@ -138,6 +138,7 @@ The following packages are designed for or work best at the host level:
 - **glibc-utils** (`ldd`, `pldd`) — `ldd` resolves shared library dependencies by executing the target binary's ELF interpreter; must run natively for correct results. `pldd` lists shared libraries loaded into a running process via `/proc`; requires host process namespace access.
 - **perf** — Linux kernel performance counters. Requires `CAP_PERFMON` (or `CAP_SYS_ADMIN` on older kernels) and access to perf events, which are often restricted in containers.
 - **perfrun** — Convenience wrapper around `perf` for common workflows (record, flamegraph, stat, top). Depends on `perf`.
+- **perf-tools** (`ft-execsnoop`, `ft-iosnoop`, `ft-funccount`, `ft-kprobe`, etc.) — ftrace-based shell tools. Must run as root on the host with tracefs mounted at `/sys/kernel/tracing` (or debugfs at `/sys/kernel/debug/tracing`).
 - **bpftrace** — High-level eBPF tracing language. Requires `CAP_BPF` + `CAP_PERFMON` and access to kernel BTF/debug info.
 - **libbpf-tools** (`bpf-biolatency`, `bpf-runqlat`, `bpf-execsnoop`, etc.) — Prebuilt eBPF CO-RE tools. Require `CAP_BPF` + `CAP_PERFMON` (or `CAP_SYS_ADMIN`) and kernel BTF at `/sys/kernel/btf/vmlinux`.
 - **sysstat** (`sar`, `iostat`, `mpstat`, etc.) — System-wide I/O, CPU, and memory statistics. Most useful at the host level for whole-node visibility.
@@ -168,6 +169,7 @@ The following packages are designed for or work best at the host level:
 - [oomd](https://github.com/facebookincubator/oomd) v0.5.0
 - [openssh](https://www.openssh.com/) v10.0p1 - OpenSSH daemon (`sshd`) and client utilities (`ssh`, `scp`, `sftp`, `ssh-keygen`)
 - [perf](https://perf.wiki.kernel.org/) v6.1.159 - Linux kernel performance analysis tool.
+- [perf-tools](https://github.com/brendangregg/perf-tools) snapshot cb42511 (2020-01-14) - Brendan Gregg's ftrace/perf_events shell tools: `bitesize`, `cachestat`, `execsnoop`, `funccount`, `funcgraph`, `funcslower`, `functrace`, `iolatency`, `iosnoop`, `killsnoop`, `kprobe`, `opensnoop`, `perf-stat-hist`, `reset-ftrace`, `syscount`, `tpoint`, `uprobe`. Upstream has no releases, so this pins a commit. The scripts live in `/usr/libexec/perf-tools` under their upstream names, and each is linked into `/usr/bin` with an `ft-` prefix (for example `ft-execsnoop`) so they never clash with same-named bcc/libbpf-tools commands; add `/usr/libexec/perf-tools` to `PATH` to use the upstream names. `tcpretrans` is omitted because it needs Perl. Pulls in `gawk`; `bitesize`, `perf-stat-hist` and `syscount` also need `perf`, and `uprobe` needs `objdump` from `binutils`.
 - [perfrun](https://www.kernel.org/) v0.1.0 - Convenience wrapper for common `perf` workflows: `record`, `flamegraph`, `stat`, `top`. Installed automatically with `perf`.
 - [permissive-selinux] - Set SELinux mode to permissive. Useful for debugging/developing while bypassing SELinux denials (e.g., running shell scripts)
 - [procps-ng](https://gitlab.com/procps-ng/procps) - Process monitoring utilities: `ps`, `top`, `free`, `vmstat`, `pgrep`, `pkill`, and more

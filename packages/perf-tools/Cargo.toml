@@ -1,0 +1,21 @@
+[package]
+name = "perf-tools"
+version = "0.1.0"
+edition = "2021"
+publish = false
+build = "../build.rs"
+
+[lib]
+path = "../packages.rs"
+
+# Upstream has no releases or tags, so pin a commit snapshot.
+[package.metadata.build-package]
+releases-url = "https://github.com/brendangregg/perf-tools/commits/master"
+
+[[package.metadata.build-package.external-files]]
+url = "https://github.com/brendangregg/perf-tools/archive/cb42511b963a8dd2d8fcca400174c8d5d33a1f37.tar.gz"
+path = "perf-tools-cb42511b963a8dd2d8fcca400174c8d5d33a1f37.tar.gz"
+sha512 = "f1e5b1a201d4f133c7f44ea1cb948b8cc5fa25cfabe0274e3b8a54ef1bd1e4dee463c368b20ab3d49c84088d083f098c061eb181f16d715843c94f954c1ffd48"
+
+[dependencies]
+gawk = { path = "../gawk" }
