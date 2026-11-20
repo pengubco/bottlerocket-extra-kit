@@ -38,6 +38,7 @@ dependencies = [
  "sysstat",
  "tar",
  "tree",
+ "turbostat",
  "vim",
  "which",
 ]
@@ -134,6 +135,10 @@ version = "0.1.0"
 
 [[package]]
 name = "tree"
+version = "0.1.0"
+
+[[package]]
+name = "turbostat"
 version = "0.1.0"
 
 [[package]]
