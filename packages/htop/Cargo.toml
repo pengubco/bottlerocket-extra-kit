@@ -1,0 +1,18 @@
+[package]
+name = "htop"
+version = "0.1.0"
+edition = "2021"
+publish = false
+build = "../build.rs"
+
+[lib]
+path = "../packages.rs"
+
+[package.metadata.build-package]
+releases-url = "https://github.com/htop-dev/htop/releases"
+
+[[package.metadata.build-package.external-files]]
+url = "https://github.com/htop-dev/htop/releases/download/3.5.3/htop-3.5.3.tar.xz"
+sha512 = "54def5519eb63493740542012f29d3e9f31d58d9438fae63ac59cfb2d9bcab2139505130466ccdf4447217f0ac076234ef4e1c4eb760a502ee1aa5fedf02cb19"
+
+[dependencies]

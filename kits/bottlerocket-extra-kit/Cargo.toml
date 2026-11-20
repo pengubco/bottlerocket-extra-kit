@@ -50,3 +50,4 @@ numactl = { path = "../../packages/numactl" }
 lsof = { path = "../../packages/lsof" }
 gawk = { path = "../../packages/gawk" }
 perf-tools = { path = "../../packages/perf-tools" }
+htop = { path = "../../packages/htop" }
