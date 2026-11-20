@@ -16,6 +16,7 @@ version = "0.1.0"
 dependencies = [
  "awscli2",
  "binutils",
+ "bpftool",
  "bpftrace",
  "curl",
  "diffutils",
@@ -40,6 +41,10 @@ dependencies = [
  "vim",
  "which",
 ]
+
+[[package]]
+name = "bpftool"
+version = "0.1.0"
 
 [[package]]
 name = "bpftrace"

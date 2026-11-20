@@ -37,3 +37,4 @@ libcap-utils = { path = "../../packages/libcap-utils" }
 logrotate = { path = "../../packages/logrotate" }
 gzip = { path = "../../packages/gzip" }
 tree = { path = "../../packages/tree" }
+bpftool = { path = "../../packages/bpftool" }

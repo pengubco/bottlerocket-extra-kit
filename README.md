@@ -144,6 +144,7 @@ The following packages are designed for or work best at the host level:
 ## Packages
 - [awscli2](https://aws.amazon.com/cli/) v2.27.0 - AWS CLI version 2
 - [binutils](https://www.gnu.org/software/binutils/) v2.44 - Binary utilities: `as`, `ld`, `objdump`, `nm`, `strip`, `readelf`, and more
+- [bpftool](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/bpf/bpftool) v6.1.159 - Inspect and manage eBPF programs, maps, links and BTF (`bpftool` v7.1.0, built from the kernel 6.1.159 tree). Built without BPF skeletons, so `prog profile` and the PID columns of `prog/map show` are unavailable; JIT disassembly (`prog dump jited`) is unavailable too. Needs `CAP_SYS_ADMIN` (or `CAP_BPF` + `CAP_PERFMON`).
 - [bpftrace](https://github.com/bpftrace/bpftrace) v0.24.2 - High-level tracing language for Linux eBPF. Pre-built static binary (x86_64 only).
 - [curl](https://curl.se) v8.12.1
 - [diffutils](https://www.gnu.org/software/diffutils/) v3.12 - GNU diff utilities: `diff`, `diff3`, `cmp`, `sdiff`
