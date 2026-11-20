@@ -1,0 +1,18 @@
+[package]
+name = "iperf3"
+version = "0.1.0"
+edition = "2021"
+publish = false
+build = "../build.rs"
+
+[lib]
+path = "../packages.rs"
+
+[package.metadata.build-package]
+releases-url = "https://downloads.es.net/pub/iperf/"
+
+[[package.metadata.build-package.external-files]]
+url = "https://downloads.es.net/pub/iperf/iperf-3.22.1.tar.gz"
+sha512 = "bf6d4983634bc64579b0addbe31e495428932a5468f20462edb960d9bfa177ad5580c7b52e431ebd1ddf0c7fac1d4fa481721c6698edcfb540c1c84fd1565126"
+
+[dependencies]
