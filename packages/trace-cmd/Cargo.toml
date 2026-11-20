@@ -1,0 +1,24 @@
+[package]
+name = "trace-cmd"
+version = "0.1.0"
+edition = "2021"
+publish = false
+build = "../build.rs"
+
+[lib]
+path = "../packages.rs"
+
+[package.metadata.build-package]
+releases-url = "https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/refs/"
+
+[[package.metadata.build-package.external-files]]
+url = "https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/snapshot/trace-cmd-v3.4.tar.gz"
+sha512 = "b237a5e60e71a882b7fd559d130cbf6e076c51f548292f3226d30a50591c5306de60ac5f664268b7d8f9f104353bc509b5bd4d7903a5db2e020570674b7712e7"
+
+[dependencies]
+libtraceevent = { path = "../libtraceevent" }
+libtracefs = { path = "../libtracefs" }
+
+[build-dependencies]
+libtraceevent = { path = "../libtraceevent" }
+libtracefs = { path = "../libtracefs" }
