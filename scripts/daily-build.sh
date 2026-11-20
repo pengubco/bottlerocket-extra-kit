@@ -25,6 +25,9 @@
 #                     Required for publishing unless Infra.toml already exists.
 #   PUBLISH_REGIONS — Comma-separated AWS regions (default: us-west-2).
 #   RELEASE_VERSION — Extra-kit release version (default: read from Makefile).
+#   ARCHES          — Space-separated architectures to build (default:
+#                     "x86_64 aarch64"). All are published as one multi-arch
+#                     index.
 #   LOG_FILE        — Path to log file (default: /tmp/extra-kit-daily-build.log).
 #   DRY_RUN         — If set to "true", same as --dry-run flag.
 #   GITHUB_TOKEN    — GitHub token for API calls. Unauthenticated requests are
@@ -40,6 +43,7 @@ REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 VENDOR="${VENDOR:-peng}"
 REGISTRY="${REGISTRY:-}"
 PUBLISH_REGIONS="${PUBLISH_REGIONS:-us-west-2}"
+ARCHES="${ARCHES:-x86_64 aarch64}"
 LOG_FILE="${LOG_FILE:-/tmp/extra-kit-daily-build.log}"
 DRY_RUN="${DRY_RUN:-false}"
 FORCE=false
@@ -342,8 +346,10 @@ if [[ -n "$VENDOR" ]]; then
 fi
 
 # ── Step 7: Build ────────────────────────────────────────────────────────────
-log "Building kit..."
-make build 2>&1 | tee -a "${LOG_FILE}" >&2
+for arch in ${ARCHES}; do
+    log "Building kit for ${arch}..."
+    make build ARCH="${arch}" 2>&1 | tee -a "${LOG_FILE}" >&2
+done
 
 # ── Step 8: Publish (optional) ───────────────────────────────────────────────
 if [[ -n "$VENDOR" ]]; then
