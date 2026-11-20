@@ -56,3 +56,4 @@ tcpdump = { path = "../../packages/tcpdump" }
 fio = { path = "../../packages/fio" }
 iperf3 = { path = "../../packages/iperf3" }
 stress-ng = { path = "../../packages/stress-ng" }
+pcm = { path = "../../packages/pcm" }

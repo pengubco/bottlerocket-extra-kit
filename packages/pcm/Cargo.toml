@@ -1,0 +1,22 @@
+[package]
+name = "pcm"
+version = "0.1.0"
+edition = "2021"
+publish = false
+build = "build.rs"
+
+[lib]
+path = "../packages.rs"
+
+[package.metadata.build-package]
+releases-url = "https://github.com/intel/pcm/releases"
+
+# The tag archive omits git submodules (simdjson, pugixml, perfmon,
+# Intel-PMT). All of them are optional for the tools shipped here; see
+# pcm.spec.
+[[package.metadata.build-package.external-files]]
+url = "https://github.com/intel/pcm/archive/refs/tags/202604.tar.gz"
+path = "pcm-202604.tar.gz"
+sha512 = "721737c6f67832e905193cb3ba2856436398bc3a695b3e7099df0aa7e70b79e4bdc5d6436a95bd229c74842a1364ff93549f51a2e718bf76afb72db57c4fb354"
+
+[dependencies]

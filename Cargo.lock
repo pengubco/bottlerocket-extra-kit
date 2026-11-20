@@ -47,6 +47,7 @@ dependencies = [
  "numactl",
  "oomd",
  "openssh",
+ "pcm",
  "perf",
  "perf-tools",
  "perfrun",
@@ -172,6 +173,10 @@ dependencies = [
 
 [[package]]
 name = "openssh"
+version = "0.1.0"
+
+[[package]]
+name = "pcm"
 version = "0.1.0"
 
 [[package]]
