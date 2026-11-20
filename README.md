@@ -174,26 +174,27 @@ The following packages are designed for or work best at the host level:
 ## Packages
 - [awscli2](https://aws.amazon.com/cli/) v2.27.0 - AWS CLI version 2
 - [binutils](https://www.gnu.org/software/binutils/) v2.44 - Binary utilities: `as`, `ld`, `objdump`, `nm`, `strip`, `readelf`, and more
-- [bpftool](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/bpf/bpftool) v6.1.190 - Inspect and manage eBPF programs, maps, links and BTF (`bpftool` v7.1.0, built from the kernel 6.1.190 tree). Built without BPF skeletons, so `prog profile` and the PID columns of `prog/map show` are unavailable; JIT disassembly (`prog dump jited`) is unavailable too. Needs `CAP_SYS_ADMIN` (or `CAP_BPF` + `CAP_PERFMON`).
 - [blktrace](https://git.kernel.org/pub/scm/linux/kernel/git/axboe/blktrace.git) v1.3.0 - Block layer IO tracing: `blktrace`, `blkparse`, `btt`, `blkiomon`, and the `btrace` wrapper. Needs debugfs mounted at `/sys/kernel/debug`.
+- [bpftool](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/bpf/bpftool) v6.1.190 - Inspect and manage eBPF programs, maps, links and BTF (`bpftool` v7.1.0, built from the kernel 6.1.190 tree). Built without BPF skeletons, so `prog profile` and the PID columns of `prog/map show` are unavailable; JIT disassembly (`prog dump jited`) is unavailable too. Needs `CAP_SYS_ADMIN` (or `CAP_BPF` + `CAP_PERFMON`).
 - [bpftrace](https://github.com/bpftrace/bpftrace) v0.24.2 - High-level tracing language for Linux eBPF. Pre-built static binary (x86_64 only).
 - [cpupower](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/power/cpupower) v6.1.190 - Show and set CPU frequency governors/limits and idle states (`cpupower frequency-info`, `frequency-set`, `idle-info`, `idle-set`, `monitor`), built from the kernel 6.1.190 tree. Changing settings needs root and a writable `/sys`; on most cloud VMs there is no cpufreq driver, so only idle-state info is reported.
 - [curl](https://curl.se) v8.12.1
 - [diffutils](https://www.gnu.org/software/diffutils/) v3.12 - GNU diff utilities: `diff`, `diff3`, `cmp`, `sdiff`
 - [file](https://www.darwinsys.com/file/) v5.46 - Determine file type (`file` command)
-- [gawk](https://www.gnu.org/software/gawk/) v5.4.2 - GNU awk: `gawk` and `awk`. The core kit ships no awk, so scripts that pipe through awk (such as `perf-tools`) need this.
 - [fio](https://github.com/axboe/fio) v3.43 - Flexible I/O tester for storage benchmarking (`fio`). Built with the `libaio`, `io_uring` and synchronous engines; network/cluster engines (rbd, gfapi, rdma, http, nfs) and the python/gnuplot helper scripts are not included. `fio --server` opens a listening socket (port 8765) and should only be started deliberately.
+- [gawk](https://www.gnu.org/software/gawk/) v5.4.2 - GNU awk: `gawk` and `awk`. The core kit ships no awk, so scripts that pipe through awk (such as `perf-tools`) need this.
 - [glibc-utils](https://www.gnu.org/software/libc/) v2.42 - GNU C Library utilities: `ldd` (list dynamic dependencies) and `pldd` (list shared libraries of a running process).
 - [golang](https://go.dev) v1.26.1 - The Go programming language toolchain. Note: `/tmp` is mounted `noexec` on Bottlerocket; set `GOCACHE`, `GOTMPDIR`, and `GOPATH` to a writable path such as `/local` before running `go build` or `go run`.
-- [iperf3](https://github.com/esnet/iperf) v3.22.1 - Network throughput measurement tool (`iperf3`). Built without RSA authentication and SCTP. `iperf3 -s` opens a listening port (5201 by default) that accepts tests from any client that can reach it; only run the server deliberately, bind it with `-B <addr>`, use `-1` to exit after one test, and stop it when done.
 - [gzip](https://www.gnu.org/software/gzip/) v1.14 - GNU compression utility: `gzip`, `gunzip`, `zcat`, `zgrep`. The core kit ships only `unpigz`, which cannot compress, so this fills the gap.
-- [iotop-c](https://github.com/Tomas-M/iotop) v1.33 - Top-like per-process I/O monitor (`iotop`), the C rewrite of iotop. Needs root or `CAP_NET_ADMIN` (taskstats netlink); enable `sysctl kernel.task_delayacct=1` for the SWAPIN/IO% columns.
 - [htop](https://github.com/htop-dev/htop) v3.5.3 - Interactive process viewer (`htop`), built against the core kit's wide-character ncurses with Unicode and Linux capabilities support
+- [iotop-c](https://github.com/Tomas-M/iotop) v1.33 - Top-like per-process I/O monitor (`iotop`), the C rewrite of iotop. Needs root or `CAP_NET_ADMIN` (taskstats netlink); enable `sysctl kernel.task_delayacct=1` for the SWAPIN/IO% columns.
+- [iperf3](https://github.com/esnet/iperf) v3.22.1 - Network throughput measurement tool (`iperf3`). Built without RSA authentication and SCTP. `iperf3 -s` opens a listening port (5201 by default) that accepts tests from any client that can reach it; only run the server deliberately, bind it with `-B <addr>`, use `-1` to exit after one test, and stop it when done.
 - [jsoncpp](https://github.com/open-source-parsers/jsoncpp) v1.9.6
 - [libbpf-tools](https://github.com/iovisor/bcc/tree/master/libbpf-tools) v0.37.0 - BPF CO-RE tracing tools from bcc (`bpf-biolatency`, `bpf-runqlat`, `bpf-offcputime`, `bpf-profile`, `bpf-execsnoop`, `bpf-opensnoop`, `bpf-tcpconnect`, and more), installed with a `bpf-` prefix. No python or compiler needed; requires kernel BTF.
+- [libcap-utils](https://sites.google.com/site/fullycapable/) v2.77 - POSIX capabilities utilities: `getcap`, `setcap`, `capsh`, `getpcaps`
+- [libpcap](https://www.tcpdump.org/) v1.11.0 - Packet capture library used by `tcpdump`. Built with only the Linux socket and netfilter backends (no D-Bus, Bluetooth, RDMA, USB, netmap, or remote capture). Includes a `-devel` subpackage.
 - [libtraceevent](https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git/) v1.9.1 - Library for parsing raw kernel trace event formats, plus its event-format plugins. Used by `trace-cmd`.
 - [libtracefs](https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/) v1.8.4 - Library for accessing the kernel tracefs file system. Used by `trace-cmd`.
-- [libpcap](https://www.tcpdump.org/) v1.11.0 - Packet capture library used by `tcpdump`. Built with only the Linux socket and netfilter backends (no D-Bus, Bluetooth, RDMA, USB, netmap, or remote capture). Includes a `-devel` subpackage.
 - [logrotate](https://github.com/logrotate/logrotate) v3.22.0 - Rotates and maintains log files. Ships a default `/etc/logrotate.conf` plus a `logrotate.timer` that runs daily; drop additional rules into `/etc/logrotate.d`. Pulls in `gzip` so `compress` works out of the box.
 - [lsof](https://github.com/lsof-org/lsof) v4.99.7 - List open files, sockets and pipes per process (`lsof`), with SELinux context (`-Z`) support
 - [nerdctl](https://github.com/containerd/nerdctl) v2.1.6 - Docker-compatible CLI for containerd
@@ -206,13 +207,32 @@ The following packages are designed for or work best at the host level:
 - [perfrun](https://www.kernel.org/) v0.1.0 - Convenience wrapper for common `perf` workflows: `record`, `flamegraph`, `stat`, `top`. Installed automatically with `perf`.
 - [permissive-selinux] - Set SELinux mode to permissive. Useful for debugging/developing while bypassing SELinux denials (e.g., running shell scripts)
 - [procps-ng](https://gitlab.com/procps-ng/procps) - Process monitoring utilities: `ps`, `top`, `free`, `vmstat`, `pgrep`, `pkill`, and more
+- [strace](https://strace.io/) v6.18 - System call and signal tracer (`strace`). Needs `CAP_SYS_PTRACE` to attach to other processes.
 - [stress-ng](https://github.com/ColinIanKing/stress-ng) v0.22.02 - Stress test CPU, cache, memory, I/O, filesystem and kernel interfaces (`stress-ng`). Built against glibc only; stressors that need optional libraries (zlib, libaio, libacl, libsctp, libkmod, ...) report as not implemented.
 - [sysstat](https://github.com/sysstat/sysstat) v12.7.7 - Commands: sar, sadf, iostat, mpstat, pidstat, tapestat, cifsiostat.
 - [tar](https://www.gnu.org/software/tar/) v1.35 - GNU tar archiving utility
-- [trace-cmd](https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/) v3.4 - Command-line front end for the kernel ftrace tracer: `trace-cmd record`, `report`, `list`, `stat`, and more. Pulls in `libtraceevent` and `libtracefs`. Run as root with `/sys/kernel/tracing` (tracefs) accessible, e.g. from the admin container via `sheltie`.
 - [tcpdump](https://www.tcpdump.org/) v4.99.7 - Command-line packet analyzer (`tcpdump`). Pulls in `libpcap`. Built without a default privilege-drop user (Bottlerocket has no `tcpdump` account), so it keeps running as the invoking user, normally root; pass `-Z <user>` to drop privileges explicitly. Linked against the host `libcrypto`, so ESP decryption (`-E`) works.
+- [trace-cmd](https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/) v3.4 - Command-line front end for the kernel ftrace tracer: `trace-cmd record`, `report`, `list`, `stat`, and more. Pulls in `libtraceevent` and `libtracefs`. Run as root with `/sys/kernel/tracing` (tracefs) accessible, e.g. from the admin container via `sheltie`.
 - [tree](https://oldmanprogrammer.net/source.php?dir=projects/tree) v2.3.2 - List directory contents as an indented tree (`tree`)
 - [turbostat](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/power/x86/turbostat) v6.1.190 - Report per-CPU frequency, C-state residency, temperature and RAPL power on x86 (`turbostat` 2022.10.04, built from the kernel 6.1.190 tree). x86_64 only. Run as root (needs `CAP_SYS_RAWIO` for `/dev/cpu/*/msr`); most counters are unavailable inside VMs that do not expose MSRs.
 - [vim](https://github.com/vim/vim) v9.1.0
 - [which](https://savannah.gnu.org/projects/which/) v2.23 - Show full path of shell commands
-- [libcap-utils](https://sites.google.com/site/fullycapable/) v2.77 - POSIX capabilities utilities: `getcap`, `setcap`, `capsh`, `getpcaps`
+
+## Contributing
+
+To add a package, copy an existing one under `packages/` (for example `packages/tree`), add it to `kits/bottlerocket-extra-kit/Cargo.toml`, refresh `Cargo.lock` with `cargo generate-lockfile --offline`, and add a bullet to the [Packages](#packages) list in alphabetical order. Build it for both architectures:
+```
+make build-package PACKAGE=<name> ARCH=x86_64
+make build-package PACKAGE=<name> ARCH=aarch64
+```
+
+CI runs `shellcheck`, `go vet`/`go test` for `scripts/go`, and `scripts/go/cmd/check-packages`, which checks that every package is in the kit, `Cargo.lock` and this README, and that README versions match the specs. Run the last one locally with:
+```
+go -C scripts/go run ./cmd/check-packages -root ../..
+```
+
+To request a package, open an issue with the "Package request" template.
+
+## License
+
+This repository is dual-licensed under the [Apache License 2.0](LICENSE-APACHE) or the [MIT license](LICENSE-MIT), at your option, like Bottlerocket. The packages it builds carry their own upstream licenses; see [COPYRIGHT](COPYRIGHT).

@@ -1,0 +1,32 @@
+name: Bug report
+description: A package fails to build, install, or run
+labels: [bug]
+body:
+  - type: input
+    id: package
+    attributes:
+      label: Package
+      placeholder: tcpdump
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Kit version
+      description: The bottlerocket-extra-kit version from your Twoliter.toml
+      placeholder: "1.0.6"
+    validations:
+      required: true
+  - type: input
+    id: variant
+    attributes:
+      label: Bottlerocket variant and architecture
+      placeholder: aws-dev 1.70.0, x86_64
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: Commands you ran and their output
+      render: shell
+    validations:
+      required: true
