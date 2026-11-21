@@ -27,7 +27,7 @@ export GO_MODULES ?=
 
 all: build
 
-RELEASE_VERSION ?= 1.0.6
+RELEASE_VERSION ?= 1.0.7
 
 # Generate Twoliter.toml. Three modes (mutually exclusive):
 #   1. Latest from GitHub (default):
