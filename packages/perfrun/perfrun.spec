@@ -1,9 +1,12 @@
 Name:    %{_cross_os}perfrun
 Version: 0.1.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Convenience wrapper scripts for Linux perf profiling
 License: Apache-2.0
 URL:     https://www.kernel.org/
+
+# perf itself comes from the core kit.
+Requires: %{_cross_os}perf
 
 %description
 %{summary}.
@@ -78,5 +81,8 @@ install -p -m 0755 perfrun %{buildroot}%{_cross_bindir}/perfrun
 %{_cross_bindir}/perfrun
 
 %changelog
+* Sun Nov 22 2026 Bottlerocket Team <bottlerocket@amazon.com> - 0.1.0-2
+- Require the core kit's perf; this kit no longer ships its own
+
 * Tue Mar 10 2026 Bottlerocket Team <bottlerocket@amazon.com> - 0.1.0-1
 - Initial package for perfrun perf wrapper script
