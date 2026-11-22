@@ -7,7 +7,7 @@ name = "awscli2"
 version = "0.1.0"
 
 [[package]]
-name = "binutils"
+name = "binutils-tools"
 version = "0.1.0"
 
 [[package]]
@@ -19,7 +19,7 @@ name = "bottlerocket-extra-kit"
 version = "0.1.0"
 dependencies = [
  "awscli2",
- "binutils",
+ "binutils-tools",
  "blktrace",
  "bpftool",
  "bpftrace",
@@ -48,12 +48,10 @@ dependencies = [
  "oomd",
  "openssh",
  "pcm",
- "perf",
  "perf-tools",
  "perfrun",
  "permissive-selinux",
  "procps-ng",
- "strace",
  "stress-ng",
  "sysstat",
  "tar",
@@ -180,13 +178,6 @@ name = "pcm"
 version = "0.1.0"
 
 [[package]]
-name = "perf"
-version = "0.1.0"
-dependencies = [
- "perfrun",
-]
-
-[[package]]
 name = "perf-tools"
 version = "0.1.0"
 dependencies = [
@@ -203,10 +194,6 @@ version = "0.1.0"
 
 [[package]]
 name = "procps-ng"
-version = "0.1.0"
-
-[[package]]
-name = "strace"
 version = "0.1.0"
 
 [[package]]

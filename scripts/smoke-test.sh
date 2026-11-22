@@ -14,7 +14,7 @@ set -uo pipefail
 # name|binary|command to run
 CHECKS=(
   "awscli2|aws|aws --version"
-  "binutils|readelf|readelf --version"
+  "binutils-tools|readelf|readelf --version"
   "blktrace|blkparse|blkparse --version"
   "bpftool|bpftool|bpftool version"
   "bpftrace|bpftrace|bpftrace --version"

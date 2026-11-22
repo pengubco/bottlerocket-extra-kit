@@ -63,8 +63,9 @@ make release-github RELEASE_VERSION=<new version> RELEASE_ARGS="--latest"
 - **nerdctl vendor tarball** is generated reproducibly by
   `packages/nerdctl/create-vendor-tarball.sh`. If its sha512 mismatches, the
   vendored module set changed: regenerate and update the pin deliberately.
-- **Kernel tools** (perf, bpftool, turbostat, cpupower) build from the same AL2023
+- **Kernel tools** (bpftool, turbostat, cpupower) build from the same AL2023
   kernel SRPM as bottlerocket-kernel-kit's kernel-6.1. When the kernel-kit is
-  bumped, update the SRPM URL and sha512 in all four packages together.
+  bumped, update the SRPM URL and sha512 in all three packages together.
+- **Prefer the core kit.** If the core kit ships a tool, don't package it here; at most add the parts it leaves out under a different package name (see binutils-tools, procps-ng).
 - **Cargo.lock**: after adding a package, run `cargo generate-lockfile --offline`
   and make sure the diff only adds entries.

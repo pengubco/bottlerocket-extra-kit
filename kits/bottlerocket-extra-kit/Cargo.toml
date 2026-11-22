@@ -20,7 +20,6 @@ sysstat = { path = "../../packages/sysstat" }
 vim = { path = "../../packages/vim" }
 nerdctl = { path = "../../packages/nerdctl" }
 awscli2 = { path = "../../packages/awscli2" }
-perf = { path = "../../packages/perf" }
 bpftrace = { path = "../../packages/bpftrace" }
 perfrun = { path = "../../packages/perfrun" }
 golang = { path = "../../packages/golang" }
@@ -29,8 +28,7 @@ tar = { path = "../../packages/tar" }
 which = { path = "../../packages/which" }
 openssh = { path = "../../packages/openssh" }
 file = { path = "../../packages/file" }
-binutils = { path = "../../packages/binutils" }
-strace = { path = "../../packages/strace" }
+binutils-tools = { path = "../../packages/binutils-tools" }
 procps-ng = { path = "../../packages/procps-ng" }
 glibc-utils = { path = "../../packages/glibc-utils" }
 libcap-utils = { path = "../../packages/libcap-utils" }
