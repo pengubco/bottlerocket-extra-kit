@@ -124,7 +124,7 @@ Environment variables:
 - `RELEASE_VERSION` — Version to release (default: the current `release-version` if it has no git tag yet, otherwise the next patch). Pass it explicitly to `make daily-build` to override.
 - `ARCHES` — Space-separated architectures to build (default: `x86_64 aarch64`). They are published as one multi-arch image.
 - `LOG_FILE` — Log output path (default: `/tmp/extra-kit-daily-build.log`).
-- `GITHUB_TOKEN` — Token for the GitHub API calls that resolve upstream versions. Unauthenticated requests are capped at 60/hour **per IP**, which a shared NAT address (such as a Cloud Desktop) exhausts easily. If unset, the script falls back to `gh auth token` when the gh CLI is logged in.
+- `GITHUB_TOKEN` — Token for the GitHub API calls that resolve upstream versions. Unauthenticated requests are capped at 60/hour **per IP**, which a shared NAT address exhausts easily. If unset, the script falls back to `gh auth token` when the gh CLI is logged in.
 
 Progress and error messages go to stderr; they are also appended to `LOG_FILE`.
 
