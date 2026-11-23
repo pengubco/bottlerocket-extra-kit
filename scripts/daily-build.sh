@@ -33,7 +33,7 @@
 #   DRY_RUN         — If set to "true", same as --dry-run flag.
 #   GITHUB_TOKEN    — GitHub token for API calls. Unauthenticated requests are
 #                     capped at 60/hour per IP, which is easily exhausted on a
-#                     shared NAT (e.g. a Cloud Desktop). If unset, the script
+#                     shared NAT (e.g. a corporate or cloud network). If unset, the script
 #                     falls back to `gh auth token` when the gh CLI is logged in.
 
 set -euo pipefail
@@ -84,7 +84,7 @@ die() {
 # ── GitHub authentication ────────────────────────────────────────────────────
 # Prefer an explicit GITHUB_TOKEN; otherwise borrow the gh CLI's token if the
 # user is logged in. Without a token the API allows only 60 requests/hour per
-# IP, which a shared Cloud Desktop NAT address exhausts quickly.
+# IP, which a shared NAT address exhausts quickly.
 GITHUB_TOKEN="${GITHUB_TOKEN:-}"
 if [[ -z "$GITHUB_TOKEN" ]] && command -v gh >/dev/null 2>&1; then
     GITHUB_TOKEN="$(gh auth token 2>/dev/null || true)"

@@ -56,8 +56,8 @@ make release-github RELEASE_VERSION=<new version> RELEASE_ARGS="--latest"
   from krane means the docker login for `public.ecr.aws` is stale:
   `aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws`
   (for a private ECR registry use `aws ecr get-login-password --region <r>`).
-- **Go modules on corporate networks.** `proxy.golang.org` may be blocked, so
-  `GOPROXY=direct` is used and `git` must reach GitHub over HTTPS. A transient
+- **Go modules on restricted networks.** If `proxy.golang.org` is blocked,
+  set `GOPROXY=direct`; `git` must then reach GitHub over HTTPS. A transient
   "Received disconnect ... Bye Bye" while building `nerdctl` is GitHub SSH rate
   limiting; retry.
 - **nerdctl vendor tarball** is generated reproducibly by
